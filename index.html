@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TCG Fantasy</title>
+    <style>
+        body { margin: 0; font-family: 'IBM Plex Sans', sans-serif; color: #294a6b; min-height: 100vh; overflow-x: hidden; }
+        #bg-video { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -1; object-fit: cover; pointer-events: none; }
+        
+        #modal-box { 
+            position: fixed; bottom: 20px; right: 20px; width: 350px; 
+            background: #eef8fc; border: 3px solid #666; border-radius: 8px; 
+            z-index: 9999; display: none; box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            transition: width 0.3s ease;
+        }
+        #modal-box.expanded-mode { width: 570px; } 
+
+        .modal-header { background: #4a5a6a; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold; }
+        #modal-title { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; margin: 0 10px; }
+        
+        .modal-body { display: flex; height: 300px; padding: 15px; box-sizing: border-box; }
+        .sidebar { width: 0; background: #1b2631; color: #fff; transition: 0.3s; overflow-y: auto; font-size: 11px; flex-shrink: 0; }
+        .sidebar.expanded { width: 190px; padding: 10px; border-right: 1px solid #444; }
+        
+        .main-info { flex: 1; display: flex; padding-left: 15px; min-width: 0; }
+        .left-panel { width: 130px; text-align: center; flex-shrink: 0; display: flex; flex-direction: column; }
+        .left-panel h4 { margin: 10px 0; font-size: 13px; max-height: 50px; overflow: hidden; }
+        
+        .desc-box { flex: 1; overflow-y: auto; font-size: 11px; padding-left: 10px; padding-right: 10px; min-width: 0; word-wrap: break-word; }
+
+        .close-btn { cursor: pointer; padding: 5px; }
+        .main-container { display: flex; flex-direction: column; align-items: center; padding: 20px; z-index: 10; }
+        #game-menu, #season-menu { margin: 10px; display: flex; gap: 10px; }
+        .maple-btn { background: linear-gradient(to bottom, #72d9ea, #4ab3c9); border: 2px solid white; border-radius: 8px; color: white; padding: 8px 20px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 0 #328495; }
+        .season-container { background: rgba(225, 234, 240, 0.9); border: 3px solid #fff; border-radius: 20px; padding: 40px; width: 850px; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.4); margin-top: 20px; }
+        .scoring-box { position: absolute; top: 20px; right: 20px; background: #fff; border: 2px solid #a2dcf0; padding: 10px; border-radius: 10px; font-size: 10px; width: 120px; }
+        .player-grid { display: flex; gap: 15px; justify-content: center; margin-top: 50px; flex-wrap: wrap; }
+        .player-card { background: #fff; border: 2px solid #a2dcf0; border-radius: 12px; padding: 15px; width: 220px; }
+        .player-name { font-weight: bold; font-size: 1.3em; margin-bottom: 10px; text-align: center; }
+        .stats-box { background: #f0f9fb; border: 1px solid #cceeff; padding: 10px; font-size: 11px; border-radius: 8px; min-height: 200px; }
+        
+        .draft-item { display: flex; justify-content: space-between; border-bottom: 1px dashed #d1e7f0; padding: 6px 0; align-items: center; cursor: pointer; height: 45px; }
+        .draft-item span { display: flex; align-items: center; overflow: hidden; padding-right: 5px; font-size: 10px; flex: 1; }
+        
+        .counterpick { background: rgba(255, 99, 71, 0.25) !important; border-radius: 4px; font-weight: bold; }
+        .counter-label-line { color: #ff4500; font-size: 9px; font-weight: 800; text-align: center; margin: 5px 0; border-top: 1px solid #ff4500; border-bottom: 1px solid #ff4500; padding: 2px 0; width: 100%; }
+        
+        .total-box { font-weight: bold; text-align: right; margin-top: 10px; border-top: 2px solid #a2dcf0; padding-top: 5px; }
+    </style>
+</head>
+<body>
+    <video autoplay muted loop id="bg-video" playsinline><source src="https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/579720/8cfbe7b8bfd8c85d2798ddbf112741d6435528ff.mp4" type="video/mp4"></video>
+
+    <div class="main-container">
+        <h1>TCG Fantasy Hub</h1>
+        <div id="game-menu"></div>
+        <div id="season-menu"></div>
+        <div id="content-area"></div>
+    </div>
+
+    <div id="modal-box">
+        <div class="modal-header">
+            <span id="toggle-icon" style="cursor:pointer" onclick="toggleSidebar()">◀◀</span>
+            <span id="modal-title">DECORATION</span>
+            <span class="close-btn" onclick="closeModal(true)">X</span>
+        </div>
+        <div class="modal-body">
+            <div class="sidebar" id="modal-sidebar"></div>
+            <div class="main-info" id="modal-content"></div>
+        </div>
+    </div>
+
+<script>
+    let allData = {}, animeCache = {}, isLocked = false;
+    const SOURCES = { "Anime Fantasy": "https://script.google.com/macros/s/AKfycbxxaDlBOIqOMHKxf0WTtJ2u3Fd9r5Xt0jn_s3ZlO79OkKpP5VN17Wf902w98rd1ox9Zng/exec" };
+
+    function init() {
+        const menu = document.getElementById('game-menu');
+        for (let game in SOURCES) menu.innerHTML += `<button class="maple-btn" onclick="loadGame('${game}')">${game}</button>`;
+    }
+
+    async function loadGame(gameName) {
+        const res = await fetch(SOURCES[gameName]);
+        allData = await res.json();
+        const seasonMenu = document.getElementById('season-menu');
+        seasonMenu.innerHTML = "";
+        for (let year in allData) {
+            for (let season in allData[year]) {
+                seasonMenu.innerHTML += `<button class="maple-btn" onclick="renderDraft('${year}', '${season}')">${year} ${season}</button>`;
+            }
+        }
+    }
+
+    async function renderDraft(year, season) {
+        const rows = allData[year][season];
+        await fetchAllAnimeInfo(rows); 
+        const container = document.getElementById('content-area');
+        const totalRow = rows.find(r => r.some(c => c.text === "Total"));
+        
+        container.innerHTML = `<div class="season-container">
+            <div class="scoring-box"><strong>Scoring</strong><br>70+: Positive<br>70-: Negative<br>90+: Double</div>
+            <h2>${year} ${season}</h2><div class="player-grid" id="grid"></div></div>`;
+        
+        const grid = document.getElementById('grid');
+        const header = rows[1];
+        
+        let allPicksByPlayer = {}; 
+        let animeRegistry = {}; 
+
+        for (let i = 2; i < header.length; i += 2) {
+            if (!header[i].text || ["Scoring", "70+"].includes(header[i].text)) continue;
+            allPicksByPlayer[i] = [];
+            rows.forEach((r, idx) => {
+                if (idx > 1 && r[1] && r[1].text && !r[1].text.includes("Total") && r[i].text) {
+                    let id = r[i].url ? parseInt(r[i].url.split('/')[4]) : null;
+                    if (id) {
+                        let pickObj = { id, text: r[i].text, score: r[i+1].text || 0, isAction: false, isTargeted: false };
+                        allPicksByPlayer[i].push(pickObj);
+                        animeRegistry[id] = (animeRegistry[id] || 0) + 1;
+                    }
+                }
+            });
+        }
+
+        for (let col in allPicksByPlayer) {
+            let picks = allPicksByPlayer[col];
+            if (picks.length > 0) {
+                let lastPick = picks[picks.length - 1];
+                lastPick.isAction = true; 
+                if (animeRegistry[lastPick.id] > 1) {
+                    for (let c in allPicksByPlayer) {
+                        allPicksByPlayer[c].forEach(p => { if (p.id === lastPick.id) p.isTargeted = true; });
+                    }
+                }
+            }
+        }
+
+        for (let i = 2; i < header.length; i += 2) {
+            if (!allPicksByPlayer[i]) continue;
+            let picksHTML = "";
+            allPicksByPlayer[i].forEach(p => {
+                let icon = animeCache[p.id] ? `<img src="${animeCache[p.id].coverImage.medium}" style="width:25px; height:35px; margin-right:8px; border-radius:3px;">` : "";
+                
+                // Add vertical counter label
+                if (p.isAction) picksHTML += `<div class="counter-label-line">COUNTERPICK</div>`;
+                
+                picksHTML += `<div class="draft-item ${p.isTargeted ? 'counterpick' : ''}" 
+                                onmouseover="handleInteraction(${p.id}, false, '${p.text.replace(/'/g, "\\'")}')" 
+                                onmouseleave="closeModal(false)" 
+                                onclick="handleInteraction(${p.id}, true, '${p.text.replace(/'/g, "\\'")}')">
+                                <span>${icon}${p.text}</span> <b>${p.score}</b></div>`;
+            });
+            grid.innerHTML += `<div class="player-card"><div class="player-name">${header[i].text}</div><div class="stats-box">${picksHTML}</div><div class="total-box">Total: ${totalRow ? (totalRow[i+1].text || 0) : '0'}</div></div>`;
+        }
+    }
+
+    async function fetchAllAnimeInfo(rows) {
+        let ids = [...new Set(rows.map(r => r.filter(c => c.url).map(c => parseInt(c.url.split('/')[4]))).flat())];
+        const query = `query ($ids: [Int]) { Page { media(id_in: $ids) { id, title { romaji }, description, coverImage { large, medium }, format, episodes, duration, status, averageScore, popularity, siteUrl } } }`;
+        const res = await fetch('https://graphql.anilist.co', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query, variables: {ids}}) });
+        const json = await res.json();
+        if(json.data) json.data.Page.media.forEach(m => animeCache[m.id] = m);
+    }
+
+    function handleInteraction(id, isClick, title) {
+        if (isLocked && !isClick) return;
+        if (isClick) isLocked = true;
+        const anime = animeCache[id];
+        if (!anime) return;
+        document.getElementById('modal-box').style.display = 'block';
+        document.getElementById('modal-title').innerText = title; 
+        document.getElementById('modal-content').innerHTML = `
+            <div class="left-panel">
+                <img src="${anime.coverImage.large}" width="120px" style="border: 2px solid #fff;">
+                <h4>${anime.title.romaji}</h4>
+                <a href="${anime.siteUrl}" target="_blank" class="maple-btn" style="font-size:10px; margin-top:auto;">AniList</a>
+            </div>
+            <div class="desc-box">${anime.description || "No description."}</div>`;
+        document.getElementById('modal-sidebar').innerHTML = `
+            <strong>Format:</strong><br>${anime.format}<br><br>
+            <strong>Eps:</strong><br>${anime.episodes}<br><br>
+            <strong>Status:</strong><br>${anime.status}<br><br>
+            <strong>Score:</strong><br>${anime.averageScore}%<br><br>
+            <strong>Pop:</strong><br>${anime.popularity}`;
+    }
+
+    function toggleSidebar() { 
+        const sidebar = document.getElementById('modal-sidebar');
+        const modal = document.getElementById('modal-box');
+        const icon = document.getElementById('toggle-icon');
+        
+        sidebar.classList.toggle('expanded'); 
+        modal.classList.toggle('expanded-mode');
+        
+        icon.innerText = sidebar.classList.contains('expanded') ? "▶▶" : "◀◀";
+    }
+    
+    function closeModal(force) { 
+        if (isLocked && !force) return;
+        isLocked = false;
+        document.getElementById('modal-box').style.display = 'none'; 
+        document.getElementById('modal-sidebar').classList.remove('expanded');
+        document.getElementById('modal-box').classList.remove('expanded-mode');
+        document.getElementById('toggle-icon').innerText = "◀◀";
+    }
+    init();
+</script>
+</body>
+</html>
