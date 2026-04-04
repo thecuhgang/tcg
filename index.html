@@ -124,6 +124,10 @@
                 "SMTM 11": "https://script.google.com/macros/s/AKfycbyhy8HimnGYkX3BOiUZhri588-bfJSnCwOmxIrtdTJrEfVkm3WOk1_pIgeKrEWvkFQ-/exec",
                 "SMTM 12": "https://script.google.com/macros/s/AKfycbwCL1mQlT2t7lboegZyo4QGkvZ1cLzW2P7a6LJneaxE8KKdgFcmdSPwaTWsNEOAblBZ/exec" 
             }
+        },
+        "Fantasy Football": {
+            type: "redirect",
+            href: "football.html"
         }
     };
 
@@ -183,15 +187,31 @@
         for (let gameName in GAMES) {
             menu.innerHTML += `<button class="maple-btn" onclick="selectGame('${gameName}')">${gameName}</button>`;
         }
+
+        // Check for URL parameters if coming back from football.html
+        const urlParams = new URLSearchParams(window.location.search);
+        const requestedGame = urlParams.get('game');
+        
+        if (requestedGame && GAMES[requestedGame]) {
+            // Prevent an infinite loop if the URL parameter somehow triggers a redirect back to itself
+            if (GAMES[requestedGame].type !== "redirect") {
+                selectGame(requestedGame);
+            }
+        }
     }
 
     async function selectGame(gameName) {
+        const gameConfig = GAMES[gameName];
+
+        if (gameConfig.type === "redirect") {
+            window.location.href = gameConfig.href;
+            return;
+        }
+
         const seasonMenu = document.getElementById('season-menu');
         const contentArea = document.getElementById('content-area');
         seasonMenu.innerHTML = "";
         contentArea.innerHTML = getLoadingCardHTML(`Loading ${gameName}...`);
-        
-        const gameConfig = GAMES[gameName];
 
         if (gameConfig.type === "anime") {
             try {
