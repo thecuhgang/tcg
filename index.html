@@ -2,54 +2,96 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TCG Fantasy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCG Fantasy Hub</title>
     <style>
-        body { margin: 0; font-family: 'IBM Plex Sans', sans-serif; color: #294a6b; min-height: 100vh; overflow-x: hidden; }
+        body { margin: 0; font-family: 'IBM Plex Sans', sans-serif; color: #294a6b; min-height: 100vh; overflow-x: hidden; background: #000; }
         #bg-video { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -1; object-fit: cover; pointer-events: none; }
         
-        #modal-box { 
-            position: fixed; bottom: 20px; right: 20px; width: 350px; 
-            background: #eef8fc; border: 3px solid #666; border-radius: 8px; 
-            z-index: 9999; display: none; box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            transition: width 0.3s ease;
-        }
-        #modal-box.expanded-mode { width: 570px; } 
+        h1 { color: #ffffff; font-size: 3em; text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000; letter-spacing: 2px; text-transform: uppercase; margin: 20px 0; text-align: center; }
 
-        .modal-header { background: #4a5a6a; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold; }
+        /* Custom Spinner for Card Loader */
+        .spinner {
+            border: 5px solid #243547; border-top: 5px solid #87e0f2;
+            border-radius: 50%; width: 40px; height: 40px;
+            animation: spin 1s linear infinite; margin-bottom: 15px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Modal - Transparent UI */
+        #modal-box { 
+            position: fixed; bottom: 20px; right: 20px; width: 90%; max-width: 350px; 
+            background: rgba(220, 240, 250, 0.9); backdrop-filter: blur(8px); 
+            border: 2px solid #5a7590; border-radius: 8px; z-index: 9999; display: none; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6); 
+            transition: max-width 0.3s ease, width 0.3s ease; 
+        }
+        #modal-box.expanded-mode { max-width: 570px; } 
+        
+        .modal-header { background: #354a6a; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold; border-bottom: 2px solid #293a5a; }
         #modal-title { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; margin: 0 10px; }
         
-        .modal-body { display: flex; height: 300px; padding: 15px; box-sizing: border-box; }
-        .sidebar { width: 0; background: #1b2631; color: #fff; transition: 0.3s; overflow-y: auto; font-size: 11px; flex-shrink: 0; }
-        .sidebar.expanded { width: 190px; padding: 10px; border-right: 1px solid #444; }
+        .modal-body { display: flex; height: 300px; padding: 15px; box-sizing: border-box; overflow: hidden; }
         
-        .main-info { flex: 1; display: flex; padding-left: 15px; min-width: 0; }
-        .left-panel { width: 130px; text-align: center; flex-shrink: 0; display: flex; flex-direction: column; }
-        .left-panel h4 { margin: 10px 0; font-size: 13px; max-height: 50px; overflow: hidden; }
+        /* Fixed Sidebar Animation */
+        .sidebar { 
+            width: 0; background: #1b2631; color: #fff; 
+            transition: width 0.3s ease, padding 0.3s ease; 
+            overflow: hidden; font-size: 11px; flex-shrink: 0; 
+        }
+        .sidebar.expanded { width: 150px; padding: 10px; border-right: 1px solid #444; }
         
-        .desc-box { flex: 1; overflow-y: auto; font-size: 11px; padding-left: 10px; padding-right: 10px; min-width: 0; word-wrap: break-word; }
-
-        .close-btn { cursor: pointer; padding: 5px; }
-        .main-container { display: flex; flex-direction: column; align-items: center; padding: 20px; z-index: 10; }
-        #game-menu, #season-menu { margin: 10px; display: flex; gap: 10px; }
-        .maple-btn { background: linear-gradient(to bottom, #72d9ea, #4ab3c9); border: 2px solid white; border-radius: 8px; color: white; padding: 8px 20px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 0 #328495; }
-        .season-container { background: rgba(225, 234, 240, 0.9); border: 3px solid #fff; border-radius: 20px; padding: 40px; width: 850px; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.4); margin-top: 20px; }
-        .scoring-box { position: absolute; top: 20px; right: 20px; background: #fff; border: 2px solid #a2dcf0; padding: 10px; border-radius: 10px; font-size: 10px; width: 120px; }
-        .player-grid { display: flex; gap: 15px; justify-content: center; margin-top: 50px; flex-wrap: wrap; }
-        .player-card { background: #fff; border: 2px solid #a2dcf0; border-radius: 12px; padding: 15px; width: 220px; }
-        .player-name { font-weight: bold; font-size: 1.3em; margin-bottom: 10px; text-align: center; }
-        .stats-box { background: #f0f9fb; border: 1px solid #cceeff; padding: 10px; font-size: 11px; border-radius: 8px; min-height: 200px; }
+        .main-info { flex: 1; display: flex; padding-left: 10px; min-width: 0; }
+        .left-panel { width: 120px; text-align: center; flex-shrink: 0; display: flex; flex-direction: column; }
+        .left-panel h4 { margin: 10px 0; font-size: 13px; max-height: 40px; overflow: hidden; color: #000; }
+        .desc-box { flex: 1; overflow-y: auto; font-size: 11px; padding: 0 10px; min-width: 0; color: #000; }
+        .close-btn { cursor: pointer; padding: 5px; font-weight: bold; }
         
-        .draft-item { display: flex; justify-content: space-between; border-bottom: 1px dashed #d1e7f0; padding: 6px 0; align-items: center; cursor: pointer; height: 45px; }
+        /* Centered Layout Enforcements */
+        .main-container { display: flex; flex-direction: column; align-items: center; padding: 20px; z-index: 10; width: 100%; box-sizing: border-box; }
+        #content-area { width: 100%; display: flex; flex-direction: column; align-items: center; }
+        #game-menu, #season-menu { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; width: 100%; max-width: 900px; }
+        
+        .maple-btn { background: linear-gradient(180deg, #87e0f2 0%, #4ab3c9 100%); border: 1px solid #fff; border-radius: 4px; color: white; padding: 8px 15px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 0 #225c68; }
+        .tab-bar { display: flex; gap: 5px; margin: 20px auto; justify-content: center; flex-wrap: wrap; width: 100%; }
+        .tab-btn { background: #333; color: white; padding: 5px 15px; border: 1px solid #555; cursor: pointer; border-radius: 4px; font-size: 12px; }
+        .tab-btn.active { background: #87e0f2; color: #000; font-weight: bold; }
+        .table-wrapper { overflow-x: auto; width: 100%; max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+        
+        .season-container { background: linear-gradient(180deg, #2a3a4a 0%, #1b2631 100%); color: #fff; border: 2px solid #5a7590; border-radius: 10px; padding: 20px; width: 95%; max-width: 1200px; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.6); margin-top: 20px; box-sizing: border-box; }
+        .scoring-box { background: #222; border: 1px solid #555; padding: 8px; border-radius: 5px; font-size: 9px; color: #fff; z-index: 5; }
+        .anime-absolute-box { position: absolute; top: 10px; right: 10px; width: 90px; }
+        
+        .player-grid { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 20px; justify-content: center; width: 100%; }
+        .player-card { background: rgba(255,255,255,0.9); border: 2px solid #5a7590; border-radius: 8px; padding: 15px; flex: 1 1 250px; max-width: 300px; color: #000; }
+        .player-name { font-weight: bold; font-size: 1.3em; margin-bottom: 10px; text-align: center; border-bottom: 1px solid #aaa; padding-bottom: 5px; }
+        .stats-box { background: #eef2f5; border: 1px solid #aaa; padding: 8px; font-size: 11px; border-radius: 4px; min-height: 200px; }
+        .draft-item { display: flex; justify-content: space-between; border-bottom: 1px dashed #bbb; padding: 8px 10px; align-items: center; cursor: pointer; height: 45px; border-radius: 4px; margin: 2px 0; }
         .draft-item span { display: flex; align-items: center; overflow: hidden; padding-right: 5px; font-size: 10px; flex: 1; }
+        .counterpick { background: rgba(255, 60, 60, 0.2) !important; border: 1px solid rgba(255, 60, 60, 0.4); }
+        .counter-label-line { color: #d00; font-size: 8px; font-weight: 900; text-align: center; margin: 4px 0; border-top: 1px solid #d00; border-bottom: 1px solid #d00; padding: 2px 0; width: 100%; background: rgba(255, 200, 200, 0.3); }
+        .total-box { font-weight: bold; text-align: right; margin-top: 8px; border-top: 2px solid #aaa; padding-top: 4px; }
+
+        /* Modern SMTM Table */
+        .smtm-modern-table { width: 100%; border-collapse: collapse; margin: 0; font-size: 12px; text-align: center; background: #1b2631; color: #fff; overflow: hidden; border-radius: 4px; border: 2px solid #5a7590; }
+        .smtm-modern-table th { background: linear-gradient(180deg, #354a6a 0%, #293a5a 100%); color: #87e0f2; padding: 12px; font-weight: bold; border-bottom: 2px solid #87e0f2; border-right: 1px solid #334e68; text-transform: uppercase; letter-spacing: 1px; }
+        .smtm-modern-table td { padding: 8px 10px; border-bottom: 1px solid #293a5a; border-right: 1px solid #334e68; height: 28px; }
+        .smtm-modern-table td:first-child { font-weight: bold; background: #243547; color: #87e0f2; text-align: right; border-right: 2px solid #5a7590; }
+        .smtm-modern-table tr:nth-child(even) td:not(:first-child) { background: rgba(255, 255, 255, 0.03); }
         
-        .counterpick { background: rgba(255, 99, 71, 0.25) !important; border-radius: 4px; font-weight: bold; }
-        .counter-label-line { color: #ff4500; font-size: 9px; font-weight: 800; text-align: center; margin: 5px 0; border-top: 1px solid #ff4500; border-bottom: 1px solid #ff4500; padding: 2px 0; width: 100%; }
+        .smtm-modern-table .section-header-rem td { background: #293a5a; color: #87e0f2; text-align: center; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; border-top: 2px solid #87e0f2; border-bottom: 2px solid #87e0f2; padding: 6px; }
+        .smtm-modern-table .section-header-elim td { background: #3a2929; color: #f28787; text-align: center; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; border-top: 2px solid #f28787; border-bottom: 2px solid #f28787; padding: 6px; }
         
-        .total-box { font-weight: bold; text-align: right; margin-top: 10px; border-top: 2px solid #a2dcf0; padding-top: 5px; }
+        .smtm-modern-table td.eliminated { color: #888; text-decoration: line-through; opacity: 0.5; background: rgba(255, 60, 60, 0.1) !important; position: relative; }
+        .smtm-modern-table td.eliminated::after { content: ""; position: absolute; left: 10%; top: 50%; width: 80%; height: 2px; background: rgba(255, 0, 0, 0.5); transform: translateY(-50%); pointer-events: none; }
+        .smtm-modern-table .total-row td { background: #354a6a; font-weight: bold; font-size: 14px; border-top: 2px solid #87e0f2; color: #fff; }
     </style>
 </head>
 <body>
     <video autoplay muted loop id="bg-video" playsinline><source src="https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/579720/8cfbe7b8bfd8c85d2798ddbf112741d6435528ff.mp4" type="video/mp4"></video>
+
+    <!-- Circular Transparent Top Button -->
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" style="position: fixed; bottom: 20px; left: 20px; z-index: 10000; background: rgba(0,0,0,0.4); color: #87e0f2; border: 2px solid #87e0f2; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); font-size: 20px; padding: 0; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">⬆</button>
 
     <div class="main-container">
         <h1>TCG Fantasy Hub</h1>
@@ -71,45 +113,438 @@
     </div>
 
 <script>
+    const GAMES = { 
+        "Anime Fantasy": {
+            type: "anime",
+            url: "https://script.google.com/macros/s/AKfycbxxaDlBOIqOMHKxf0WTtJ2u3Fd9r5Xt0jn_s3ZlO79OkKpP5VN17Wf902w98rd1ox9Zng/exec"
+        },
+        "SMTM Fantasy": {
+            type: "smtm",
+            seasons: {
+                "SMTM 11": "https://script.google.com/macros/s/AKfycbyhy8HimnGYkX3BOiUZhri588-bfJSnCwOmxIrtdTJrEfVkm3WOk1_pIgeKrEWvkFQ-/exec",
+                "SMTM 12": "https://script.google.com/macros/s/AKfycbwCL1mQlT2t7lboegZyo4QGkvZ1cLzW2P7a6LJneaxE8KKdgFcmdSPwaTWsNEOAblBZ/exec" 
+            }
+        }
+    };
+
+    // Pool of randomized text and GIFs for the loading screen
+    const LOADING_TEXTS =[
+        "Loading these hands...",
+        "Loading L's...",
+        "Loading ...",
+        "l O a D i N g ...",
+		"Loading third leg protocol...",
+		"Loading Mountain Dew Cold Red",
+		"Loading ... dez nuts"
+    ];
+    
+    const LOADING_GIFS =[
+        "https://c.tenor.com/jfmI0j5FcpAAAAAd/tenor.gif",
+        "https://c.tenor.com/FawYo00tBekAAAAC/tenor.gif",
+        "https://c.tenor.com/Krf7sKoeHNUAAAAd/tenor.gif",
+        "https://media.tenor.com/OSCT96zoz_0AAAAj/umbreon-loading.gif",
+        "leon.gif", 
+        "https://c.tenor.com/5eIhXDwH73QAAAAd/tenor.gif",
+        "https://c.tenor.com/jgDVuidR3bkAAAAd/tenor.gif",
+        "https://c.tenor.com/hXpNeTG45kIAAAAC/tenor.gif",
+        "https://c.tenor.com/8tA6lM4NHdAAAAAd/tenor.gif"
+    ];
+
     let allData = {}, animeCache = {}, isLocked = false;
-    const SOURCES = { "Anime Fantasy": "https://script.google.com/macros/s/AKfycbxxaDlBOIqOMHKxf0WTtJ2u3Fd9r5Xt0jn_s3ZlO79OkKpP5VN17Wf902w98rd1ox9Zng/exec" };
+    let currentSMTMSeason = ""; // Global tracker for active SMTM Season
+
+    // Generates a randomized Loading Card HTML (50% chance text/spinner, 50% chance GIF)
+    function getLoadingCardHTML(contextText = "Loading Data...") {
+        const isGif = Math.random() < 0.4;
+        let innerHTML = "";
+
+        if (isGif) {
+            const randomGif = LOADING_GIFS[Math.floor(Math.random() * LOADING_GIFS.length)];
+            innerHTML = `
+                <img src="${randomGif}" style="max-width: 100%; max-height: 180px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);" />
+                <h3 style="margin:0; text-transform:uppercase; letter-spacing: 2px; color: #87e0f2; text-align: center; font-size: 14px;">${contextText}</h3>
+            `;
+        } else {
+            const randomText = LOADING_TEXTS[Math.floor(Math.random() * LOADING_TEXTS.length)];
+            innerHTML = `
+                <div class="spinner"></div>
+                <h3 style="margin:0; text-transform:uppercase; letter-spacing: 2px; color: #87e0f2; text-align: center;">${randomText}</h3>
+            `;
+        }
+
+        return `
+        <div class="season-container" style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 50px 20px; border-color: #87e0f2; box-shadow: 0 0 30px rgba(135, 224, 242, 0.2); width: 100%; max-width: 400px; margin: 40px auto; box-sizing: border-box; background: rgba(27, 38, 49, 0.9);">
+            ${innerHTML}
+        </div>`;
+    }
 
     function init() {
         const menu = document.getElementById('game-menu');
-        for (let game in SOURCES) menu.innerHTML += `<button class="maple-btn" onclick="loadGame('${game}')">${game}</button>`;
+        for (let gameName in GAMES) {
+            menu.innerHTML += `<button class="maple-btn" onclick="selectGame('${gameName}')">${gameName}</button>`;
+        }
     }
 
-    async function loadGame(gameName) {
-        const res = await fetch(SOURCES[gameName]);
-        allData = await res.json();
+    async function selectGame(gameName) {
         const seasonMenu = document.getElementById('season-menu');
+        const contentArea = document.getElementById('content-area');
         seasonMenu.innerHTML = "";
-        for (let year in allData) {
-            for (let season in allData[year]) {
-                seasonMenu.innerHTML += `<button class="maple-btn" onclick="renderDraft('${year}', '${season}')">${year} ${season}</button>`;
+        contentArea.innerHTML = getLoadingCardHTML(`Loading ${gameName}...`);
+        
+        const gameConfig = GAMES[gameName];
+
+        if (gameConfig.type === "anime") {
+            try {
+                const res = await fetch(gameConfig.url);
+                allData = await res.json();
+                contentArea.innerHTML = ""; // Clear loader
+                for (let year in allData) {
+                    for (let season in allData[year]) {
+                        seasonMenu.innerHTML += `<button class="maple-btn" onclick="renderAnimeDraft('${year}', '${season}')">${year} ${season}</button>`;
+                    }
+                }
+            } catch (e) { contentArea.innerHTML = `<h3 style="color:red;">Error loading data</h3>`; }
+        } 
+        else if (gameConfig.type === "smtm") {
+            contentArea.innerHTML = ""; // Clear loader initially for SMTM, wait for season pick
+            for (let seasonName in gameConfig.seasons) {
+                let url = gameConfig.seasons[seasonName];
+                seasonMenu.innerHTML += `<button class="maple-btn" onclick="loadSMTMSeason('${seasonName}', '${url}')">${seasonName}</button>`;
             }
         }
     }
 
-    async function renderDraft(year, season) {
+    async function loadSMTMSeason(seasonName, url) {
+        currentSMTMSeason = seasonName; // Set active season
+        const contentArea = document.getElementById('content-area');
+        contentArea.innerHTML = getLoadingCardHTML(`Loading ${seasonName}...`);
+        try {
+            const res = await fetch(url);
+            allData = await res.json();
+            renderTabs(allData);
+        } catch(e) { contentArea.innerHTML = `<h3 style="color:red;">Error loading ${seasonName}</h3>`; }
+    }
+
+    function renderTabs(dataObject, selectedTab = null) {
+        const container = document.getElementById('content-area');
+        const tabNames = Object.keys(dataObject);
+        const activeTab = selectedTab || tabNames[0];
+        let tabHTML = `<div class="tab-bar">`;
+        tabNames.forEach(name => {
+            tabHTML += `<button class="tab-btn ${name === activeTab ? 'active' : ''}" onclick="switchTab('${name}')">${name}</button>`;
+        });
+        tabHTML += `</div>`;
+        container.innerHTML = tabHTML + `<div id="tab-content-render" class="table-wrapper"></div>`;
+
+        // Universal SMTM Emojis Ranking based on Overall Tab
+        window.smtmEmojis = {};
+        if (dataObject["Overall"]) {
+            let overallData = dataObject["Overall"];
+            let r1 = overallData[1];
+            if (r1) {
+                let mainColCount = 2; 
+                for (let i = 2; i < r1.length; i++) {
+                    let txt = String(r1[i].text).trim();
+                    if (txt === "" || txt.includes("Contestants:") || txt.includes("Point Crit")) { mainColCount = i; break; }
+                }
+                if (mainColCount === 2) mainColCount = r1.length;
+                
+                let totalRow = overallData.find(r => r[1] && r[1].text && String(r[1].text).includes("Total"));
+                if (totalRow) {
+                    let players =[];
+                    for (let c = 2; c < mainColCount; c++) {
+                        let name = r1[c] ? r1[c].text.trim() : "";
+                        let score = parseFloat(totalRow[c] ? totalRow[c].text : "0") || 0;
+                        if (name) players.push({name, score});
+                    }
+                    players.sort((a, b) => b.score - a.score);
+                    for(let i=0; i<players.length; i++) {
+                        let em = '';
+                        if(i === players.length - 1) em = '💩';
+                        else if(i === 0) em = '🥇';
+                        else if(i === 1) em = '🥈';
+                        else if(i === 2) em = '🥉';
+                        window.smtmEmojis[players[i].name] = em;
+                    }
+                }
+            }
+        }
+
+        renderSMTM(dataObject[activeTab], activeTab);
+    }
+
+    function switchTab(tabName) { renderTabs(allData, tabName); }
+
+    function renderSMTM(rows, tabName) {
+        const container = document.getElementById('tab-content-render');
+        if (!rows || rows.length < 2) return;
+
+        let r1 = rows[1];
+        let mainColCount = 2; 
+
+        // Figure out where main player grid ends
+        for (let i = 2; i < r1.length; i++) {
+            let txt = String(r1[i].text).trim();
+            if (txt === "" || txt.includes("Contestants:") || txt.includes("Point Crit")) {
+                mainColCount = i;
+                break;
+            }
+        }
+        if (mainColCount === 2) mainColCount = r1.length;
+
+        let scoringCriteriaHTML = "";
+        let contestantsCardHTML = "";
+
+        // Extract Criteria & Contestants pool
+        for (let i = mainColCount; i < r1.length; i++) {
+            let txt = String(r1[i].text).trim();
+            if (txt.includes("Point Critiera") || txt.includes("Point Criteria")) {
+                let criteriaPairs =[];
+                for (let r = 2; r < rows.length; r++) {
+                    let key = rows[r][i-1] ? String(rows[r][i-1].text).trim() : "";
+                    let val = rows[r][i] ? String(rows[r][i].text).trim() : "";
+                    if (key || val) {
+                        criteriaPairs.push(`<tr><td style="padding-right:10px;">${key}</td><td style="text-align:right;">${val}</td></tr>`);
+                    }
+                }
+                if (criteriaPairs.length > 0) {
+                    scoringCriteriaHTML = `
+                    <div class="scoring-box" style="position: relative; width:auto; min-width:140px; margin-left: 20px;">
+                        <strong style="display:block; border-bottom:1px solid #555; padding-bottom:3px; margin-bottom:3px; text-align:center;">Scoring Criteria</strong>
+                        <table style="width:100%; font-size:10px; color:#fff; border-collapse:collapse;">
+                            ${criteriaPairs.join('')}
+                        </table>
+                    </div>`;
+                }
+            } else if (txt.includes("Contestants:")) {
+                // Determine Domestic vs Global logic
+                let domesticContestants = [];
+                let globalContestants =[];
+                let isGlobalSection = false;
+
+                for (let r = 2; r < rows.length; r++) {
+                    for (let c = i; c < rows[r].length; c++) {
+                        let cTxt = rows[r][c] ? String(rows[r][c].text).trim() : "";
+                        if (!cTxt || cTxt.includes("(Not final)") || cTxt.includes("Round") || cTxt.includes("Picks") || cTxt.includes("Points")) continue;
+                        
+                        if (cTxt.toLowerCase() === "global:" || cTxt.toLowerCase() === "global") {
+                            isGlobalSection = true;
+                            continue;
+                        }
+                        if (cTxt.toLowerCase() === "domestic:" || cTxt.toLowerCase() === "domestic") {
+                            isGlobalSection = false;
+                            continue;
+                        }
+
+                        if (isGlobalSection) {
+                            globalContestants.push(cTxt);
+                        } else {
+                            domesticContestants.push(cTxt);
+                        }
+                    }
+                }
+
+                // Alphanumeric Sort
+                const sortAlphaNum = (a, b) => a.localeCompare(b, undefined, {numeric: true, sensitivity: 'base'});
+                domesticContestants.sort(sortAlphaNum);
+                globalContestants.sort(sortAlphaNum);
+
+                if (domesticContestants.length > 0 || globalContestants.length > 0) {
+                    let listHTML = "";
+                    
+                    if (domesticContestants.length > 0) {
+                        let domSpan = domesticContestants.map(n => `<span style="background:#243547; color:#87e0f2; padding:5px 10px; border-radius:4px; font-size:12px; margin:3px; border:1px solid #334e68; font-weight:bold; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${n}</span>`).join('');
+                        let header = globalContestants.length > 0 ? `<div style="color:#87e0f2; font-size:11px; text-transform:uppercase; margin-bottom:5px; padding-bottom:2px; font-weight:bold; width:100%; border-bottom:1px solid #334e68;">Domestic</div>` : "";
+                        listHTML += `<div style="width:100%;">${header}<div style="display:flex; flex-wrap:wrap; gap:5px;">${domSpan}</div></div>`;
+                    }
+                    if (globalContestants.length > 0) {
+                        let globSpan = globalContestants.map(n => `<span style="background:#243547; color:#e087f2; padding:5px 10px; border-radius:4px; font-size:12px; margin:3px; border:1px solid #4e3368; font-weight:bold; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${n}</span>`).join('');
+                        listHTML += `<div style="width:100%; margin-top:10px;"><div style="color:#e087f2; font-size:11px; text-transform:uppercase; margin-bottom:5px; padding-bottom:2px; font-weight:bold; width:100%; border-bottom:1px solid #4e3368;">Global</div><div style="display:flex; flex-wrap:wrap; gap:5px;">${globSpan}</div></div>`;
+                    }
+
+                    contestantsCardHTML = `
+                    <div id="contestants-section" class="player-card" style="flex: 1 1 100%; max-width: 100%; margin-top: 15px; border-color:#87e0f2; background: rgba(27, 38, 49, 0.9);">
+                        <div class="player-name" style="color: #fff; border-bottom-color: #5a7590;">Contestants</div>
+                        <div class="stats-box" style="display:flex; flex-wrap:wrap; align-content:flex-start; gap:5px; padding:15px; min-height:auto; background: transparent; border: none;">
+                            ${listHTML}
+                        </div>
+                    </div>`;
+                }
+            }
+        }
+
+        // Determine layout logic
+        let isAlternating = rows.length > 2 && rows[2][1] && String(rows[2][1].text).trim() === "Contestant";
+        let tableHTML = `<table class="smtm-modern-table"><thead><tr><th></th>`;
+        for (let c = 2; c < mainColCount; c++) {
+            let pName = r1[c].text || "";
+            let emoji = window.smtmEmojis ? (window.smtmEmojis[pName] || "") : "";
+            tableHTML += `<th>${pName} ${emoji}</th>`;
+        }
+        tableHTML += `</tr></thead><tbody>`;
+
+        if (isAlternating) {
+            let playersData = {};
+            let totalLabel = "Total Pts:";
+
+            for (let c = 2; c < mainColCount; c++) playersData[c] = { rem: [], elim:[], total: "0" };
+
+            let r = 2;
+            while (r < rows.length) {
+                let rowLabel = rows[r][1] ? String(rows[r][1].text).trim() : "";
+                
+                if (rowLabel.includes("Total")) {
+                    totalLabel = rowLabel || "Total Pts:";
+                    for (let c = 2; c < mainColCount; c++) playersData[c].total = rows[r][c] ? String(rows[r][c].text).trim() : "0";
+                    break;
+                }
+
+                // Process pairs unconditionally
+                let ptsRow = rows[r+1];
+                for (let c = 2; c < mainColCount; c++) {
+                    let name = rows[r][c] ? String(rows[r][c].text).trim() : "";
+                    let pts = ptsRow && ptsRow[c] ? String(ptsRow[c].text).trim() : "";
+                    
+                    if (name) {
+                        let numPts = parseFloat(pts);
+                        let isElim = pts === "" || isNaN(numPts) || numPts === 0;
+                        if (isElim) playersData[c].elim.push({ name, pts });
+                        else playersData[c].rem.push({ name, pts });
+                    }
+                }
+                r += 2; 
+            }
+
+            // Find Max Rows
+            let maxRem = 0, maxElim = 0;
+            for (let c = 2; c < mainColCount; c++) {
+                if (playersData[c].rem.length > maxRem) maxRem = playersData[c].rem.length;
+                if (playersData[c].elim.length > maxElim) maxElim = playersData[c].elim.length;
+            }
+
+            // Render Remaining
+            if (maxRem > 0) {
+                tableHTML += `<tr class="section-header-rem"><td colspan="${mainColCount - 1}">Remaining Contestants</td></tr>`;
+                for (let i = 0; i < maxRem; i++) {
+                    let label1 = i === 0 ? "Contestant" : "";
+                    let label2 = i === 0 ? "Points" : "";
+                    tableHTML += `<tr><td style="color:#aaa; border-bottom: none;">${label1}</td>`;
+                    for (let c = 2; c < mainColCount; c++) tableHTML += `<td>${playersData[c].rem[i] ? playersData[c].rem[i].name : ""}</td>`;
+                    tableHTML += `</tr><tr><td style="color:#aaa;">${label2}</td>`;
+                    for (let c = 2; c < mainColCount; c++) tableHTML += `<td>${playersData[c].rem[i] ? playersData[c].rem[i].pts : ""}</td>`;
+                    tableHTML += `</tr>`;
+                }
+            }
+
+            // Render Eliminated (Just names, no duplicated point rows)
+            if (maxElim > 0) {
+                tableHTML += `<tr class="section-header-elim"><td colspan="${mainColCount - 1}">Eliminated Contestants</td></tr>`;
+                for (let i = 0; i < maxElim; i++) {
+                    let label1 = i === 0 ? "Contestant" : "";
+                    tableHTML += `<tr><td style="background: rgba(255, 60, 60, 0.05); color:#aaa;">${label1}</td>`;
+                    for (let c = 2; c < mainColCount; c++) {
+                        let p = playersData[c].elim[i];
+                        let isEmpty = !p || !p.name;
+                        tableHTML += `<td class="${!isEmpty ? 'eliminated' : ''}" style="background: rgba(255, 60, 60, 0.05);">${!isEmpty ? p.name : ""}</td>`;
+                    }
+                    tableHTML += `</tr>`;
+                }
+            }
+
+            // Render Total
+            tableHTML += `<tr class="total-row"><td>${totalLabel}</td>`;
+            for (let c = 2; c < mainColCount; c++) tableHTML += `<td>${playersData[c].total}</td>`;
+            tableHTML += `</tr>`;
+
+        } else {
+            // Fallback for non-alternating tables (like 'Overall')
+            for (let r = 2; r < rows.length; r++) {
+                let rowData = rows[r];
+                let rowLabel = rowData[1] ? String(rowData[1].text).trim() : "";
+                let isTotalRow = rowLabel.includes("Total Pts") || rowLabel.includes("Total Points");
+                
+                let hasData = false;
+                for(let c = 1; c < mainColCount; c++) { if (rowData[c] && String(rowData[c].text).trim() !== "") hasData = true; }
+                if (!hasData) continue;
+
+                tableHTML += `<tr class="${isTotalRow ? 'total-row' : ''}">`;
+                for (let c = 1; c < mainColCount; c++) {
+                    let cellVal = rowData[c] ? String(rowData[c].text).trim() : "";
+                    tableHTML += `<td>${cellVal}</td>`;
+                }
+                tableHTML += `</tr>`;
+            }
+        }
+        tableHTML += `</tbody></table>`;
+
+        // Poster Injection Logic for Overall Tab
+        let posterHTML = "";
+        if (tabName === "Overall") {
+            if (currentSMTMSeason === "SMTM 11") {
+                posterHTML = `<img src="https://web2-cf-image.cjenm.com/crop/520x748/public/share/metamng/programs/Contents-Detail-poster-Show-Me-the-Money-11-01_1668046835603.jpg?v=1768316724" style="width: 100%; height: auto; border-radius: 8px; border: 2px solid #5a7590; box-shadow: 0 5px 15px rgba(0,0,0,0.5); display: block;">`;
+            } else if (currentSMTMSeason === "SMTM 12") {
+                posterHTML = `<img src="https://web2-cf-image.cjenm.com/crop/520x748/public/share/metamng/programs/contentsdetailpostershowmethemoney1201_1769073438099.jpg?v=1775142316" style="width: 100%; height: auto; border-radius: 8px; border: 2px solid #5a7590; box-shadow: 0 5px 15px rgba(0,0,0,0.5); display: block;">`;
+            }
+        }
+
+        container.innerHTML = `
+        <div class="season-container">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-bottom: 20px;">
+                <h2 style="margin: 0; flex: 1;">${tabName}</h2>
+                ${(tabName === "Overall" && contestantsCardHTML) ? `<button class="maple-btn" onclick="document.getElementById('contestants-section').scrollIntoView({behavior: 'smooth'})" style="margin-right: 15px; font-size: 12px; height: 35px;">Contestants</button>` : ''}
+                ${scoringCriteriaHTML}
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; justify-content: center; width: 100%;">
+                ${posterHTML ? `<div style="flex: 0 0 auto; width: 100%; max-width: 300px; margin: 0 auto; display: flex; justify-content: center;">${posterHTML}</div>` : ''}
+                <div class="player-card" style="flex: 1 1 500px; max-width: 100%; padding: 0; overflow: hidden; border-color: #87e0f2; background: transparent; margin: 0;">
+                    <div style="overflow-x: auto; width: 100%;">
+                        ${tableHTML}
+                    </div>
+                </div>
+            </div>
+            ${contestantsCardHTML ? `<div style="width: 100%; margin-top: 15px;">${contestantsCardHTML}</div>` : ''}
+        </div>`;
+    }
+
+    async function renderAnimeDraft(year, season) {
+        const container = document.getElementById('content-area');
+        container.innerHTML = getLoadingCardHTML("Fetching Anime Info...");
+        
         const rows = allData[year][season];
         await fetchAllAnimeInfo(rows); 
-        const container = document.getElementById('content-area');
+        
         const totalRow = rows.find(r => r.some(c => c.text === "Total"));
-        
         container.innerHTML = `<div class="season-container">
-            <div class="scoring-box"><strong>Scoring</strong><br>70+: Positive<br>70-: Negative<br>90+: Double</div>
+            <div class="scoring-box anime-absolute-box"><strong>Scoring</strong><br>70+: Positive<br>70-: Negative<br>90+: Double</div>
             <h2>${year} ${season}</h2><div class="player-grid" id="grid"></div></div>`;
-        
+            
         const grid = document.getElementById('grid');
         const header = rows[1];
+        let allPicksByPlayer = {}, animeRegistry = {}; 
         
-        let allPicksByPlayer = {}; 
-        let animeRegistry = {}; 
-
+        // Compute Anime Ranks/Emojis
+        let players =[];
         for (let i = 2; i < header.length; i += 2) {
-            if (!header[i].text || ["Scoring", "70+"].includes(header[i].text)) continue;
-            allPicksByPlayer[i] = [];
+            let name = header[i].text;
+            let score = parseFloat(totalRow ? totalRow[i+1].text : "0") || 0;
+            if (name && !["Scoring", "70+"].includes(name)) {
+                players.push({name, score});
+            }
+        }
+        players.sort((a,b) => b.score - a.score);
+        let animeEmojis = {};
+        for(let i=0; i<players.length; i++) {
+            let em = '';
+            if(i === players.length - 1) em = '💩';
+            else if(i === 0) em = '🥇';
+            else if(i === 1) em = '🥈';
+            else if(i === 2) em = '🥉';
+            animeEmojis[players[i].name] = em;
+        }
+        
+        for (let i = 2; i < header.length; i += 2) {
+            if (!header[i].text ||["Scoring", "70+"].includes(header[i].text)) continue;
+            allPicksByPlayer[i] =[];
             rows.forEach((r, idx) => {
                 if (idx > 1 && r[1] && r[1].text && !r[1].text.includes("Total") && r[i].text) {
                     let id = r[i].url ? parseInt(r[i].url.split('/')[4]) : null;
@@ -121,45 +556,43 @@
                 }
             });
         }
-
         for (let col in allPicksByPlayer) {
             let picks = allPicksByPlayer[col];
             if (picks.length > 0) {
                 let lastPick = picks[picks.length - 1];
                 lastPick.isAction = true; 
                 if (animeRegistry[lastPick.id] > 1) {
-                    for (let c in allPicksByPlayer) {
-                        allPicksByPlayer[c].forEach(p => { if (p.id === lastPick.id) p.isTargeted = true; });
-                    }
+                    for (let c in allPicksByPlayer) { allPicksByPlayer[c].forEach(p => { if (p.id === lastPick.id) p.isTargeted = true; }); }
                 }
             }
         }
-
         for (let i = 2; i < header.length; i += 2) {
             if (!allPicksByPlayer[i]) continue;
             let picksHTML = "";
             allPicksByPlayer[i].forEach(p => {
                 let icon = animeCache[p.id] ? `<img src="${animeCache[p.id].coverImage.medium}" style="width:25px; height:35px; margin-right:8px; border-radius:3px;">` : "";
-                
-                // Add vertical counter label
                 if (p.isAction) picksHTML += `<div class="counter-label-line">COUNTERPICK</div>`;
-                
                 picksHTML += `<div class="draft-item ${p.isTargeted ? 'counterpick' : ''}" 
                                 onmouseover="handleInteraction(${p.id}, false, '${p.text.replace(/'/g, "\\'")}')" 
                                 onmouseleave="closeModal(false)" 
                                 onclick="handleInteraction(${p.id}, true, '${p.text.replace(/'/g, "\\'")}')">
                                 <span>${icon}${p.text}</span> <b>${p.score}</b></div>`;
             });
-            grid.innerHTML += `<div class="player-card"><div class="player-name">${header[i].text}</div><div class="stats-box">${picksHTML}</div><div class="total-box">Total: ${totalRow ? (totalRow[i+1].text || 0) : '0'}</div></div>`;
+            let pName = header[i].text;
+            let pEmoji = animeEmojis[pName] ? ` ${animeEmojis[pName]}` : '';
+            grid.innerHTML += `<div class="player-card"><div class="player-name">${pName}${pEmoji}</div><div class="stats-box">${picksHTML}</div><div class="total-box">Total: ${totalRow ? (totalRow[i+1].text || 0) : '0'}</div></div>`;
         }
     }
 
     async function fetchAllAnimeInfo(rows) {
-        let ids = [...new Set(rows.map(r => r.filter(c => c.url).map(c => parseInt(c.url.split('/')[4]))).flat())];
+        let ids =[...new Set(rows.map(r => r.filter(c => c.url).map(c => parseInt(c.url.split('/')[4]))).flat())];
+        if(ids.length === 0) return;
         const query = `query ($ids: [Int]) { Page { media(id_in: $ids) { id, title { romaji }, description, coverImage { large, medium }, format, episodes, duration, status, averageScore, popularity, siteUrl } } }`;
-        const res = await fetch('https://graphql.anilist.co', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query, variables: {ids}}) });
-        const json = await res.json();
-        if(json.data) json.data.Page.media.forEach(m => animeCache[m.id] = m);
+        try {
+            const res = await fetch('https://graphql.anilist.co', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query, variables: {ids}}) });
+            const json = await res.json();
+            if(json.data) json.data.Page.media.forEach(m => animeCache[m.id] = m);
+        } catch(e) { console.error("Error fetching anime info", e); }
     }
 
     function handleInteraction(id, isClick, title) {
@@ -188,10 +621,8 @@
         const sidebar = document.getElementById('modal-sidebar');
         const modal = document.getElementById('modal-box');
         const icon = document.getElementById('toggle-icon');
-        
         sidebar.classList.toggle('expanded'); 
         modal.classList.toggle('expanded-mode');
-        
         icon.innerText = sidebar.classList.contains('expanded') ? "▶▶" : "◀◀";
     }
     
@@ -203,6 +634,7 @@
         document.getElementById('modal-box').classList.remove('expanded-mode');
         document.getElementById('toggle-icon').innerText = "◀◀";
     }
+
     init();
 </script>
 </body>
