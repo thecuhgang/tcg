@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TCG Fantasy Hub - Football Archive</title>
     <style>
-        /* Removed font-size: 13px; from body to sync perfectly with index.html */
         body { margin: 0; font-family: 'IBM Plex Sans', sans-serif; color: #294a6b; min-height: 100vh; overflow-x: hidden; background: #000; }
         #bg-video { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -1; object-fit: cover; pointer-events: none; }
         h1 { color: #ffffff; font-size: 3em; text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000; letter-spacing: 2px; text-transform: uppercase; margin: 20px 0; text-align: center; }
@@ -14,7 +13,6 @@
         #content-area { width: 100%; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; }
         #game-menu, #season-menu { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; width: 100%; max-width: 900px; }
         
-        /* Matched button styles perfectly with index.html, retaining flex to align icons */
         .maple-btn, .expand-btn { 
             background: linear-gradient(180deg, #87e0f2 0%, #4ab3c9 100%); 
             border: 1px solid #fff; border-radius: 4px; color: white; padding: 8px 15px; 
@@ -23,7 +21,7 @@
             font-size: 13.3333px; transition: transform 0.1s;
         }
         .maple-btn:active, .expand-btn:active { transform: translateY(2px); box-shadow: 0 0 0 #225c68; }
-        .platform-icon { width: 18px; height: 18px; border-radius: 3px; background: white; padding: 1px; }
+        .platform-icon { width: 18px; height: 18px; border-radius: 3px; background: white; padding: 1px; object-fit: cover; }
         .expand-btn { width: 100% !important; margin-top: 10px !important; box-sizing: border-box; } 
         
         .tab-bar { display: flex; gap: 5px; margin: 20px auto; justify-content: center; flex-wrap: wrap; width: 100%; }
@@ -55,10 +53,13 @@
         .draft-order-visual { display: flex !important; flex-direction: row !important; justify-content: center !important; gap: 10px !important; margin-bottom: 25px !important; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px; flex-wrap: nowrap !important; overflow-x: auto; width: 100%; box-sizing: border-box; border: 1px solid #334e68; }
         .do-item { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 5px; font-size: 11px; color: #87e0f2; font-weight: bold; min-width: 85px; text-align: center; }
 
-        .football-table { width: 100%; border-collapse: collapse; background: rgba(255,255,255,0.05); color: white; font-size: 13px; }
-        .football-table th { background: #354a6a; color: #87e0f2; padding: 12px; border: 1px solid #5a7590; }
-        .football-table td { padding: 10px; border: 1px solid #334e68; text-align: center; }
-        .round-even { background: rgba(255,255,255,0.02); }
+        /* Table Overrides & Wrapping for Aesthetics */
+        .table-wrapper { width: 100%; border-radius: 10px; overflow: hidden; border: 2px solid #5a7590; box-shadow: 0 4px 10px rgba(0,0,0,0.3); background: rgba(0,0,0,0.2); }
+        .football-table { width: 100%; border-collapse: collapse; color: white; font-size: 13px; margin: 0; }
+        .football-table th { background: #2a3a4a; color: #87e0f2; padding: 12px; border-bottom: 2px solid #5a7590; text-transform: uppercase; font-size: 12px; }
+        .football-table td { padding: 10px 12px; border-bottom: 1px solid #4a6583; text-align: center; vertical-align: middle; }
+        .football-table tr:last-child td { border-bottom: none; }
+        .round-even { background: rgba(255,255,255,0.03); }
         .round-odd { background: rgba(135, 224, 242, 0.05); }
 
         .nfl-player-row { display: flex !important; flex-direction: row !important; align-items: center !important; gap: 10px !important; padding: 6px !important; border-bottom: 1px solid rgba(0,0,0,0.08) !important; min-height: 52px !important; box-sizing: border-box !important; width: 100% !important; overflow: hidden !important; }
@@ -70,8 +71,21 @@
         .nfl-pts { font-weight: 900; font-size: 13px; color: #fff !important; width: 45px; text-align: center; text-shadow: 1px 1px 2px #000; flex-shrink: 0; }
         .pos-badge { font-weight: 900; font-size: 8px; padding: 1px 4px; border-radius: 3px; color: #fff; text-shadow: 1px 1px 0 rgba(0,0,0,0.5); display: inline-block !important; width: fit-content !important; text-align: center; margin-bottom: 2px; }
 
+        /* Override to clean up nfl-player-row inside table cells */
+        .football-table .nfl-player-row { border-bottom: none !important; min-height: auto !important; padding: 2px 0 !important; }
+
+        /* Draft Owner Column Alignments */
+        .draft-owner-cell { display: flex; align-items: center; justify-content: flex-start; gap: 10px; text-align: left; }
+        .draft-owner-avatar { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #5a7590; object-fit: cover; background: #eee; flex-shrink: 0; }
+
         .details-pane { display: none; margin-top: 10px; border-top: 2px solid #354a6a; padding-top: 10px; }
         .details-pane.active { display: block; }
+
+        /* Custom Scrollbar for Transactions History */
+        .history-scroll { max-height: 250px; overflow-y: auto; padding-right: 5px; }
+        .history-scroll::-webkit-scrollbar { width: 6px; }
+        .history-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); border-radius: 4px; }
+        .history-scroll::-webkit-scrollbar-thumb { background: #87e0f2; border-radius: 4px; }
 
         .box-score-container { background: rgba(255,255,255,0.04); border-radius: 5px; padding: 8px; width: 100%; box-sizing: border-box; }
         .matchup-row { display: flex !important; align-items: center !important; justify-content: space-between !important; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.1); gap: 10px; min-height: 55px; box-sizing: border-box; width: 100%; }
@@ -131,32 +145,23 @@
     const POS_ORDER = { QB: 1, RB: 2, WR: 3, TE: 4, K: 5, DEF: 6 };
     const POS_COLORS = { QB: '#d4af37', RB: '#27ae60', WR: '#2980b9', TE: '#d35400', K: '#8e44ad', DEF: '#7f8c8d' };
     const DEF_ICON = "https://sleepercdn.com/images/v2/icons/player_default.webp"; 
+    
     const SLEEPER_ID_2019 = "474813121689546752";
+    const YAHOO_ID_2025 = "199672_2025";
 
-    const LOADING_TEXTS = [
-        "Loading these hands...", 
-        "Loading L's...", 
-        "Loading ...", 
-        "l O a D i N g ...", 
-        "Loading third leg protocol...", 
-        "Loading Mountain Dew Cold Red", 
-        "Loading ... dez nuts"
+    const LOADING_TEXTS =[
+        "Loading these hands...", "Loading L's...", "Loading ...", "l O a D i N g ...", 
+        "Loading third leg protocol...", "Loading Mountain Dew Cold Red", "Loading ... dez nuts"
     ];
-    const LOADING_GIFS = [
-        "https://c.tenor.com/jfmI0j5FcpAAAAAd/tenor.gif", 
-        "https://c.tenor.com/FawYo00tBekAAAAC/tenor.gif", 
-        "https://c.tenor.com/Krf7sKoeHNUAAAAd/tenor.gif", 
-        "https://media.tenor.com/OSCT96zoz_0AAAAj/umbreon-loading.gif", 
-        "leon.gif", 
-        "https://c.tenor.com/5eIhXDwH73QAAAAd/tenor.gif", 
-        "https://c.tenor.com/jgDVuidR3bkAAAAd/tenor.gif", 
-        "https://c.tenor.com/hXpNeTG45kIAAAAC/tenor.gif", 
-        "https://c.tenor.com/8tA6lM4NHdAAAAAd/tenor.gif"
+    const LOADING_GIFS =[
+        "https://c.tenor.com/jfmI0j5FcpAAAAAd/tenor.gif", "https://c.tenor.com/FawYo00tBekAAAAC/tenor.gif", 
+        "https://c.tenor.com/Krf7sKoeHNUAAAAd/tenor.gif", "https://media.tenor.com/OSCT96zoz_0AAAAj/umbreon-loading.gif", 
+        "leon.gif", "https://c.tenor.com/5eIhXDwH73QAAAAd/tenor.gif", "https://c.tenor.com/jgDVuidR3bkAAAAd/tenor.gif", 
+        "https://c.tenor.com/hXpNeTG45kIAAAAC/tenor.gif", "https://c.tenor.com/8tA6lM4NHdAAAAAd/tenor.gif"
     ];
 
-    let nflPlayers = null, currentLeagueData = null;
+    let nflPlayers = null, nflPlayersLoadedFromAPI = false, currentLeagueData = null;
 
-    // Properly aligned loading method using the exact same logic as index.html
     function getLoadingCardHTML(contextText = "Loading Data...") {
         const isGif = Math.random() < 0.4;
         let innerHTML = "";
@@ -184,34 +189,41 @@
     function init() {
         const menu = document.getElementById('game-menu');
         for (let name in GAMES) menu.innerHTML += `<button class="maple-btn" onclick="handleMenuClick('${name}')">${name}</button>`;
+        
         const sMenu = document.getElementById('season-menu');
-        sMenu.innerHTML += `<button class="maple-btn" onclick="fetchSleeperData('${SLEEPER_ID_2019}')"><img src="https://sleeper.com/favicon.ico" class="platform-icon"> 2019 (Sleeper)</button>`;
+        sMenu.innerHTML += `<button class="maple-btn" onclick="fetchLeagueData('${SLEEPER_ID_2019}', 'sleeper')"><img src="https://sleeper.com/favicon.ico" class="platform-icon"> 2019 (Sleeper)</button>`;
+        sMenu.innerHTML += `<button class="maple-btn" onclick="fetchLeagueData('${YAHOO_ID_2025}', 'local')"><img src="https://www.yahoo.com/favicon.ico" class="platform-icon"> 2025 (Yahoo)</button>`;
     }
 
     function handleMenuClick(name) { if (GAMES[name].type === "redirect") window.location.href = GAMES[name].href; }
 
     async function loadNFLPlayers() {
-        if (nflPlayers) return;
+        if (nflPlayersLoadedFromAPI && nflPlayers) return; 
+        
         const container = document.getElementById('content-area');
         container.innerHTML = getLoadingCardHTML("Downloading NFL Player Database...");
         try {
             const res = await fetch('https://api.sleeper.app/v1/players/nfl');
             nflPlayers = await res.json();
-        } catch (e) { nflPlayers = {}; }
+            nflPlayersLoadedFromAPI = true;
+        } catch (e) { 
+            if (!nflPlayers) nflPlayers = {}; 
+        }
     }
 
-    async function fetchSleeperData(leagueId) {
+    async function fetchLeagueData(leagueId, source) {
         const container = document.getElementById('content-area');
-        if (!DEBUG_FORCE_FALLBACK) await loadNFLPlayers();
+        await loadNFLPlayers(); 
         
         container.innerHTML = getLoadingCardHTML("Syncing Archive...");
         try {
-            let data;
-            if (DEBUG_FORCE_FALLBACK) {
+            let data = null;
+
+            if (source === 'local') {
                 data = await fetch(`./sleeper_backup_${leagueId}.json`).then(r => r.json());
-            } else {
+            } else if (source === 'sleeper') {
                 try {
-                    const [league, rosters, users, drafts, bracket, consol] = await Promise.all([
+                    const[league, rosters, users, drafts, bracket, consol] = await Promise.all([
                         fetch(`https://api.sleeper.app/v1/league/${leagueId}`).then(r => r.json()),
                         fetch(`https://api.sleeper.app/v1/league/${leagueId}/rosters`).then(r => r.json()),
                         fetch(`https://api.sleeper.app/v1/league/${leagueId}/users`).then(r => r.json()),
@@ -232,15 +244,22 @@
                 }
             }
 
-            if (!data) throw new Error("Null data");
-            if (data.playerSnapshot) nflPlayers = data.playerSnapshot;
+            if (!data) throw new Error("Data not found");
+            
+            // Safe merge to prevent the small local snapshot from erasing the Sleeper Live DB
+            if (data.playerSnapshot) {
+                nflPlayers = { ...nflPlayers, ...data.playerSnapshot };
+            }
 
-            // SMART USER MAPPING: Check if backup or live
+            // Ensure transactions are ALWAYS sorted by earliest date first (chronologically)
+            if (data.allTransactions) {
+                data.allTransactions.sort((a, b) => a.status_updated - b.status_updated);
+            }
+
             const userMap = {};
             const userList = Array.isArray(data.userMap) ? data.userMap : Object.values(data.userMap);
             userList.forEach(u => { 
                 const uid = u.user_id;
-                // If backup already has 'name' and 'owner' fields, use them. Otherwise, map Sleeper raw.
                 userMap[uid] = { 
                     user_id: uid, 
                     name: u.name || u.metadata?.team_name || u.display_name || "Unknown Team", 
@@ -253,7 +272,7 @@
             data.rosters.forEach(r => { rosterToTeam[r.roster_id] = { ...userMap[r.owner_id], roster_id: r.roster_id }; });
             
             const teamTransactionsMap = {};
-            data.rosters.forEach(r => teamTransactionsMap[r.roster_id] = []);
+            data.rosters.forEach(r => teamTransactionsMap[r.roster_id] =[]);
             data.allTransactions.forEach(tr => {
                 if (tr.roster_ids) tr.roster_ids.forEach(rid => { if (teamTransactionsMap[rid]) teamTransactionsMap[rid].push(tr); });
             });
@@ -262,7 +281,7 @@
             renderSleeperTabs("Standings");
         } catch (e) { 
             console.error("LOAD ERROR:", e);
-            container.innerHTML = `<h3 style="color:red; text-align:center;">Error loading Sleeper data.</h3>`; 
+            container.innerHTML = `<h3 style="color:red; text-align:center;">Error loading data. Ensure <code>sleeper_backup_${leagueId}.json</code> exists in the root folder.</h3>`; 
         }
     }
 
@@ -270,12 +289,14 @@
 
     function getPosBadge(pos) {
         const color = POS_COLORS[pos] || '#333';
-        return `<span class="pos-badge" style="background:${color}">${pos}</span>`;
+        return `<span class="pos-badge" style="background:${color}">${pos || 'UKN'}</span>`;
     }
 
     function getPlayerHTML(pid, pts = null, flip = false) {
-        const p = nflPlayers?.[pid] || { first_name: "", last_name: "Empty", position: "??" };
-        const img = currentLeagueData.imageMap?.[pid] || (p.position === 'DEF' ? DEF_ICON : `https://sleepercdn.com/content/nfl/players/thumb/${pid}.jpg`);
+        const p = nflPlayers?.[pid] || { first_name: "Unknown", last_name: "Player", position: "UKN" };
+        const fallbackImg = p.position === 'DEF' ? `https://sleepercdn.com/images/team_logos/nfl/${pid.toLowerCase()}.png` : `https://sleepercdn.com/content/nfl/players/thumb/${pid}.jpg`;
+        const img = currentLeagueData.imageMap?.[pid] || fallbackImg;
+        
         return `<div class="nfl-player-row ${flip ? 'flipped' : ''}">
             <div class="nfl-img-jail"><img src="${img}" onerror="this.src='${DEF_ICON}'"></div>
             <div class="nfl-info">${getPosBadge(p.position)}<span>${p.first_name} ${p.last_name}</span></div>
@@ -293,30 +314,61 @@
 
     function renderSleeperStandings(target) {
         const { rosters, rosterToTeam, teamTransactionsMap, bracket, consol, imageMap } = currentLeagueData;
-        const winnerId = bracket.find(m => m.p === 1)?.w;
-        const consolWinnerId = consol.find(m => m.p === 1)?.w;
 
         const buildBracketHTML = (data, title) => {
             if(!data || !data.length) return "";
+            
+            let uniqueData =[];
+            let seen = new Set();
+            data.forEach(m => {
+                if(!m.t1 || !m.t2) return;
+                let key = m.m ? "match-" + m.m : "r-" + m.r + "-" +[m.t1, m.t2].sort().join("-");
+                if(!seen.has(key)) { seen.add(key); uniqueData.push({...m}); }
+            });
+
+            let isChamp = title.toLowerCase().includes("championship");
+            let r1Losers = uniqueData.filter(m => m.r === 1).map(m => m.l);
+            
+            uniqueData.forEach(m => {
+                if (m.r === 2) {
+                    if (r1Losers.includes(m.t1) || r1Losers.includes(m.t2)) m.isBottom = true;
+                    else m.isBottom = false;
+                }
+            });
+
+            let r2TopWinners = uniqueData.filter(m => m.r === 2 && !m.isBottom).map(m => m.w);
+            uniqueData.forEach(m => {
+                if (m.r === 3) {
+                    if (r2TopWinners.includes(m.t1) || r2TopWinners.includes(m.t2)) m.p = 1;
+                    else m.p = 3;
+                }
+            });
+
             let rounds = {};
-            data.forEach(m => { rounds[m.r] = rounds[m.r] || []; rounds[m.r].push(m); });
+            uniqueData.forEach(m => {
+                if (m.r === 1) m.label = "Quarterfinals";
+                else if (m.r === 2) m.label = m.isBottom ? (isChamp ? "5th Place Match" : "11th Place Match") : "Semifinals";
+                else if (m.r === 3) {
+                    if (m.p === 1) m.label = "Finals Match";
+                    else if (m.p === 3) m.label = isChamp ? "3rd Place Match" : "9th Place Match";
+                }
+                rounds[m.r] = rounds[m.r] ||[]; 
+                rounds[m.r].push(m); 
+            });
+            
             let h = `<div class="bracket-container"><h4 style="color:#87e0f2; margin:0 0 15px 0; text-transform:uppercase;">${title}</h4><div class="bracket-tree">`;
             Object.keys(rounds).sort().forEach(rNum => {
                 h += `<div class="bracket-column">`;
                 rounds[rNum].forEach(m => {
                     const t1 = rosterToTeam[m.t1], t2 = rosterToTeam[m.t2];
-                    let label = "Placement Path";
-                    if (m.p === 1) label = "Finals Path";
-                    else if (m.p === 3) label = "Runner Up Match";
-                    else if (rNum == 1) label = "Round 1";
-                    h += `<div class="bracket-match"><div class="match-label">${label}</div>
+                    h += `<div class="bracket-match"><div class="match-label">${m.label || 'Placement Match'}</div>
                         <div class="bm-team ${m.w === m.t1 ? 'bm-winner' : t1 ? 'bm-loser' : ''}"><img src="${imageMap?.[t1?.user_id] || t1?.avatar}" class="bm-avatar"> <span>${t1?.name || "TBD"}</span></div>
                         <div class="bm-team ${m.w === m.t2 ? 'bm-winner' : t2 ? 'bm-loser' : ''}"><img src="${imageMap?.[t2?.user_id] || t2?.avatar}" class="bm-avatar"> <span>${t2?.name || "TBD"}</span></div>
                     </div>`;
                 });
                 h += `</div>`;
             });
-            const final = data.find(m => m.p === 1 && m.w);
+            const final = uniqueData.find(m => m.p === 1 && m.w);
             if (final) {
                 const champ = rosterToTeam[final.w];
                 if (champ) h += `<div class="bracket-column" style="margin-left:10px;"><div class="final-winner-box"><span style="font-size:18px;">🏆</span><img src="${imageMap?.[champ.user_id] || champ.avatar}" style="width:32px;height:32px;border-radius:50%;border:2px solid gold;"><b style="color:gold; font-size:10px; overflow:hidden; text-overflow:ellipsis; width:100%; white-space:nowrap;">${champ.name}</b></div></div>`;
@@ -324,67 +376,128 @@
             return h + `</div></div>`;
         };
 
+        let ultimateWinner = null, ultimateConsolWinner = null;
+        let cFinalMatch = bracket.find(m => m.p === 1) || bracket.filter(m => m.r === 3)[0];
+        if (cFinalMatch) ultimateWinner = cFinalMatch.w;
+        
+        let consolFinalMatch = consol.find(m => m.p === 1) || consol.filter(m => m.r === 3)[0];
+        if (consolFinalMatch) ultimateConsolWinner = consolFinalMatch.w;
+
+        // Detect 11th Place Loser for the Poop Emoji
+        let poopLoserId = null;
+        let consolR1Losers = consol.filter(m => m.r === 1).map(m => m.l);
+        let consol11thMatch = consol.find(m => m.r === 2 && (consolR1Losers.includes(m.t1) || consolR1Losers.includes(m.t2)));
+        if (consol11thMatch) {
+            poopLoserId = consol11thMatch.l;
+        }
+
         let teamData = rosters.map(r => {
             const u = rosterToTeam[r.roster_id];
             return {
                 ...u, wins: r.settings.wins, losses: r.settings.losses,
                 fpts: (r.settings.fpts + "." + (r.settings.fpts_decimal || 0)),
-                players: r.players.sort((a,b) => (POS_ORDER[nflPlayers?.[a]?.position] || 99) - (POS_ORDER[nflPlayers?.[b]?.position] || 99)),
+                players: (r.players ||[]).sort((a,b) => (POS_ORDER[nflPlayers?.[a]?.position] || 99) - (POS_ORDER[nflPlayers?.[b]?.position] || 99)),
                 roster_id: r.roster_id, user_id: r.owner_id
             };
         });
-        teamData.sort((a,b) => (a.roster_id === winnerId ? -2 : a.roster_id === consolWinnerId ? -1 : 0) - (b.roster_id === winnerId ? -2 : b.roster_id === consolWinnerId ? -1 : 0) || b.wins - a.wins || b.fpts - a.fpts);
+        
+        teamData.sort((a,b) => (a.roster_id === ultimateWinner ? -2 : a.roster_id === ultimateConsolWinner ? -1 : 0) - (b.roster_id === ultimateWinner ? -2 : b.roster_id === ultimateConsolWinner ? -1 : 0) || b.wins - a.wins || b.fpts - a.fpts);
+        
+        // Fallback poop emoji if bracket didn't resolve an 11th place match
+        if (!poopLoserId && teamData.length > 0) poopLoserId = teamData[teamData.length - 1].roster_id;
 
         let html = `<div class="bracket-wrapper">` + buildBracketHTML(bracket, "🏆 Championship") + buildBracketHTML(consol, "🚽 Consolation") + `</div><div class="player-grid">`;
+        
         teamData.forEach((t, i) => {
-            const rankEmoji = (t.roster_id === winnerId || t.roster_id === consolWinnerId) ? '🥇' : (i === teamData.length-1) ? '💩' : '';
+            const rankEmoji = (t.roster_id === ultimateWinner || t.roster_id === ultimateConsolWinner) ? '🥇' : (t.roster_id === poopLoserId) ? '💩' : '';
             const tAvatar = imageMap?.[t.user_id] || t.avatar;
-            const moves = (teamTransactionsMap[t.roster_id] || []).map(m => {
+            const moves = (teamTransactionsMap[t.roster_id] ||[]).map(m => {
                 const gIds = Object.keys(m.adds || {}).filter(id => m.adds[id] === t.roster_id);
                 const lIds = Object.keys(m.drops || {}).filter(id => m.drops[id] === t.roster_id);
-                let g = gIds.map(id => `${getPosBadge(nflPlayers?.[id]?.position)} ${nflPlayers?.[id]?.first_name} ${nflPlayers?.[id]?.last_name}`).join('<br>') || 'None';
+                
+                let g = gIds.map(id => {
+                    const p = nflPlayers?.[id] || { position: 'UKN', first_name: 'Unknown', last_name: 'Player' };
+                    return `${getPosBadge(p.position)} ${p.first_name} ${p.last_name}`;
+                }).join('<br>') || 'None';
+
                 if (m.type === 'trade') {
                     const pid = m.roster_ids.find(rid => rid !== t.roster_id);
                     const partner = rosterToTeam[pid]?.name || "Partner";
                     const tlIds = Object.keys(m.adds || {}).filter(id => m.adds[id] === pid);
-                    const lost = tlIds.map(id => `${getPosBadge(nflPlayers?.[id]?.position)} ${nflPlayers?.[id]?.first_name} ${nflPlayers?.[id]?.last_name}`).join('<br>') || 'None';
+                    
+                    const lost = tlIds.map(id => {
+                        const p = nflPlayers?.[id] || { position: 'UKN', first_name: 'Unknown', last_name: 'Player' };
+                        return `${getPosBadge(p.position)} ${p.first_name} ${p.last_name}`;
+                    }).join('<br>') || 'None';
+                    
                     return `<div class="move-item trade-box"><div class="trade-header">Trade with ${partner}</div><b>Gained:</b><br>${g}<br><b>Lost:</b><br>${lost}</div>`;
                 }
+                
                 const header = m.type.toUpperCase().replace('_', ' ');
-                const lostStr = lIds.map(id => `${getPosBadge(nflPlayers?.[id]?.position)} ${nflPlayers?.[id]?.first_name} ${nflPlayers?.[id]?.last_name}`).join('<br>');
+                const lostStr = lIds.map(id => {
+                    const p = nflPlayers?.[id] || { position: 'UKN', first_name: 'Unknown', last_name: 'Player' };
+                    return `${getPosBadge(p.position)} ${p.first_name} ${p.last_name}`;
+                }).join('<br>');
+                
                 return `<div class="move-item"><b>${header}:</b><br>${g}${lostStr.length ? `<br><b>DROPPED:</b><br>${lostStr}` : ''}</div>`;
             }).join('') || "No recent moves.";
 
-            html += `<div class="player-card"><div class="player-name">${rankEmoji} <img src="${tAvatar}" class="team-avatar"> ${t.name}</div><div class="stats-box"><div class="stat-item"><span>Owner:&nbsp;</span><b>${t.owner}</b></div><div class="stat-item"><span>Record:&nbsp;</span><b>${t.wins}W - ${t.losses}L</b></div><div class="stat-item"><span>Total Pts:&nbsp;</span><b>${t.fpts}</b></div></div><button class="expand-btn" onclick="toggleDetail('rost-${t.roster_id}')">View Roster & History</button><div class="details-pane" id="rost-${t.roster_id}"><p style="font-weight:bold; font-size:11px; border-bottom:1px solid #ddd; margin:0 0 5px 0;">FINAL LINEUP</p>${t.players.map(pid => getPlayerHTML(pid)).join('')}<p style="font-weight:bold; font-size:11px; border-bottom:1px solid #ddd; margin:15px 0 5px 0;">HISTORY</p>${moves}</div></div>`;
-        });
+            let lineupHtml = t.players.length > 0 
+                ? t.players.map(pid => getPlayerHTML(pid)).join('')
+                : `<div style="text-align:center; padding: 15px; color:#fff; font-size:11px; opacity:0.6;"><i>Roster unavailable. Include players JSON for deeper sync.</i></div>`;
 
-        // SMART EXPORT: Only shows if you open the file locally on your computer
-        const isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        if (isLocal) {
-            html += `<div style="width:100%; display:flex; justify-content:center; margin-top:40px;"><button class="maple-btn" onclick="exportLeagueData()">💾 Export Local Archive</button></div>`;
-        }
+            html += `<div class="player-card"><div class="player-name">${rankEmoji} <img src="${tAvatar}" class="team-avatar"> ${t.name}</div><div class="stats-box"><div class="stat-item"><span>Owner:&nbsp;</span><b>${t.owner}</b></div><div class="stat-item"><span>Record:&nbsp;</span><b>${t.wins}W - ${t.losses}L</b></div><div class="stat-item"><span>Total Pts:&nbsp;</span><b>${t.fpts}</b></div></div><button class="expand-btn" onclick="toggleDetail('rost-${t.roster_id}')">View Roster & History</button><div class="details-pane" id="rost-${t.roster_id}"><p style="font-weight:bold; font-size:11px; border-bottom:1px solid #ddd; margin:0 0 5px 0;">FINAL LINEUP</p>${lineupHtml}<p style="font-weight:bold; font-size:11px; border-bottom:1px solid #ddd; margin:15px 0 5px 0;">HISTORY</p><div class="history-scroll">${moves}</div></div></div>`;
+        });
 
         target.innerHTML = html;
     }
 
     function renderSleeperDraft(target) {
         const { draftPicks, userMap, imageMap } = currentLeagueData;
-        const seen = new Set(); const uniqueOwners = [];
+        if (!draftPicks || draftPicks.length === 0) {
+            target.innerHTML = `<h3 style="text-align:center; color:#87e0f2; margin-top:20px;">Draft Data Unavailable</h3>`;
+            return;
+        }
+
+        const seen = new Set(); const uniqueOwners =[];
         draftPicks.forEach(p => { if(!seen.has(p.picked_by)) { seen.add(p.picked_by); uniqueOwners.push(userMap[p.picked_by]); } });
         const visual = `<h3 style="text-align:center; color:#87e0f2; margin:0 0 10px 0;">DRAFT ORDER</h3><div class="draft-order-visual">` + uniqueOwners.map((u, idx) => `<div class="do-item"><span>#${idx+1}</span><img src="${imageMap?.[u?.user_id] || u?.avatar}" class="bm-avatar" style="width:36px;height:36px;border:2px solid #87e0f2;background:#eee;border-radius:50%;"><span>${u?.name}</span></div>`).join('') + `</div>`;
-        let table = `<table class="football-table"><thead><tr><th>Pick</th><th>NFL Player</th><th>Team Owner</th></tr></thead><tbody>`;
+        
+        let table = `<div class="table-wrapper"><table class="football-table"><thead><tr><th>Pick</th><th>NFL Player</th><th>Team Owner</th></tr></thead><tbody>`;
         draftPicks.forEach(p => {
-            const team = userMap[p.picked_by], pInf = nflPlayers?.[p.player_id] || { position: "??" }, icon = imageMap?.[p.player_id] || (pInf.position === 'DEF' ? DEF_ICON : `https://sleepercdn.com/content/nfl/players/thumb/${p.player_id}.jpg`);
-            table += `<tr class="${p.round % 2 === 0 ? 'round-even' : 'round-odd'}"><td>${p.round}-${p.draft_slot}</td><td style="text-align:left;"><div class="nfl-player-row"><div class="nfl-img-jail"><img src="${icon}" onerror="this.src='${DEF_ICON}'"></div>${getPosBadge(pInf.position)} <b>${pInf.first_name || ""} ${pInf.last_name || ""}</b></div></td><td style="text-align:left;"><img src="${imageMap?.[team?.user_id] || team?.avatar}" style="width:20px;height:20px;border-radius:50%;vertical-align:middle;margin-right:8px;">${team?.name}</td></tr>`;
+            const team = userMap[p.picked_by], pInf = nflPlayers?.[p.player_id] || { position: "??" };
+            const fallbackImg = pInf.position === 'DEF' ? `https://sleepercdn.com/images/team_logos/nfl/${p.player_id.toLowerCase()}.png` : `https://sleepercdn.com/content/nfl/players/thumb/${p.player_id}.jpg`;
+            const icon = imageMap?.[p.player_id] || fallbackImg;
+            
+            table += `<tr class="${p.round % 2 === 0 ? 'round-even' : 'round-odd'}">
+                <td><b style="color:#87e0f2;">${p.round}-${p.draft_slot}</b></td>
+                <td style="text-align:left;">
+                    <div class="nfl-player-row">
+                        <div class="nfl-img-jail"><img src="${icon}" onerror="this.src='${DEF_ICON}'"></div>
+                        <div class="nfl-info">${getPosBadge(pInf.position)} <b style="font-size:12px;">${pInf.first_name || ""} ${pInf.last_name || ""}</b></div>
+                    </div>
+                </td>
+                <td style="text-align:left;">
+                    <div class="draft-owner-cell">
+                        <img src="${imageMap?.[team?.user_id] || team?.avatar}" class="draft-owner-avatar">
+                        <span style="font-size:12px;">${team?.name}</span>
+                    </div>
+                </td>
+            </tr>`;
         });
-        target.innerHTML = visual + table + `</tbody></table>`;
+        target.innerHTML = visual + table + `</tbody></table></div>`;
     }
 
     function getBoxScoreRowHTML(pid1, pts1, pid2, pts2) {
-        const p1 = nflPlayers?.[pid1] || { first_name: "", last_name: "Empty", position: "??" };
-        const p2 = nflPlayers?.[pid2] || { first_name: "", last_name: "Empty", position: "??" };
-        const img1 = currentLeagueData.imageMap?.[pid1] || (p1.position === 'DEF' ? DEF_ICON : `https://sleepercdn.com/content/nfl/players/thumb/${pid1}.jpg`);
-        const img2 = currentLeagueData.imageMap?.[pid2] || (p2.position === 'DEF' ? DEF_ICON : `https://sleepercdn.com/content/nfl/players/thumb/${pid2}.jpg`);
+        const p1 = nflPlayers?.[pid1] || { first_name: "Unknown", last_name: "Player", position: "UKN" };
+        const p2 = nflPlayers?.[pid2] || { first_name: "Unknown", last_name: "Player", position: "UKN" };
+        
+        const fallbackImg1 = p1.position === 'DEF' ? `https://sleepercdn.com/images/team_logos/nfl/${pid1.toLowerCase()}.png` : `https://sleepercdn.com/content/nfl/players/thumb/${pid1}.jpg`;
+        const fallbackImg2 = p2.position === 'DEF' ? `https://sleepercdn.com/images/team_logos/nfl/${pid2.toLowerCase()}.png` : `https://sleepercdn.com/content/nfl/players/thumb/${pid2}.jpg`;
+
+        const img1 = currentLeagueData.imageMap?.[pid1] || fallbackImg1;
+        const img2 = currentLeagueData.imageMap?.[pid2] || fallbackImg2;
+        
         return `<div class="matchup-row"><div class="player-mini"><div class="nfl-img-jail"><img src="${img1}" onerror="this.src='${DEF_ICON}'"></div><div class="mini-info">${getPosBadge(p1.position)}<span>${p1.first_name} ${p1.last_name}</span></div><div class="mini-pts">${(pts1 || 0).toFixed(1)}</div></div><div class="player-mini right"><div class="nfl-img-jail"><img src="${img2}" onerror="this.src='${DEF_ICON}'"></div><div class="mini-info">${getPosBadge(p2.position)}<span>${p2.first_name} ${p2.last_name}</span></div><div class="mini-pts">${(pts2 || 0).toFixed(1)}</div></div></div>`;
     }
 
@@ -392,71 +505,23 @@
         const { allMatchups, rosterToTeam, imageMap } = currentLeagueData;
         let h = ``;
         allMatchups.forEach((weekData, i) => {
+            if (!weekData || weekData.length === 0) return;
             let matchups = {};
             weekData.forEach(m => { if (!matchups[m.matchup_id]) matchups[m.matchup_id] = []; matchups[m.matchup_id].push(m); });
             h += `<div class="week-container"><div class="week-header" onclick="toggleDetail('week-${i}')">Week ${i+1} <span>▼</span></div><div class="week-content" id="week-${i}"><div class="matchup-grid">`;
             for (let id in matchups) {
-                const [tA, tB] = matchups[id]; if (!tB) continue;
+                const[tA, tB] = matchups[id]; if (!tB) continue;
                 const teamA = rosterToTeam[tA.roster_id], teamB = rosterToTeam[tB.roster_id], mid = `m-${i}-${id}`;
-                h += `<div class="matchup-card"><div class="matchup-summary"><div class="team-side"><img src="${imageMap?.[teamA.user_id] || teamA.avatar}" class="team-avatar" style="width:32px;height:32px;"><h5>${teamA.name}</h5><div class="score-val">${tA.points.toFixed(1)}</div></div><div class="matchup-vs">VS</div><div class="team-side"><img src="${imageMap?.[teamB.user_id] || teamB.avatar}" class="team-avatar" style="width:32px;height:32px;"><h5>${teamB.name}</h5><div class="score-val">${tB.points.toFixed(1)}</div></div></div><button class="expand-btn" onclick="toggleDetail('${mid}')">View Box Score</button><div class="details-pane" id="${mid}"><div class="box-score-container">${tA.starters.map((pid, idx) => getBoxScoreRowHTML(pid, tA.starters_points[idx], tB.starters[idx], tB.starters_points[idx])).join('')}</div></div></div>`;
+                
+                let boxScoreHtml = (tA.starters && tA.starters.length > 0)
+                    ? Math.max(tA.starters.length, tB.starters.length) > 0 ? Array.from({length: Math.max(tA.starters.length, tB.starters.length)}).map((_, idx) => getBoxScoreRowHTML(tA.starters[idx], tA.starters_points[idx], tB.starters[idx], tB.starters_points[idx])).join('') : ''
+                    : `<div style="text-align:center; padding: 20px; color:#fff; font-size:11px; opacity:0.6;"><i>Box Score Unavailable</i></div>`;
+                
+                h += `<div class="matchup-card"><div class="matchup-summary"><div class="team-side"><img src="${imageMap?.[teamA.user_id] || teamA.avatar}" class="team-avatar" style="width:32px;height:32px;"><h5>${teamA.name}</h5><div class="score-val">${tA.points.toFixed(1)}</div></div><div class="matchup-vs">VS</div><div class="team-side"><img src="${imageMap?.[teamB.user_id] || teamB.avatar}" class="team-avatar" style="width:32px;height:32px;"><h5>${teamB.name}</h5><div class="score-val">${tB.points.toFixed(1)}</div></div></div><button class="expand-btn" onclick="toggleDetail('${mid}')">View Box Score</button><div class="details-pane" id="${mid}"><div class="box-score-container">${boxScoreHtml}</div></div></div>`;
             }
             h += `</div></div></div>`;
         });
         target.innerHTML = h;
-    }
-
-    async function toBase64(url) {
-        try {
-            const res = await fetch(url);
-            const blob = await res.blob();
-            return new Promise((r, j) => { const rd = new FileReader(); rd.onloadend = () => r(rd.result); rd.onerror = j; rd.readAsDataURL(blob); });
-        } catch (e) { return null; }
-    }
-
-    async function exportLeagueData() {
-        if(!currentLeagueData) return;
-        const container = document.getElementById('content-area');
-        const old = container.innerHTML;
-        container.innerHTML = getLoadingCardHTML("Encoding Images & Database Snapshot... (This may take a minute)");
-
-        const imgMap = {};
-        for (const uid of Object.keys(currentLeagueData.userMap)) {
-            const url = currentLeagueData.userMap[uid].avatar;
-            if (url) imgMap[uid] = await toBase64(url);
-        }
-        
-        const playerSnapshot = {};
-        const pIds = new Set();
-        currentLeagueData.rosters.forEach(r => r.players.forEach(p => pIds.add(p)));
-        currentLeagueData.draftPicks.forEach(p => pIds.add(p.player_id));
-        currentLeagueData.allMatchups.forEach(week => week.forEach(m => m.starters.forEach(p => pIds.add(p))));
-        currentLeagueData.allTransactions.forEach(tr => {
-            if(tr.adds) Object.keys(tr.adds).forEach(id => pIds.add(id));
-            if(tr.drops) Object.keys(tr.drops).forEach(id => pIds.add(id));
-        });
-
-        for (const pid of pIds) {
-            const p = nflPlayers[pid];
-            if (p) {
-                playerSnapshot[pid] = { first_name: p.first_name, last_name: p.last_name, position: p.position };
-                if (p.position !== 'DEF') {
-                    const url = `https://sleepercdn.com/content/nfl/players/thumb/${pid}.jpg`;
-                    imgMap[pid] = await toBase64(url);
-                }
-            }
-        }
-
-        currentLeagueData.imageMap = imgMap;
-        currentLeagueData.playerSnapshot = playerSnapshot;
-
-        const blob = new Blob([JSON.stringify(currentLeagueData)], {type: "application/json"});
-        const dnNode = document.createElement('a');
-        dnNode.href = URL.createObjectURL(blob);
-        dnNode.download = `sleeper_backup_${currentLeagueData.league.league_id}.json`;
-        document.body.appendChild(dnNode);
-        dnNode.click();
-        document.body.removeChild(dnNode);
-        container.innerHTML = old;
     }
 
     window.onload = init;
