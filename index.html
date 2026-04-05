@@ -10,7 +10,22 @@
         
         h1 { color: #ffffff; font-size: 3em; text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000; letter-spacing: 2px; text-transform: uppercase; margin: 20px 0; text-align: center; }
 
-        /* Custom Spinner for Card Loader */
+        /* Modal Loading Overlay Styles */
+        #loading-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            z-index: 100000; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.2s;
+        }
+        #loading-overlay.active { opacity: 1; pointer-events: all; }
+        
+        .loading-card {
+            background: rgba(27, 38, 49, 0.95); border: 2px solid #87e0f2; border-radius: 10px;
+            padding: 30px; box-shadow: 0 0 30px rgba(135, 224, 242, 0.4);
+            display: flex; flex-direction: column; align-items: center; width: 90%; max-width: 350px;
+        }
+
         .spinner {
             border: 5px solid #243547; border-top: 5px solid #87e0f2;
             border-radius: 50%; width: 40px; height: 40px;
@@ -18,7 +33,7 @@
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Modal - Transparent UI */
+        /* Info Modal - Transparent UI */
         #modal-box { 
             position: fixed; bottom: 20px; right: 20px; width: 90%; max-width: 350px; 
             background: rgba(220, 240, 250, 0.9); backdrop-filter: blur(8px); 
@@ -33,12 +48,7 @@
         
         .modal-body { display: flex; height: 300px; padding: 15px; box-sizing: border-box; overflow: hidden; }
         
-        /* Fixed Sidebar Animation */
-        .sidebar { 
-            width: 0; background: #1b2631; color: #fff; 
-            transition: width 0.3s ease, padding 0.3s ease; 
-            overflow: hidden; font-size: 11px; flex-shrink: 0; 
-        }
+        .sidebar { width: 0; background: #1b2631; color: #fff; transition: width 0.3s ease, padding 0.3s ease; overflow: hidden; font-size: 11px; flex-shrink: 0; }
         .sidebar.expanded { width: 150px; padding: 10px; border-right: 1px solid #444; }
         
         .main-info { flex: 1; display: flex; padding-left: 10px; min-width: 0; }
@@ -47,7 +57,6 @@
         .desc-box { flex: 1; overflow-y: auto; font-size: 11px; padding: 0 10px; min-width: 0; color: #000; }
         .close-btn { cursor: pointer; padding: 5px; font-weight: bold; }
         
-        /* Centered Layout Enforcements */
         .main-container { display: flex; flex-direction: column; align-items: center; padding: 20px; z-index: 10; width: 100%; box-sizing: border-box; }
         #content-area { width: 100%; display: flex; flex-direction: column; align-items: center; }
         #game-menu, #season-menu { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; width: 100%; max-width: 900px; }
@@ -93,6 +102,11 @@
     <!-- Circular Transparent Top Button -->
     <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" style="position: fixed; bottom: 20px; left: 20px; z-index: 10000; background: rgba(0,0,0,0.4); color: #87e0f2; border: 2px solid #87e0f2; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); font-size: 20px; padding: 0; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">⬆</button>
 
+    <!-- Modal Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="loading-card" id="loading-card-content"></div>
+    </div>
+
     <div class="main-container">
         <h1>TCG Fantasy Hub</h1>
         <div id="game-menu"></div>
@@ -100,6 +114,7 @@
         <div id="content-area"></div>
     </div>
 
+    <!-- Info Modal -->
     <div id="modal-box">
         <div class="modal-header">
             <span id="toggle-icon" style="cursor:pointer" onclick="toggleSidebar()">◀◀</span>
@@ -131,37 +146,27 @@
         }
     };
 
-    // Pool of randomized text and GIFs for the loading screen
     const LOADING_TEXTS =[
-        "Loading these hands...",
-        "Loading L's...",
-        "Loading ...",
-        "l O a D i N g ...",
-		"Loading third leg protocol...",
-		"Loading Mountain Dew Cold Red",
-		"Loading ... dez nuts"
+        "Loading these hands...", "Loading L's...", "Loading ...", "l O a D i N g ...",
+		"Loading third leg protocol...", "Loading Mountain Dew Cold Red", "Loading ... dez nuts"
     ];
     
     const LOADING_GIFS =[
-        "https://c.tenor.com/jfmI0j5FcpAAAAAd/tenor.gif",
-        "https://c.tenor.com/FawYo00tBekAAAAC/tenor.gif",
-        "https://c.tenor.com/Krf7sKoeHNUAAAAd/tenor.gif",
-        "https://media.tenor.com/OSCT96zoz_0AAAAj/umbreon-loading.gif",
-        "leon.gif", 
-        "https://c.tenor.com/5eIhXDwH73QAAAAd/tenor.gif",
-        "https://c.tenor.com/jgDVuidR3bkAAAAd/tenor.gif",
-        "https://c.tenor.com/hXpNeTG45kIAAAAC/tenor.gif",
-        "https://c.tenor.com/8tA6lM4NHdAAAAAd/tenor.gif"
+        "https://c.tenor.com/jfmI0j5FcpAAAAAd/tenor.gif", "https://c.tenor.com/FawYo00tBekAAAAC/tenor.gif",
+        "https://c.tenor.com/Krf7sKoeHNUAAAAd/tenor.gif", "https://media.tenor.com/OSCT96zoz_0AAAAj/umbreon-loading.gif",
+        "leon.gif", "https://c.tenor.com/5eIhXDwH73QAAAAd/tenor.gif", "https://c.tenor.com/jgDVuidR3bkAAAAd/tenor.gif",
+        "https://c.tenor.com/hXpNeTG45kIAAAAC/tenor.gif", "https://c.tenor.com/8tA6lM4NHdAAAAAd/tenor.gif"
     ];
 
     let allData = {}, animeCache = {}, isLocked = false;
-    let currentSMTMSeason = ""; // Global tracker for active SMTM Season
+    let currentSMTMSeason = ""; 
 
-    // Generates a randomized Loading Card HTML (50% chance text/spinner, 50% chance GIF)
-    function getLoadingCardHTML(contextText = "Loading Data...") {
-        const isGif = Math.random() < 0.4;
+    function showLoading(contextText) {
+        const overlay = document.getElementById('loading-overlay');
+        const content = document.getElementById('loading-card-content');
+        
+        const isGif = Math.random() < 0.7;
         let innerHTML = "";
-
         if (isGif) {
             const randomGif = LOADING_GIFS[Math.floor(Math.random() * LOADING_GIFS.length)];
             innerHTML = `
@@ -172,14 +177,16 @@
             const randomText = LOADING_TEXTS[Math.floor(Math.random() * LOADING_TEXTS.length)];
             innerHTML = `
                 <div class="spinner"></div>
-                <h3 style="margin:0; text-transform:uppercase; letter-spacing: 2px; color: #87e0f2; text-align: center;">${randomText}</h3>
+                <h3 style="margin:0; text-transform:uppercase; letter-spacing: 2px; color: #87e0f2; text-align: center; font-size: 14px;">${randomText}</h3>
+                <p style="margin:10px 0 0 0; color:#aaa; font-size:11px;">${contextText}</p>
             `;
         }
+        content.innerHTML = innerHTML;
+        overlay.classList.add('active');
+    }
 
-        return `
-        <div class="season-container" style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 50px 20px; border-color: #87e0f2; box-shadow: 0 0 30px rgba(135, 224, 242, 0.2); width: 100%; max-width: 400px; margin: 40px auto; box-sizing: border-box; background: rgba(27, 38, 49, 0.9);">
-            ${innerHTML}
-        </div>`;
+    function hideLoading() {
+        document.getElementById('loading-overlay').classList.remove('active');
     }
 
     function init() {
@@ -188,21 +195,15 @@
             menu.innerHTML += `<button class="maple-btn" onclick="selectGame('${gameName}')">${gameName}</button>`;
         }
 
-        // Check for URL parameters if coming back from football.html
         const urlParams = new URLSearchParams(window.location.search);
         const requestedGame = urlParams.get('game');
-        
         if (requestedGame && GAMES[requestedGame]) {
-            // Prevent an infinite loop if the URL parameter somehow triggers a redirect back to itself
-            if (GAMES[requestedGame].type !== "redirect") {
-                selectGame(requestedGame);
-            }
+            if (GAMES[requestedGame].type !== "redirect") selectGame(requestedGame);
         }
     }
 
     async function selectGame(gameName) {
         const gameConfig = GAMES[gameName];
-
         if (gameConfig.type === "redirect") {
             window.location.href = gameConfig.href;
             return;
@@ -211,38 +212,46 @@
         const seasonMenu = document.getElementById('season-menu');
         const contentArea = document.getElementById('content-area');
         seasonMenu.innerHTML = "";
-        contentArea.innerHTML = getLoadingCardHTML(`Loading ${gameName}...`);
+        
+        showLoading(`Loading ${gameName}...`);
 
-        if (gameConfig.type === "anime") {
-            try {
-                const res = await fetch(gameConfig.url);
-                allData = await res.json();
-                contentArea.innerHTML = ""; // Clear loader
-                for (let year in allData) {
-                    for (let season in allData[year]) {
-                        seasonMenu.innerHTML += `<button class="maple-btn" onclick="renderAnimeDraft('${year}', '${season}')">${year} ${season}</button>`;
+        setTimeout(async () => {
+            if (gameConfig.type === "anime") {
+                try {
+                    const res = await fetch(gameConfig.url);
+                    allData = await res.json();
+                    for (let year in allData) {
+                        for (let season in allData[year]) {
+                            seasonMenu.innerHTML += `<button class="maple-btn" onclick="renderAnimeDraft('${year}', '${season}')">${year} ${season}</button>`;
+                        }
                     }
+                    hideLoading();
+                } catch (e) { contentArea.innerHTML = `<h3 style="color:red;">Error loading data</h3>`; hideLoading(); }
+            } 
+            else if (gameConfig.type === "smtm") {
+                for (let seasonName in gameConfig.seasons) {
+                    let url = gameConfig.seasons[seasonName];
+                    seasonMenu.innerHTML += `<button class="maple-btn" onclick="loadSMTMSeason('${seasonName}', '${url}')">${seasonName}</button>`;
                 }
-            } catch (e) { contentArea.innerHTML = `<h3 style="color:red;">Error loading data</h3>`; }
-        } 
-        else if (gameConfig.type === "smtm") {
-            contentArea.innerHTML = ""; // Clear loader initially for SMTM, wait for season pick
-            for (let seasonName in gameConfig.seasons) {
-                let url = gameConfig.seasons[seasonName];
-                seasonMenu.innerHTML += `<button class="maple-btn" onclick="loadSMTMSeason('${seasonName}', '${url}')">${seasonName}</button>`;
+                hideLoading();
             }
-        }
+        }, 100);
     }
 
     async function loadSMTMSeason(seasonName, url) {
-        currentSMTMSeason = seasonName; // Set active season
-        const contentArea = document.getElementById('content-area');
-        contentArea.innerHTML = getLoadingCardHTML(`Loading ${seasonName}...`);
-        try {
-            const res = await fetch(url);
-            allData = await res.json();
-            renderTabs(allData);
-        } catch(e) { contentArea.innerHTML = `<h3 style="color:red;">Error loading ${seasonName}</h3>`; }
+        showLoading(`Fetching ${seasonName}...`);
+        setTimeout(async () => {
+            currentSMTMSeason = seasonName;
+            try {
+                const res = await fetch(url);
+                allData = await res.json();
+                renderTabs(allData);
+                hideLoading();
+            } catch(e) { 
+                document.getElementById('content-area').innerHTML = `<h3 style="color:red;">Error loading ${seasonName}</h3>`; 
+                hideLoading();
+            }
+        }, 100);
     }
 
     function renderTabs(dataObject, selectedTab = null) {
@@ -256,7 +265,6 @@
         tabHTML += `</div>`;
         container.innerHTML = tabHTML + `<div id="tab-content-render" class="table-wrapper"></div>`;
 
-        // Universal SMTM Emojis Ranking based on Overall Tab
         window.smtmEmojis = {};
         if (dataObject["Overall"]) {
             let overallData = dataObject["Overall"];
@@ -289,7 +297,6 @@
                 }
             }
         }
-
         renderSMTM(dataObject[activeTab], activeTab);
     }
 
@@ -301,21 +308,15 @@
 
         let r1 = rows[1];
         let mainColCount = 2; 
-
-        // Figure out where main player grid ends
         for (let i = 2; i < r1.length; i++) {
             let txt = String(r1[i].text).trim();
-            if (txt === "" || txt.includes("Contestants:") || txt.includes("Point Crit")) {
-                mainColCount = i;
-                break;
-            }
+            if (txt === "" || txt.includes("Contestants:") || txt.includes("Point Crit")) { mainColCount = i; break; }
         }
         if (mainColCount === 2) mainColCount = r1.length;
 
         let scoringCriteriaHTML = "";
         let contestantsCardHTML = "";
 
-        // Extract Criteria & Contestants pool
         for (let i = mainColCount; i < r1.length; i++) {
             let txt = String(r1[i].text).trim();
             if (txt.includes("Point Critiera") || txt.includes("Point Criteria")) {
@@ -323,77 +324,51 @@
                 for (let r = 2; r < rows.length; r++) {
                     let key = rows[r][i-1] ? String(rows[r][i-1].text).trim() : "";
                     let val = rows[r][i] ? String(rows[r][i].text).trim() : "";
-                    if (key || val) {
-                        criteriaPairs.push(`<tr><td style="padding-right:10px;">${key}</td><td style="text-align:right;">${val}</td></tr>`);
-                    }
+                    if (key || val) criteriaPairs.push(`<tr><td style="padding-right:10px;">${key}</td><td style="text-align:right;">${val}</td></tr>`);
                 }
                 if (criteriaPairs.length > 0) {
                     scoringCriteriaHTML = `
                     <div class="scoring-box" style="position: relative; width:auto; min-width:140px; margin-left: 20px;">
                         <strong style="display:block; border-bottom:1px solid #555; padding-bottom:3px; margin-bottom:3px; text-align:center;">Scoring Criteria</strong>
-                        <table style="width:100%; font-size:10px; color:#fff; border-collapse:collapse;">
-                            ${criteriaPairs.join('')}
-                        </table>
+                        <table style="width:100%; font-size:10px; color:#fff; border-collapse:collapse;">${criteriaPairs.join('')}</table>
                     </div>`;
                 }
             } else if (txt.includes("Contestants:")) {
-                // Determine Domestic vs Global logic
                 let domesticContestants = [];
                 let globalContestants =[];
                 let isGlobalSection = false;
-
                 for (let r = 2; r < rows.length; r++) {
                     for (let c = i; c < rows[r].length; c++) {
                         let cTxt = rows[r][c] ? String(rows[r][c].text).trim() : "";
                         if (!cTxt || cTxt.includes("(Not final)") || cTxt.includes("Round") || cTxt.includes("Picks") || cTxt.includes("Points")) continue;
-                        
-                        if (cTxt.toLowerCase() === "global:" || cTxt.toLowerCase() === "global") {
-                            isGlobalSection = true;
-                            continue;
-                        }
-                        if (cTxt.toLowerCase() === "domestic:" || cTxt.toLowerCase() === "domestic") {
-                            isGlobalSection = false;
-                            continue;
-                        }
-
-                        if (isGlobalSection) {
-                            globalContestants.push(cTxt);
-                        } else {
-                            domesticContestants.push(cTxt);
-                        }
+                        if (cTxt.toLowerCase() === "global:" || cTxt.toLowerCase() === "global") { isGlobalSection = true; continue; }
+                        if (cTxt.toLowerCase() === "domestic:" || cTxt.toLowerCase() === "domestic") { isGlobalSection = false; continue; }
+                        if (isGlobalSection) globalContestants.push(cTxt); else domesticContestants.push(cTxt);
                     }
                 }
-
-                // Alphanumeric Sort
                 const sortAlphaNum = (a, b) => a.localeCompare(b, undefined, {numeric: true, sensitivity: 'base'});
                 domesticContestants.sort(sortAlphaNum);
                 globalContestants.sort(sortAlphaNum);
 
                 if (domesticContestants.length > 0 || globalContestants.length > 0) {
                     let listHTML = "";
-                    
                     if (domesticContestants.length > 0) {
                         let domSpan = domesticContestants.map(n => `<span style="background:#243547; color:#87e0f2; padding:5px 10px; border-radius:4px; font-size:12px; margin:3px; border:1px solid #334e68; font-weight:bold; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${n}</span>`).join('');
-                        let header = globalContestants.length > 0 ? `<div style="color:#87e0f2; font-size:11px; text-transform:uppercase; margin-bottom:5px; padding-bottom:2px; font-weight:bold; width:100%; border-bottom:1px solid #334e68;">Domestic</div>` : "";
-                        listHTML += `<div style="width:100%;">${header}<div style="display:flex; flex-wrap:wrap; gap:5px;">${domSpan}</div></div>`;
+                        listHTML += `<div style="width:100%;"><div style="color:#87e0f2; font-size:11px; text-transform:uppercase; margin-bottom:5px; padding-bottom:2px; font-weight:bold; width:100%; border-bottom:1px solid #334e68;">Domestic</div><div style="display:flex; flex-wrap:wrap; gap:5px;">${domSpan}</div></div>`;
                     }
                     if (globalContestants.length > 0) {
                         let globSpan = globalContestants.map(n => `<span style="background:#243547; color:#e087f2; padding:5px 10px; border-radius:4px; font-size:12px; margin:3px; border:1px solid #4e3368; font-weight:bold; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${n}</span>`).join('');
                         listHTML += `<div style="width:100%; margin-top:10px;"><div style="color:#e087f2; font-size:11px; text-transform:uppercase; margin-bottom:5px; padding-bottom:2px; font-weight:bold; width:100%; border-bottom:1px solid #4e3368;">Global</div><div style="display:flex; flex-wrap:wrap; gap:5px;">${globSpan}</div></div>`;
                     }
-
                     contestantsCardHTML = `
                     <div id="contestants-section" class="player-card" style="flex: 1 1 100%; max-width: 100%; margin-top: 15px; border-color:#87e0f2; background: rgba(27, 38, 49, 0.9);">
                         <div class="player-name" style="color: #fff; border-bottom-color: #5a7590;">Contestants</div>
-                        <div class="stats-box" style="display:flex; flex-wrap:wrap; align-content:flex-start; gap:5px; padding:15px; min-height:auto; background: transparent; border: none;">
-                            ${listHTML}
-                        </div>
+                        <div class="stats-box" style="display:flex; flex-wrap:wrap; align-content:flex-start; gap:5px; padding:15px; min-height:auto; background: transparent; border: none;">${listHTML}</div>
                     </div>`;
                 }
             }
         }
 
-        // Determine layout logic
         let isAlternating = rows.length > 2 && rows[2][1] && String(rows[2][1].text).trim() === "Contestant";
         let tableHTML = `<table class="smtm-modern-table"><thead><tr><th></th>`;
         for (let c = 2; c < mainColCount; c++) {
@@ -406,62 +381,48 @@
         if (isAlternating) {
             let playersData = {};
             let totalLabel = "Total Pts:";
-
             for (let c = 2; c < mainColCount; c++) playersData[c] = { rem: [], elim:[], total: "0" };
-
             let r = 2;
             while (r < rows.length) {
                 let rowLabel = rows[r][1] ? String(rows[r][1].text).trim() : "";
-                
                 if (rowLabel.includes("Total")) {
                     totalLabel = rowLabel || "Total Pts:";
                     for (let c = 2; c < mainColCount; c++) playersData[c].total = rows[r][c] ? String(rows[r][c].text).trim() : "0";
                     break;
                 }
-
-                // Process pairs unconditionally
                 let ptsRow = rows[r+1];
                 for (let c = 2; c < mainColCount; c++) {
                     let name = rows[r][c] ? String(rows[r][c].text).trim() : "";
                     let pts = ptsRow && ptsRow[c] ? String(ptsRow[c].text).trim() : "";
-                    
                     if (name) {
                         let numPts = parseFloat(pts);
                         let isElim = pts === "" || isNaN(numPts) || numPts === 0;
-                        if (isElim) playersData[c].elim.push({ name, pts });
-                        else playersData[c].rem.push({ name, pts });
+                        if (isElim) playersData[c].elim.push({ name, pts }); else playersData[c].rem.push({ name, pts });
                     }
                 }
                 r += 2; 
             }
-
-            // Find Max Rows
             let maxRem = 0, maxElim = 0;
             for (let c = 2; c < mainColCount; c++) {
                 if (playersData[c].rem.length > maxRem) maxRem = playersData[c].rem.length;
                 if (playersData[c].elim.length > maxElim) maxElim = playersData[c].elim.length;
             }
-
-            // Render Remaining
             if (maxRem > 0) {
                 tableHTML += `<tr class="section-header-rem"><td colspan="${mainColCount - 1}">Remaining Contestants</td></tr>`;
                 for (let i = 0; i < maxRem; i++) {
-                    let label1 = i === 0 ? "Contestant" : "";
-                    let label2 = i === 0 ? "Points" : "";
-                    tableHTML += `<tr><td style="color:#aaa; border-bottom: none;">${label1}</td>`;
+                    let l1 = i === 0 ? "Contestant" : "", l2 = i === 0 ? "Points" : "";
+                    tableHTML += `<tr><td style="color:#aaa; border-bottom: none;">${l1}</td>`;
                     for (let c = 2; c < mainColCount; c++) tableHTML += `<td>${playersData[c].rem[i] ? playersData[c].rem[i].name : ""}</td>`;
-                    tableHTML += `</tr><tr><td style="color:#aaa;">${label2}</td>`;
+                    tableHTML += `</tr><tr><td style="color:#aaa;">${l2}</td>`;
                     for (let c = 2; c < mainColCount; c++) tableHTML += `<td>${playersData[c].rem[i] ? playersData[c].rem[i].pts : ""}</td>`;
                     tableHTML += `</tr>`;
                 }
             }
-
-            // Render Eliminated (Just names, no duplicated point rows)
             if (maxElim > 0) {
                 tableHTML += `<tr class="section-header-elim"><td colspan="${mainColCount - 1}">Eliminated Contestants</td></tr>`;
                 for (let i = 0; i < maxElim; i++) {
-                    let label1 = i === 0 ? "Contestant" : "";
-                    tableHTML += `<tr><td style="background: rgba(255, 60, 60, 0.05); color:#aaa;">${label1}</td>`;
+                    let l1 = i === 0 ? "Contestant" : "";
+                    tableHTML += `<tr><td style="background: rgba(255, 60, 60, 0.05); color:#aaa;">${l1}</td>`;
                     for (let c = 2; c < mainColCount; c++) {
                         let p = playersData[c].elim[i];
                         let isEmpty = !p || !p.name;
@@ -470,41 +431,27 @@
                     tableHTML += `</tr>`;
                 }
             }
-
-            // Render Total
             tableHTML += `<tr class="total-row"><td>${totalLabel}</td>`;
             for (let c = 2; c < mainColCount; c++) tableHTML += `<td>${playersData[c].total}</td>`;
             tableHTML += `</tr>`;
-
         } else {
-            // Fallback for non-alternating tables (like 'Overall')
             for (let r = 2; r < rows.length; r++) {
-                let rowData = rows[r];
-                let rowLabel = rowData[1] ? String(rowData[1].text).trim() : "";
+                let rowData = rows[r], rowLabel = rowData[1] ? String(rowData[1].text).trim() : "";
                 let isTotalRow = rowLabel.includes("Total Pts") || rowLabel.includes("Total Points");
-                
                 let hasData = false;
-                for(let c = 1; c < mainColCount; c++) { if (rowData[c] && String(rowData[c].text).trim() !== "") hasData = true; }
+                for(let c = 1; c < mainColCount; c++) if (rowData[c] && String(rowData[c].text).trim() !== "") hasData = true;
                 if (!hasData) continue;
-
                 tableHTML += `<tr class="${isTotalRow ? 'total-row' : ''}">`;
-                for (let c = 1; c < mainColCount; c++) {
-                    let cellVal = rowData[c] ? String(rowData[c].text).trim() : "";
-                    tableHTML += `<td>${cellVal}</td>`;
-                }
+                for (let c = 1; c < mainColCount; c++) tableHTML += `<td>${rowData[c] ? String(rowData[c].text).trim() : ""}</td>`;
                 tableHTML += `</tr>`;
             }
         }
         tableHTML += `</tbody></table>`;
 
-        // Poster Injection Logic for Overall Tab
         let posterHTML = "";
         if (tabName === "Overall") {
-            if (currentSMTMSeason === "SMTM 11") {
-                posterHTML = `<img src="https://web2-cf-image.cjenm.com/crop/520x748/public/share/metamng/programs/Contents-Detail-poster-Show-Me-the-Money-11-01_1668046835603.jpg?v=1768316724" style="width: 100%; height: auto; border-radius: 8px; border: 2px solid #5a7590; box-shadow: 0 5px 15px rgba(0,0,0,0.5); display: block;">`;
-            } else if (currentSMTMSeason === "SMTM 12") {
-                posterHTML = `<img src="https://web2-cf-image.cjenm.com/crop/520x748/public/share/metamng/programs/contentsdetailpostershowmethemoney1201_1769073438099.jpg?v=1775142316" style="width: 100%; height: auto; border-radius: 8px; border: 2px solid #5a7590; box-shadow: 0 5px 15px rgba(0,0,0,0.5); display: block;">`;
-            }
+            if (currentSMTMSeason === "SMTM 11") posterHTML = `<img src="https://web2-cf-image.cjenm.com/crop/520x748/public/share/metamng/programs/Contents-Detail-poster-Show-Me-the-Money-11-01_1668046835603.jpg?v=1768316724" style="width: 100%; height: auto; border-radius: 8px; border: 2px solid #5a7590; box-shadow: 0 5px 15px rgba(0,0,0,0.5); display: block;">`;
+            else if (currentSMTMSeason === "SMTM 12") posterHTML = `<img src="https://web2-cf-image.cjenm.com/crop/520x748/public/share/metamng/programs/contentsdetailpostershowmethemoney1201_1769073438099.jpg?v=1775142316" style="width: 100%; height: auto; border-radius: 8px; border: 2px solid #5a7590; box-shadow: 0 5px 15px rgba(0,0,0,0.5); display: block;">`;
         }
 
         container.innerHTML = `
@@ -517,9 +464,7 @@
             <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; justify-content: center; width: 100%;">
                 ${posterHTML ? `<div style="flex: 0 0 auto; width: 100%; max-width: 300px; margin: 0 auto; display: flex; justify-content: center;">${posterHTML}</div>` : ''}
                 <div class="player-card" style="flex: 1 1 500px; max-width: 100%; padding: 0; overflow: hidden; border-color: #87e0f2; background: transparent; margin: 0;">
-                    <div style="overflow-x: auto; width: 100%;">
-                        ${tableHTML}
-                    </div>
+                    <div style="overflow-x: auto; width: 100%;">${tableHTML}</div>
                 </div>
             </div>
             ${contestantsCardHTML ? `<div style="width: 100%; margin-top: 15px;">${contestantsCardHTML}</div>` : ''}
@@ -527,81 +472,74 @@
     }
 
     async function renderAnimeDraft(year, season) {
-        const container = document.getElementById('content-area');
-        container.innerHTML = getLoadingCardHTML("Fetching Anime Info...");
+        showLoading(`Rendering ${year} ${season}...`);
         
-        const rows = allData[year][season];
-        await fetchAllAnimeInfo(rows); 
-        
-        const totalRow = rows.find(r => r.some(c => c.text === "Total"));
-        container.innerHTML = `<div class="season-container">
-            <div class="scoring-box anime-absolute-box"><strong>Scoring</strong><br>70+: Positive<br>70-: Negative<br>90+: Double</div>
-            <h2>${year} ${season}</h2><div class="player-grid" id="grid"></div></div>`;
+        setTimeout(async () => {
+            const container = document.getElementById('content-area');
+            const rows = allData[year][season];
+            await fetchAllAnimeInfo(rows); 
             
-        const grid = document.getElementById('grid');
-        const header = rows[1];
-        let allPicksByPlayer = {}, animeRegistry = {}; 
-        
-        // Compute Anime Ranks/Emojis
-        let players =[];
-        for (let i = 2; i < header.length; i += 2) {
-            let name = header[i].text;
-            let score = parseFloat(totalRow ? totalRow[i+1].text : "0") || 0;
-            if (name && !["Scoring", "70+"].includes(name)) {
-                players.push({name, score});
+            const totalRow = rows.find(r => r.some(c => c.text === "Total"));
+            container.innerHTML = `<div class="season-container">
+                <div class="scoring-box anime-absolute-box"><strong>Scoring</strong><br>70+: Positive<br>70-: Negative<br>90+: Double</div>
+                <h2>${year} ${season}</h2><div class="player-grid" id="grid"></div></div>`;
+                
+            const grid = document.getElementById('grid');
+            const header = rows[1];
+            let allPicksByPlayer = {}, animeRegistry = {}; 
+            
+            let players =[];
+            for (let i = 2; i < header.length; i += 2) {
+                let name = header[i].text, score = parseFloat(totalRow ? totalRow[i+1].text : "0") || 0;
+                if (name && !["Scoring", "70+"].includes(name)) players.push({name, score});
             }
-        }
-        players.sort((a,b) => b.score - a.score);
-        let animeEmojis = {};
-        for(let i=0; i<players.length; i++) {
-            let em = '';
-            if(i === players.length - 1) em = '💩';
-            else if(i === 0) em = '🥇';
-            else if(i === 1) em = '🥈';
-            else if(i === 2) em = '🥉';
-            animeEmojis[players[i].name] = em;
-        }
-        
-        for (let i = 2; i < header.length; i += 2) {
-            if (!header[i].text ||["Scoring", "70+"].includes(header[i].text)) continue;
-            allPicksByPlayer[i] =[];
-            rows.forEach((r, idx) => {
-                if (idx > 1 && r[1] && r[1].text && !r[1].text.includes("Total") && r[i].text) {
-                    let id = r[i].url ? parseInt(r[i].url.split('/')[4]) : null;
-                    if (id) {
-                        let pickObj = { id, text: r[i].text, score: r[i+1].text || 0, isAction: false, isTargeted: false };
-                        allPicksByPlayer[i].push(pickObj);
-                        animeRegistry[id] = (animeRegistry[id] || 0) + 1;
+            players.sort((a,b) => b.score - a.score);
+            let animeEmojis = {};
+            for(let i=0; i<players.length; i++) {
+                let em = '';
+                if(i === players.length - 1) em = '💩'; else if(i === 0) em = '🥇'; else if(i === 1) em = '🥈'; else if(i === 2) em = '🥉';
+                animeEmojis[players[i].name] = em;
+            }
+            
+            for (let i = 2; i < header.length; i += 2) {
+                if (!header[i].text ||["Scoring", "70+"].includes(header[i].text)) continue;
+                allPicksByPlayer[i] =[];
+                rows.forEach((r, idx) => {
+                    if (idx > 1 && r[1] && r[1].text && !r[1].text.includes("Total") && r[i].text) {
+                        let id = r[i].url ? parseInt(r[i].url.split('/')[4]) : null;
+                        if (id) {
+                            let pickObj = { id, text: r[i].text, score: r[i+1].text || 0, isAction: false, isTargeted: false };
+                            allPicksByPlayer[i].push(pickObj);
+                            animeRegistry[id] = (animeRegistry[id] || 0) + 1;
+                        }
+                    }
+                });
+            }
+            for (let col in allPicksByPlayer) {
+                let picks = allPicksByPlayer[col];
+                if (picks.length > 0) {
+                    let lastPick = picks[picks.length - 1]; lastPick.isAction = true; 
+                    if (animeRegistry[lastPick.id] > 1) {
+                        for (let c in allPicksByPlayer) allPicksByPlayer[c].forEach(p => { if (p.id === lastPick.id) p.isTargeted = true; });
                     }
                 }
-            });
-        }
-        for (let col in allPicksByPlayer) {
-            let picks = allPicksByPlayer[col];
-            if (picks.length > 0) {
-                let lastPick = picks[picks.length - 1];
-                lastPick.isAction = true; 
-                if (animeRegistry[lastPick.id] > 1) {
-                    for (let c in allPicksByPlayer) { allPicksByPlayer[c].forEach(p => { if (p.id === lastPick.id) p.isTargeted = true; }); }
-                }
             }
-        }
-        for (let i = 2; i < header.length; i += 2) {
-            if (!allPicksByPlayer[i]) continue;
-            let picksHTML = "";
-            allPicksByPlayer[i].forEach(p => {
-                let icon = animeCache[p.id] ? `<img src="${animeCache[p.id].coverImage.medium}" style="width:25px; height:35px; margin-right:8px; border-radius:3px;">` : "";
-                if (p.isAction) picksHTML += `<div class="counter-label-line">COUNTERPICK</div>`;
-                picksHTML += `<div class="draft-item ${p.isTargeted ? 'counterpick' : ''}" 
-                                onmouseover="handleInteraction(${p.id}, false, '${p.text.replace(/'/g, "\\'")}')" 
-                                onmouseleave="closeModal(false)" 
-                                onclick="handleInteraction(${p.id}, true, '${p.text.replace(/'/g, "\\'")}')">
-                                <span>${icon}${p.text}</span> <b>${p.score}</b></div>`;
-            });
-            let pName = header[i].text;
-            let pEmoji = animeEmojis[pName] ? ` ${animeEmojis[pName]}` : '';
-            grid.innerHTML += `<div class="player-card"><div class="player-name">${pName}${pEmoji}</div><div class="stats-box">${picksHTML}</div><div class="total-box">Total: ${totalRow ? (totalRow[i+1].text || 0) : '0'}</div></div>`;
-        }
+            for (let i = 2; i < header.length; i += 2) {
+                if (!allPicksByPlayer[i]) continue;
+                let picksHTML = "", pName = header[i].text;
+                allPicksByPlayer[i].forEach(p => {
+                    let icon = animeCache[p.id] ? `<img src="${animeCache[p.id].coverImage.medium}" style="width:25px; height:35px; margin-right:8px; border-radius:3px;">` : "";
+                    if (p.isAction) picksHTML += `<div class="counter-label-line">COUNTERPICK</div>`;
+                    picksHTML += `<div class="draft-item ${p.isTargeted ? 'counterpick' : ''}" 
+                                    onmouseover="handleInteraction(${p.id}, false, '${p.text.replace(/'/g, "\\'")}')" 
+                                    onmouseleave="closeModal(false)" 
+                                    onclick="handleInteraction(${p.id}, true, '${p.text.replace(/'/g, "\\'")}')">
+                                    <span>${icon}${p.text}</span> <b>${p.score}</b></div>`;
+                });
+                grid.innerHTML += `<div class="player-card"><div class="player-name">${pName}${animeEmojis[pName] ? ` ${animeEmojis[pName]}` : ''}</div><div class="stats-box">${picksHTML}</div><div class="total-box">Total: ${totalRow ? (totalRow[i+1].text || 0) : '0'}</div></div>`;
+            }
+            hideLoading();
+        }, 50);
     }
 
     async function fetchAllAnimeInfo(rows) {
@@ -625,7 +563,7 @@
         document.getElementById('modal-content').innerHTML = `
             <div class="left-panel">
                 <img src="${anime.coverImage.large}" width="120px" style="border: 2px solid #fff;">
-                <h4>${anime.title.romaji}</h4>
+                <h4 style="color:#000;">${anime.title.romaji}</h4>
                 <a href="${anime.siteUrl}" target="_blank" class="maple-btn" style="font-size:10px; margin-top:auto;">AniList</a>
             </div>
             <div class="desc-box">${anime.description || "No description."}</div>`;
@@ -638,11 +576,8 @@
     }
 
     function toggleSidebar() { 
-        const sidebar = document.getElementById('modal-sidebar');
-        const modal = document.getElementById('modal-box');
-        const icon = document.getElementById('toggle-icon');
-        sidebar.classList.toggle('expanded'); 
-        modal.classList.toggle('expanded-mode');
+        const sidebar = document.getElementById('modal-sidebar'), modal = document.getElementById('modal-box'), icon = document.getElementById('toggle-icon');
+        sidebar.classList.toggle('expanded'); modal.classList.toggle('expanded-mode');
         icon.innerText = sidebar.classList.contains('expanded') ? "▶▶" : "◀◀";
     }
     
@@ -655,7 +590,7 @@
         document.getElementById('toggle-icon').innerText = "◀◀";
     }
 
-    init();
+    window.onload = init;
 </script>
 </body>
 </html>
