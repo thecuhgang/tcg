@@ -50,10 +50,9 @@
         .stat-item { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px dashed #ccc; }
         .stat-item span { color: #555; font-weight: bold; }
 
-        .draft-order-visual { display: flex !important; flex-direction: row !important; justify-content: center !important; gap: 10px !important; margin-bottom: 25px !important; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px; flex-wrap: nowrap !important; overflow-x: auto; width: 100%; box-sizing: border-box; border: 1px solid #334e68; }
-        .do-item { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 5px; font-size: 11px; color: #87e0f2; font-weight: bold; min-width: 85px; text-align: center; }
+        .draft-order-visual { display: flex !important; flex-direction: row !important; gap: 10px !important; margin-bottom: 25px !important; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px; flex-wrap: nowrap !important; overflow-x: auto; width: 100%; box-sizing: border-box; border: 1px solid #334e68; }
+        .do-item { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 5px; font-size: 11px; color: #87e0f2; font-weight: bold; min-width: 85px; text-align: center; margin-left: auto; margin-right: auto; }
 
-        /* Table Overrides & Wrapping for Aesthetics */
         .table-wrapper { width: 100%; border-radius: 10px; overflow: hidden; border: 2px solid #5a7590; box-shadow: 0 4px 10px rgba(0,0,0,0.3); background: rgba(0,0,0,0.2); }
         .football-table { width: 100%; border-collapse: collapse; color: white; font-size: 13px; margin: 0; }
         .football-table th { background: #2a3a4a; color: #87e0f2; padding: 12px; border-bottom: 2px solid #5a7590; text-transform: uppercase; font-size: 12px; }
@@ -71,17 +70,13 @@
         .nfl-pts { font-weight: 900; font-size: 13px; color: #fff !important; width: 45px; text-align: center; text-shadow: 1px 1px 2px #000; flex-shrink: 0; }
         .pos-badge { font-weight: 900; font-size: 8px; padding: 1px 4px; border-radius: 3px; color: #fff; text-shadow: 1px 1px 0 rgba(0,0,0,0.5); display: inline-block !important; width: fit-content !important; text-align: center; margin-bottom: 2px; }
 
-        /* Override to clean up nfl-player-row inside table cells */
         .football-table .nfl-player-row { border-bottom: none !important; min-height: auto !important; padding: 2px 0 !important; }
-
-        /* Draft Owner Column Alignments */
         .draft-owner-cell { display: flex; align-items: center; justify-content: flex-start; gap: 10px; text-align: left; }
         .draft-owner-avatar { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #5a7590; object-fit: cover; background: #eee; flex-shrink: 0; }
 
         .details-pane { display: none; margin-top: 10px; border-top: 2px solid #354a6a; padding-top: 10px; }
         .details-pane.active { display: block; }
 
-        /* Custom Scrollbar for Transactions History */
         .history-scroll { max-height: 250px; overflow-y: auto; padding-right: 5px; }
         .history-scroll::-webkit-scrollbar { width: 6px; }
         .history-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); border-radius: 4px; }
@@ -98,7 +93,7 @@
         .mini-info span { font-size: 11px; overflow: hidden; text-overflow: ellipsis; display: block; color: #fff; }
         .mini-pts { font-weight: 900; font-size: 13px; color: #fff; text-shadow: 1px 1px 2px #000; flex-shrink: 0; width: 40px; text-align: center; }
 
-        .matchup-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 15px; width: 100%; box-sizing: border-box; justify-items: center; margin-top: 15px; }
+        .matchup-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; width: 100%; box-sizing: border-box; justify-items: center; margin-top: 15px; }
         .matchup-card { background: #1b2631; border: 2px solid #5a7590; padding: 15px; border-radius: 10px; color: #fff; width: 100%; max-width: 380px; box-sizing: border-box; overflow: hidden; }
         .matchup-summary { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px solid #334e68; padding-bottom: 10px; }
         .team-side { width: 42%; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
@@ -118,7 +113,6 @@
 
         #top-btn { position: fixed; bottom: 20px; left: 20px; z-index: 10000; background: rgba(0,0,0,0.4); color: #87e0f2; border: 2px solid #87e0f2; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); font-size: 20px; }
         
-        /* Modal Overlay Styles */
         #loading-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
@@ -126,13 +120,11 @@
             align-items: center; justify-content: center;
             opacity: 0; pointer-events: none; transition: opacity 0.2s;
         }
-        #loading-overlay.active {
-            opacity: 1; pointer-events: all;
-        }
+        #loading-overlay.active { opacity: 1; pointer-events: all; }
         .loading-card {
             background: rgba(27, 38, 49, 0.95); border: 2px solid #87e0f2; border-radius: 10px;
             padding: 30px; box-shadow: 0 0 30px rgba(135, 224, 242, 0.4);
-            display: flex; flex-direction: column; align-items: center; width: 90%; max-width: 350px;
+            display: flex; flex-direction: column; align-items: center; width: 85%; max-width: 350px;
         }
         .spinner { border: 5px solid #243547; border-top: 5px solid #87e0f2; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -142,7 +134,6 @@
     <video autoplay muted loop id="bg-video" playsinline><source src="https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/579720/8cfbe7b8bfd8c85d2798ddbf112741d6435528ff.mp4" type="video/mp4"></video>
     <button id="top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆</button>
 
-    <!-- Modal Loading Overlay -->
     <div id="loading-overlay">
         <div class="loading-card" id="loading-card-content"></div>
     </div>
@@ -164,7 +155,6 @@
     const POS_ORDER = { QB: 1, RB: 2, WR: 3, TE: 4, K: 5, DEF: 6 };
     const POS_COLORS = { QB: '#d4af37', RB: '#27ae60', WR: '#2980b9', TE: '#d35400', K: '#8e44ad', DEF: '#7f8c8d' };
     const DEF_ICON = "https://sleepercdn.com/images/v2/icons/player_default.webp"; 
-    
     const SLEEPER_ID_2019 = "474813121689546752";
     const YAHOO_ID_2025 = "199672_2025";
 
@@ -184,35 +174,24 @@
     function showLoading(contextText) {
         const overlay = document.getElementById('loading-overlay');
         const content = document.getElementById('loading-card-content');
-        
         const isGif = Math.random() < 0.7;
         let innerHTML = "";
         if (isGif) {
             const randomGif = LOADING_GIFS[Math.floor(Math.random() * LOADING_GIFS.length)];
-            innerHTML = `
-                <img src="${randomGif}" style="max-width: 100%; max-height: 180px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);" />
-                <h3 style="margin:0; text-transform:uppercase; letter-spacing: 2px; color: #87e0f2; text-align: center; font-size: 14px;">${contextText}</h3>
-            `;
+            innerHTML = `<img src="${randomGif}" style="max-width: 100%; max-height: 180px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);" /><h3 style="margin:0; text-transform:uppercase; letter-spacing: 2px; color: #87e0f2; text-align: center; font-size: 14px;">${contextText}</h3>`;
         } else {
             const randomText = LOADING_TEXTS[Math.floor(Math.random() * LOADING_TEXTS.length)];
-            innerHTML = `
-                <div class="spinner"></div>
-                <h3 style="margin:0; text-transform:uppercase; letter-spacing: 2px; color: #87e0f2; text-align: center; font-size: 14px;">${randomText}</h3>
-                <p style="margin:10px 0 0 0; color:#aaa; font-size:11px;">${contextText}</p>
-            `;
+            innerHTML = `<div class="spinner"></div><h3 style="margin:0; text-transform:uppercase; letter-spacing: 2px; color: #87e0f2; text-align: center; font-size: 14px;">${randomText}</h3><p style="margin:10px 0 0 0; color:#aaa; font-size:11px;">${contextText}</p>`;
         }
         content.innerHTML = innerHTML;
         overlay.classList.add('active');
     }
 
-    function hideLoading() {
-        document.getElementById('loading-overlay').classList.remove('active');
-    }
+    function hideLoading() { document.getElementById('loading-overlay').classList.remove('active'); }
 
     function init() {
         const menu = document.getElementById('game-menu');
         for (let name in GAMES) menu.innerHTML += `<button class="maple-btn" onclick="handleMenuClick('${name}')">${name}</button>`;
-        
         const sMenu = document.getElementById('season-menu');
         sMenu.innerHTML += `<button class="maple-btn" onclick="fetchLeagueData('${SLEEPER_ID_2019}', 'sleeper')"><img src="https://sleeper.com/favicon.ico" class="platform-icon"> 2019 (Sleeper)</button>`;
         sMenu.innerHTML += `<button class="maple-btn" onclick="fetchLeagueData('${YAHOO_ID_2025}', 'local')"><img src="https://www.yahoo.com/favicon.ico" class="platform-icon"> 2025 (Yahoo)</button>`;
@@ -222,29 +201,20 @@
 
     async function loadNFLPlayers() {
         if (nflPlayersLoadedFromAPI && nflPlayers) return; 
-        
-        showLoading("Downloading NFL Player Database...");
         try {
             const res = await fetch('https://api.sleeper.app/v1/players/nfl');
             nflPlayers = await res.json();
             nflPlayersLoadedFromAPI = true;
-        } catch (e) { 
-            if (!nflPlayers) nflPlayers = {}; 
-        }
-        hideLoading();
+        } catch (e) { if (!nflPlayers) nflPlayers = {}; }
     }
 
     async function fetchLeagueData(leagueId, source) {
         showLoading("Syncing Archive...");
-        
-        // Let the loading screen render first before freezing main thread
         setTimeout(async () => {
             const container = document.getElementById('content-area');
             await loadNFLPlayers(); 
-            
             try {
                 let data = null;
-
                 if (source === 'local') {
                     data = await fetch(`./sleeper_backup_${leagueId}.json`).then(r => r.json());
                 } else if (source === 'sleeper') {
@@ -260,397 +230,204 @@
                         const draftPicks = await fetch(`https://api.sleeper.app/v1/draft/${drafts[0].draft_id}/picks`).then(r => r.json());
                         const matchupRes = await Promise.allSettled(Array.from({length: 16}, (_, i) => fetch(`https://api.sleeper.app/v1/league/${leagueId}/matchups/${i+1}`).then(r => r.json())));
                         const transRes = await Promise.allSettled(Array.from({length: 16}, (_, i) => fetch(`https://api.sleeper.app/v1/league/${leagueId}/transactions/${i+1}`).then(r => r.json())));
-                        data = {
-                            league, rosters, userMap: users, bracket, consol, draftPicks, 
-                            allMatchups: matchupRes.filter(r => r.status === 'fulfilled').map(r => r.value),
-                            allTransactions: transRes.filter(r => r.status === 'fulfilled').flatMap(r => r.value)
-                        };
-                    } catch (e) { 
-                        data = await fetch(`./sleeper_backup_${leagueId}.json`).then(r => r.json()); 
-                    }
+                        data = { league, rosters, userMap: users, bracket, consol, draftPicks, allMatchups: matchupRes.filter(r => r.status === 'fulfilled').map(r => r.value), allTransactions: transRes.filter(r => r.status === 'fulfilled').flatMap(r => r.value) };
+                    } catch (e) { data = await fetch(`./sleeper_backup_${leagueId}.json`).then(r => r.json()); }
                 }
-
                 if (!data) throw new Error("Data not found");
-                
-                // Safe merge to prevent the small local snapshot from erasing the Sleeper Live DB
-                if (data.playerSnapshot) {
-                    nflPlayers = { ...nflPlayers, ...data.playerSnapshot };
-                }
-
-                // Ensure transactions are ALWAYS sorted by earliest date first (chronologically)
-                if (data.allTransactions) {
-                    data.allTransactions.sort((a, b) => a.status_updated - b.status_updated);
-                }
+                if (data.playerSnapshot) nflPlayers = { ...nflPlayers, ...data.playerSnapshot };
+                if (data.allTransactions) data.allTransactions.sort((a, b) => a.status_updated - b.status_updated);
 
                 const userMap = {};
                 const userList = Array.isArray(data.userMap) ? data.userMap : Object.values(data.userMap);
                 userList.forEach(u => { 
                     const uid = u.user_id;
-                    userMap[uid] = { 
-                        user_id: uid, 
-                        name: u.name || u.metadata?.team_name || u.display_name || "Unknown Team", 
-                        owner: u.owner || u.display_name || "Unknown Owner", 
-                        avatar: u.avatar ? (data.imageMap?.[uid] || `https://sleepercdn.com/avatars/thumbs/${u.avatar}`) : null 
-                    }; 
+                    userMap[uid] = { user_id: uid, name: u.name || u.metadata?.team_name || u.display_name || "Unknown Team", owner: u.owner || u.display_name || "Unknown Owner", avatar: u.avatar ? (data.imageMap?.[uid] || `https://sleepercdn.com/avatars/thumbs/${u.avatar}`) : null }; 
                 });
                 
                 const rosterToTeam = {};
                 data.rosters.forEach(r => { rosterToTeam[r.roster_id] = { ...userMap[r.owner_id], roster_id: r.roster_id }; });
-                
                 const teamTransactionsMap = {};
                 data.rosters.forEach(r => teamTransactionsMap[r.roster_id] =[]);
-                data.allTransactions.forEach(tr => {
-                    if (tr.roster_ids) tr.roster_ids.forEach(rid => { if (teamTransactionsMap[rid]) teamTransactionsMap[rid].push(tr); });
-                });
+                data.allTransactions.forEach(tr => { if (tr.roster_ids) tr.roster_ids.forEach(rid => { if (teamTransactionsMap[rid]) teamTransactionsMap[rid].push(tr); }); });
 
                 currentLeagueData = { ...data, userMap, rosterToTeam, teamTransactionsMap };
                 
-                // Done! Clean up loading and render
-                hideLoading();
-                renderSleeperTabs("Standings");
-
+                // Hide only after initial render is placed in DOM
+                renderSleeperTabs("Standings", true); 
             } catch (e) { 
                 console.error("LOAD ERROR:", e);
-                const container = document.getElementById('content-area');
-                container.innerHTML = `<h3 style="color:red; text-align:center;">Error loading data. Ensure <code>sleeper_backup_${leagueId}.json</code> exists in the root folder.</h3>`; 
+                container.innerHTML = `<h3 style="color:red; text-align:center;">Error loading data. Ensure backup file exists.</h3>`; 
                 hideLoading();
             }
-        }, 100); // Small timeout to yield thread
+        }, 100);
     }
 
     function toggleDetail(id) { document.getElementById(id).classList.toggle('active'); }
-
-    function getPosBadge(pos) {
-        const color = POS_COLORS[pos] || '#333';
-        return `<span class="pos-badge" style="background:${color}">${pos || 'UKN'}</span>`;
-    }
+    function getPosBadge(pos) { return `<span class="pos-badge" style="background:${POS_COLORS[pos] || '#333'}">${pos || 'UKN'}</span>`; }
 
     function getPlayerHTML(pid, pts = null, flip = false) {
         const p = nflPlayers?.[pid] || { first_name: "Unknown", last_name: "Player", position: "UKN" };
         const fallbackImg = p.position === 'DEF' ? `https://sleepercdn.com/images/team_logos/nfl/${pid.toLowerCase()}.png` : `https://sleepercdn.com/content/nfl/players/thumb/${pid}.jpg`;
         const img = currentLeagueData.imageMap?.[pid] || fallbackImg;
-        
-        return `<div class="nfl-player-row ${flip ? 'flipped' : ''}">
-            <div class="nfl-img-jail"><img src="${img}" onerror="this.src='${DEF_ICON}'"></div>
-            <div class="nfl-info">${getPosBadge(p.position)}<span>${p.first_name} ${p.last_name}</span></div>
-            ${pts !== null ? `<span class="nfl-pts">${pts.toFixed(1)}</span>` : ''}</div>`;
+        return `<div class="nfl-player-row ${flip ? 'flipped' : ''}"><div class="nfl-img-jail"><img src="${img}" onerror="this.src='${DEF_ICON}'"></div><div class="nfl-info">${getPosBadge(p.position)}<span>${p.first_name} ${p.last_name}</span></div>${pts !== null ? `<span class="nfl-pts">${pts.toFixed(1)}</span>` : ''}</div>`;
     }
 
-    function renderSleeperTabs(activeTab) {
+    function renderSleeperTabs(activeTab, initialFetch = false) {
         const container = document.getElementById('content-area');
         let isInitialRender = !document.getElementById('sub-tab-content');
-
         if (isInitialRender) {
-            container.innerHTML = `
-                <div class="season-container">
-                    <h2 style="text-align:center; margin-top:0;">${currentLeagueData.league.name}</h2>
-                    <div class="tab-bar">
-                        <button class="tab-btn ${activeTab === 'Standings' ? 'active' : ''}" onclick="renderSleeperTabs('Standings')">Standings</button>
-                        <button class="tab-btn ${activeTab === 'Draft' ? 'active' : ''}" onclick="renderSleeperTabs('Draft')">Draft</button>
-                        <button class="tab-btn ${activeTab === 'Matchups' ? 'active' : ''}" onclick="renderSleeperTabs('Matchups')">Matchups</button>
-                    </div>
-                    <div id="sub-tab-content"></div>
-                </div>`;
+            container.innerHTML = `<div class="season-container"><h2 style="text-align:center; margin-top:0;">${currentLeagueData.league.name}</h2><div class="tab-bar"><button class="tab-btn ${activeTab === 'Standings' ? 'active' : ''}" onclick="renderSleeperTabs('Standings')">Standings</button><button class="tab-btn ${activeTab === 'Draft' ? 'active' : ''}" onclick="renderSleeperTabs('Draft')">Draft</button><button class="tab-btn ${activeTab === 'Matchups' ? 'active' : ''}" onclick="renderSleeperTabs('Matchups')">Matchups</button></div><div id="sub-tab-content"></div></div>`;
         } else {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            const activeBtn = document.querySelector(`.tab-btn[onclick="renderSleeperTabs('${activeTab}')"]`);
+            const activeBtn = document.querySelector(`.tab-btn[onclick*="${activeTab}"]`);
             if (activeBtn) activeBtn.classList.add('active');
         }
-
         const target = document.getElementById('sub-tab-content');
-        if (activeTab === "Standings") renderSleeperStandings(target);
-        else if (activeTab === "Draft") renderSleeperDraft(target);
-        else if (activeTab === "Matchups") renderSleeperMatchups(target);
+        
+        // Execute render and then hide loading modal if it was a fresh data pull
+        setTimeout(() => {
+            if (activeTab === "Standings") renderSleeperStandings(target);
+            else if (activeTab === "Draft") renderSleeperDraft(target);
+            else if (activeTab === "Matchups") renderSleeperMatchups(target);
+            if (initialFetch) hideLoading();
+        }, 10);
     }
 
     function renderSleeperStandings(target) {
         const { rosters, rosterToTeam, teamTransactionsMap, bracket, consol, imageMap } = currentLeagueData;
-
         const buildBracketHTML = (data, title) => {
             if(!data || !data.length) return "";
-            
-            let uniqueData =[];
-            let seen = new Set();
-            data.forEach(m => {
-                if(!m.t1 || !m.t2) return;
-                let key = m.m ? "match-" + m.m : "r-" + m.r + "-" +[m.t1, m.t2].sort().join("-");
-                if(!seen.has(key)) { seen.add(key); uniqueData.push({...m}); }
-            });
-
+            let uniqueData =[]; let seen = new Set();
+            data.forEach(m => { if(!m.t1 || !m.t2) return; let key = m.m ? "match-" + m.m : "r-" + m.r + "-" +[m.t1, m.t2].sort().join("-"); if(!seen.has(key)) { seen.add(key); uniqueData.push({...m}); } });
             let isChamp = title.toLowerCase().includes("championship");
             let r1Losers = uniqueData.filter(m => m.r === 1).map(m => m.l);
-            
-            uniqueData.forEach(m => {
-                if (m.r === 2) {
-                    if (r1Losers.includes(m.t1) || r1Losers.includes(m.t2)) m.isBottom = true;
-                    else m.isBottom = false;
-                }
-            });
-
+            uniqueData.forEach(m => { if (m.r === 2) m.isBottom = r1Losers.includes(m.t1) || r1Losers.includes(m.t2); });
             let r2TopWinners = uniqueData.filter(m => m.r === 2 && !m.isBottom).map(m => m.w);
-            uniqueData.forEach(m => {
-                if (m.r === 3) {
-                    if (r2TopWinners.includes(m.t1) || r2TopWinners.includes(m.t2)) m.p = 1;
-                    else m.p = 3;
-                }
-            });
-
+            uniqueData.forEach(m => { if (m.r === 3) m.p = (r2TopWinners.includes(m.t1) || r2TopWinners.includes(m.t2)) ? 1 : 3; });
             let rounds = {};
             uniqueData.forEach(m => {
                 if (m.r === 1) m.label = "Quarterfinals";
                 else if (m.r === 2) m.label = m.isBottom ? (isChamp ? "5th Place Match" : "11th Place Match") : "Semifinals";
-                else if (m.r === 3) {
-                    if (m.p === 1) m.label = "Finals Match";
-                    else if (m.p === 3) m.label = isChamp ? "3rd Place Match" : "9th Place Match";
-                }
-                rounds[m.r] = rounds[m.r] ||[]; 
-                rounds[m.r].push(m); 
+                else if (m.r === 3) m.label = (m.p === 1) ? "Finals Match" : (isChamp ? "3rd Place Match" : "9th Place Match");
+                rounds[m.r] = rounds[m.r] ||[]; rounds[m.r].push(m); 
             });
-            
             let h = `<div class="bracket-container"><h4 style="color:#87e0f2; margin:0 0 15px 0; text-transform:uppercase;">${title}</h4><div class="bracket-tree">`;
             Object.keys(rounds).sort().forEach(rNum => {
                 h += `<div class="bracket-column">`;
                 rounds[rNum].forEach(m => {
                     const t1 = rosterToTeam[m.t1], t2 = rosterToTeam[m.t2];
-                    h += `<div class="bracket-match"><div class="match-label">${m.label || 'Placement Match'}</div>
-                        <div class="bm-team ${m.w === m.t1 ? 'bm-winner' : t1 ? 'bm-loser' : ''}"><img src="${imageMap?.[t1?.user_id] || t1?.avatar}" class="bm-avatar"> <span>${t1?.name || "TBD"}</span></div>
-                        <div class="bm-team ${m.w === m.t2 ? 'bm-winner' : t2 ? 'bm-loser' : ''}"><img src="${imageMap?.[t2?.user_id] || t2?.avatar}" class="bm-avatar"> <span>${t2?.name || "TBD"}</span></div>
-                    </div>`;
+                    h += `<div class="bracket-match"><div class="match-label">${m.label || 'Placement Match'}</div><div class="bm-team ${m.w === m.t1 ? 'bm-winner' : t1 ? 'bm-loser' : ''}"><img src="${imageMap?.[t1?.user_id] || t1?.avatar}" class="bm-avatar"> <span>${t1?.name || "TBD"}</span></div><div class="bm-team ${m.w === m.t2 ? 'bm-winner' : t2 ? 'bm-loser' : ''}"><img src="${imageMap?.[t2?.user_id] || t2?.avatar}" class="bm-avatar"> <span>${t2?.name || "TBD"}</span></div></div>`;
                 });
                 h += `</div>`;
             });
             const final = uniqueData.find(m => m.p === 1 && m.w);
-            if (final) {
-                const champ = rosterToTeam[final.w];
-                if (champ) h += `<div class="bracket-column" style="margin-left:10px;"><div class="final-winner-box"><span style="font-size:18px;">🏆</span><img src="${imageMap?.[champ.user_id] || champ.avatar}" style="width:32px;height:32px;border-radius:50%;border:2px solid gold;"><b style="color:gold; font-size:10px; overflow:hidden; text-overflow:ellipsis; width:100%; white-space:nowrap;">${champ.name}</b></div></div>`;
-            }
+            if (final) { const champ = rosterToTeam[final.w]; if (champ) h += `<div class="bracket-column" style="margin-left:10px;"><div class="final-winner-box"><span style="font-size:18px;">🏆</span><img src="${imageMap?.[champ.user_id] || champ.avatar}" style="width:32px;height:32px;border-radius:50%;border:2px solid gold;"><b style="color:gold; font-size:10px; overflow:hidden; text-overflow:ellipsis; width:100%; white-space:nowrap;">${champ.name}</b></div></div>`; }
             return h + `</div></div>`;
         };
-
-        let ultimateWinner = null, ultimateConsolWinner = null;
-        let cFinalMatch = bracket.find(m => m.p === 1) || bracket.filter(m => m.r === 3)[0];
-        if (cFinalMatch) ultimateWinner = cFinalMatch.w;
-        
-        let consolFinalMatch = consol.find(m => m.p === 1) || consol.filter(m => m.r === 3)[0];
-        if (consolFinalMatch) ultimateConsolWinner = consolFinalMatch.w;
-
-        // Detect 11th Place Loser for the Poop Emoji
+        let cFinal = bracket.find(m => m.p === 1) || bracket.filter(m => m.r === 3)[0];
+        let ultimateWinner = cFinal ? cFinal.w : null;
         let poopLoserId = null;
-        let consolR1Losers = consol.filter(m => m.r === 1).map(m => m.l);
-        let consol11thMatch = consol.find(m => m.r === 2 && (consolR1Losers.includes(m.t1) || consolR1Losers.includes(m.t2)));
-        if (consol11thMatch) {
-            poopLoserId = consol11thMatch.l;
-        }
-
-        let teamData = rosters.map(r => {
-            const u = rosterToTeam[r.roster_id];
-            return {
-                ...u, wins: r.settings.wins, losses: r.settings.losses,
-                fpts: (r.settings.fpts + "." + (r.settings.fpts_decimal || 0)),
-                players: (r.players ||[]).sort((a,b) => (POS_ORDER[nflPlayers?.[a]?.position] || 99) - (POS_ORDER[nflPlayers?.[b]?.position] || 99)),
-                roster_id: r.roster_id, user_id: r.owner_id
-            };
-        });
-        
-        teamData.sort((a,b) => (a.roster_id === ultimateWinner ? -2 : a.roster_id === ultimateConsolWinner ? -1 : 0) - (b.roster_id === ultimateWinner ? -2 : b.roster_id === ultimateConsolWinner ? -1 : 0) || b.wins - a.wins || b.fpts - a.fpts);
-        
-        if (!poopLoserId && teamData.length > 0) poopLoserId = teamData[teamData.length - 1].roster_id;
+        let cR1Losers = consol.filter(m => m.r === 1).map(m => m.l);
+        let c11th = consol.find(m => m.r === 2 && (cR1Losers.includes(m.t1) || cR1Losers.includes(m.t2)));
+        if (c11th) poopLoserId = c11th.l;
+        let teamData = rosters.map(r => { const u = rosterToTeam[r.roster_id]; return { ...u, wins: r.settings.wins, losses: r.settings.losses, fpts: (r.settings.fpts + "." + (r.settings.fpts_decimal || 0)), players: (r.players ||[]).sort((a,b) => (POS_ORDER[nflPlayers?.[a]?.position] || 99) - (POS_ORDER[nflPlayers?.[b]?.position] || 99)), roster_id: r.roster_id, user_id: r.owner_id }; });
+        teamData.sort((a,b) => (a.roster_id === ultimateWinner ? -2 : a.roster_id === poopLoserId ? 2 : 0) - (b.roster_id === ultimateWinner ? -2 : b.roster_id === poopLoserId ? 2 : 0) || b.wins - a.wins || b.fpts - a.fpts);
+        if (!poopLoserId && teamData.length > 0) poopLoserId = teamData[teamData.length-1].roster_id;
 
         let html = `<div class="bracket-wrapper">` + buildBracketHTML(bracket, "🏆 Championship") + buildBracketHTML(consol, "🚽 Consolation") + `</div><div class="player-grid">`;
-        
         teamData.forEach((t, i) => {
-            const rankEmoji = (t.roster_id === ultimateWinner || t.roster_id === ultimateConsolWinner) ? '🥇' : (t.roster_id === poopLoserId) ? '💩' : '';
-            const tAvatar = imageMap?.[t.user_id] || t.avatar;
+            const emoji = (t.roster_id === ultimateWinner) ? '🥇' : (t.roster_id === poopLoserId) ? '💩' : '';
             const moves = (teamTransactionsMap[t.roster_id] ||[]).map(m => {
-                const gIds = Object.keys(m.adds || {}).filter(id => m.adds[id] === t.roster_id);
-                const lIds = Object.keys(m.drops || {}).filter(id => m.drops[id] === t.roster_id);
-                
-                let g = gIds.map(id => {
-                    const p = nflPlayers?.[id] || { position: 'UKN', first_name: 'Unknown', last_name: 'Player' };
-                    return `${getPosBadge(p.position)} ${p.first_name} ${p.last_name}`;
-                }).join('<br>') || 'None';
-
+                const gIds = Object.keys(m.adds || {}).filter(id => m.adds[id] === t.roster_id), lIds = Object.keys(m.drops || {}).filter(id => m.drops[id] === t.roster_id);
+                let g = gIds.map(id => { const p = nflPlayers?.[id] || { position: 'UKN', first_name: 'Unknown', last_name: 'Player' }; return `${getPosBadge(p.position)} ${p.first_name} ${p.last_name}`; }).join('<br>') || 'None';
                 if (m.type === 'trade') {
-                    const pid = m.roster_ids.find(rid => rid !== t.roster_id);
-                    const partner = rosterToTeam[pid]?.name || "Partner";
-                    const tlIds = Object.keys(m.adds || {}).filter(id => m.adds[id] === pid);
-                    
-                    const lost = tlIds.map(id => {
-                        const p = nflPlayers?.[id] || { position: 'UKN', first_name: 'Unknown', last_name: 'Player' };
-                        return `${getPosBadge(p.position)} ${p.first_name} ${p.last_name}`;
-                    }).join('<br>') || 'None';
-                    
+                    const pid = m.roster_ids.find(rid => rid !== t.roster_id), partner = rosterToTeam[pid]?.name || "Partner", tlIds = Object.keys(m.adds || {}).filter(id => m.adds[id] === pid);
+                    const lost = tlIds.map(id => { const p = nflPlayers?.[id] || { position: 'UKN', first_name: 'Unknown', last_name: 'Player' }; return `${getPosBadge(p.position)} ${p.first_name} ${p.last_name}`; }).join('<br>') || 'None';
                     return `<div class="move-item trade-box"><div class="trade-header">Trade with ${partner}</div><b>Gained:</b><br>${g}<br><b>Lost:</b><br>${lost}</div>`;
                 }
-                
-                const header = m.type.toUpperCase().replace('_', ' ');
-                const lostStr = lIds.map(id => {
-                    const p = nflPlayers?.[id] || { position: 'UKN', first_name: 'Unknown', last_name: 'Player' };
-                    return `${getPosBadge(p.position)} ${p.first_name} ${p.last_name}`;
-                }).join('<br>');
-                
-                return `<div class="move-item"><b>${header}:</b><br>${g}${lostStr.length ? `<br><b>DROPPED:</b><br>${lostStr}` : ''}</div>`;
+                const lostStr = lIds.map(id => { const p = nflPlayers?.[id] || { position: 'UKN', first_name: 'Unknown', last_name: 'Player' }; return `${getPosBadge(p.position)} ${p.first_name} ${p.last_name}`; }).join('<br>');
+                return `<div class="move-item"><b>${m.type.toUpperCase().replace('_', ' ')}:</b><br>${g}${lostStr.length ? `<br><b>DROPPED:</b><br>${lostStr}` : ''}</div>`;
             }).join('') || "No recent moves.";
-
-            let lineupHtml = t.players.length > 0 
-                ? t.players.map(pid => getPlayerHTML(pid)).join('')
-                : `<div style="text-align:center; padding: 15px; color:#fff; font-size:11px; opacity:0.6;"><i>Roster unavailable. Include players JSON for deeper sync.</i></div>`;
-
-            html += `<div class="player-card"><div class="player-name">${rankEmoji} <img src="${tAvatar}" class="team-avatar"> ${t.name}</div><div class="stats-box"><div class="stat-item"><span>Owner:&nbsp;</span><b>${t.owner}</b></div><div class="stat-item"><span>Record:&nbsp;</span><b>${t.wins}W - ${t.losses}L</b></div><div class="stat-item"><span>Total Pts:&nbsp;</span><b>${t.fpts}</b></div></div><button class="expand-btn" onclick="toggleDetail('rost-${t.roster_id}')">View Roster & History</button><div class="details-pane" id="rost-${t.roster_id}"><p style="font-weight:bold; font-size:11px; border-bottom:1px solid #ddd; margin:0 0 5px 0;">FINAL LINEUP</p>${lineupHtml}<p style="font-weight:bold; font-size:11px; border-bottom:1px solid #ddd; margin:15px 0 5px 0;">HISTORY</p><div class="history-scroll">${moves}</div></div></div>`;
+            html += `<div class="player-card"><div class="player-name">${emoji} <img src="${imageMap?.[t.user_id] || t.avatar}" class="team-avatar"> ${t.name}</div><div class="stats-box"><div class="stat-item"><span>Owner:&nbsp;</span><b>${t.owner}</b></div><div class="stat-item"><span>Record:&nbsp;</span><b>${t.wins}W - ${t.losses}L</b></div><div class="stat-item"><span>Total Pts:&nbsp;</span><b>${t.fpts}</b></div></div><button class="expand-btn" onclick="toggleDetail('rost-${t.roster_id}')">View Roster & History</button><div class="details-pane" id="rost-${t.roster_id}"><p style="font-weight:bold; font-size:11px; border-bottom:1px solid #ddd; margin:0 0 5px 0;">FINAL LINEUP</p>${t.players.length ? t.players.map(pid => getPlayerHTML(pid)).join('') : '<i>Roster unavailable</i>'}<p style="font-weight:bold; font-size:11px; border-bottom:1px solid #ddd; margin:15px 0 5px 0;">HISTORY</p><div class="history-scroll">${moves}</div></div></div>`;
         });
-
         const isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        if (isLocal) {
-            html += `<div style="width:100%; display:flex; justify-content:center; margin-top:40px;"><button class="maple-btn" onclick="exportLeagueData()">💾 Export Local Archive</button></div>`;
-        }
-
+        if (isLocal) html += `<div style="width:100%; display:flex; justify-content:center; margin-top:40px;"><button class="maple-btn" onclick="exportLeagueData()">💾 Export Local Archive</button></div>`;
         target.innerHTML = html;
     }
 
     function renderSleeperDraft(target) {
         const { draftPicks, userMap, imageMap } = currentLeagueData;
-        if (!draftPicks || draftPicks.length === 0) {
-            target.innerHTML = `<h3 style="text-align:center; color:#87e0f2; margin-top:20px;">Draft Data Unavailable</h3>`;
-            return;
-        }
-
+        if (!draftPicks || !draftPicks.length) { target.innerHTML = `<h3 style="text-align:center; color:#87e0f2; margin-top:20px;">Draft Data Unavailable</h3>`; return; }
         const seen = new Set(); const uniqueOwners =[];
         draftPicks.forEach(p => { if(!seen.has(p.picked_by)) { seen.add(p.picked_by); uniqueOwners.push(userMap[p.picked_by]); } });
         const visual = `<h3 style="text-align:center; color:#87e0f2; margin:0 0 10px 0;">DRAFT ORDER</h3><div class="draft-order-visual">` + uniqueOwners.map((u, idx) => `<div class="do-item"><span>#${idx+1}</span><img src="${imageMap?.[u?.user_id] || u?.avatar}" class="bm-avatar" style="width:36px;height:36px;border:2px solid #87e0f2;background:#eee;border-radius:50%;"><span>${u?.name}</span></div>`).join('') + `</div>`;
-        
         let table = `<div class="table-wrapper"><table class="football-table"><thead><tr><th>Pick</th><th>NFL Player</th><th>Team Owner</th></tr></thead><tbody>`;
         draftPicks.forEach(p => {
             const team = userMap[p.picked_by], pInf = nflPlayers?.[p.player_id] || { position: "??" };
-            const fallbackImg = pInf.position === 'DEF' ? `https://sleepercdn.com/images/team_logos/nfl/${p.player_id.toLowerCase()}.png` : `https://sleepercdn.com/content/nfl/players/thumb/${p.player_id}.jpg`;
-            const icon = imageMap?.[p.player_id] || fallbackImg;
-            
-            table += `<tr class="${p.round % 2 === 0 ? 'round-even' : 'round-odd'}">
-                <td><b style="color:#87e0f2;">${p.round}-${p.draft_slot}</b></td>
-                <td style="text-align:left;">
-                    <div class="nfl-player-row">
-                        <div class="nfl-img-jail"><img src="${icon}" onerror="this.src='${DEF_ICON}'"></div>
-                        <div class="nfl-info">${getPosBadge(pInf.position)} <b style="font-size:12px;">${pInf.first_name || ""} ${pInf.last_name || ""}</b></div>
-                    </div>
-                </td>
-                <td style="text-align:left;">
-                    <div class="draft-owner-cell">
-                        <img src="${imageMap?.[team?.user_id] || team?.avatar}" class="draft-owner-avatar">
-                        <span style="font-size:12px;">${team?.name}</span>
-                    </div>
-                </td>
-            </tr>`;
+            const icon = imageMap?.[p.player_id] || (pInf.position === 'DEF' ? `https://sleepercdn.com/images/team_logos/nfl/${p.player_id.toLowerCase()}.png` : `https://sleepercdn.com/content/nfl/players/thumb/${p.player_id}.jpg`);
+            table += `<tr class="${p.round % 2 === 0 ? 'round-even' : 'round-odd'}"><td><b style="color:#87e0f2;">${p.round}-${p.draft_slot}</b></td><td style="text-align:left;"><div class="nfl-player-row"><div class="nfl-img-jail"><img src="${icon}" onerror="this.src='${DEF_ICON}'"></div><div class="nfl-info">${getPosBadge(pInf.position)} <b style="font-size:12px;">${pInf.first_name || ""} ${pInf.last_name || ""}</b></div></div></td><td style="text-align:left;"><div class="draft-owner-cell"><img src="${imageMap?.[team?.user_id] || team?.avatar}" class="draft-owner-avatar"><span style="font-size:12px;">${team?.name}</span></div></td></tr>`;
         });
         target.innerHTML = visual + table + `</tbody></table></div>`;
     }
 
     function getBoxScoreRowHTML(pid1, pts1, pid2, pts2) {
-        const p1 = nflPlayers?.[pid1] || { first_name: "Unknown", last_name: "Player", position: "UKN" };
-        const p2 = nflPlayers?.[pid2] || { first_name: "Unknown", last_name: "Player", position: "UKN" };
-        
-        const fallbackImg1 = p1.position === 'DEF' ? `https://sleepercdn.com/images/team_logos/nfl/${pid1.toLowerCase()}.png` : `https://sleepercdn.com/content/nfl/players/thumb/${pid1}.jpg`;
-        const fallbackImg2 = p2.position === 'DEF' ? `https://sleepercdn.com/images/team_logos/nfl/${pid2.toLowerCase()}.png` : `https://sleepercdn.com/content/nfl/players/thumb/${pid2}.jpg`;
-
-        const img1 = currentLeagueData.imageMap?.[pid1] || fallbackImg1;
-        const img2 = currentLeagueData.imageMap?.[pid2] || fallbackImg2;
-        
+        const p1 = nflPlayers?.[pid1] || { first_name: "??", last_name: "Player", position: "UKN" }, p2 = nflPlayers?.[pid2] || { first_name: "??", last_name: "Player", position: "UKN" };
+        const img1 = currentLeagueData.imageMap?.[pid1] || (p1.position === 'DEF' ? `https://sleepercdn.com/images/team_logos/nfl/${pid1.toLowerCase()}.png` : `https://sleepercdn.com/content/nfl/players/thumb/${pid1}.jpg`);
+        const img2 = currentLeagueData.imageMap?.[pid2] || (p2.position === 'DEF' ? `https://sleepercdn.com/images/team_logos/nfl/${pid2.toLowerCase()}.png` : `https://sleepercdn.com/content/nfl/players/thumb/${pid2}.jpg`);
         return `<div class="matchup-row"><div class="player-mini"><div class="nfl-img-jail"><img src="${img1}" onerror="this.src='${DEF_ICON}'"></div><div class="mini-info">${getPosBadge(p1.position)}<span>${p1.first_name} ${p1.last_name}</span></div><div class="mini-pts">${(pts1 || 0).toFixed(1)}</div></div><div class="player-mini right"><div class="nfl-img-jail"><img src="${img2}" onerror="this.src='${DEF_ICON}'"></div><div class="mini-info">${getPosBadge(p2.position)}<span>${p2.first_name} ${p2.last_name}</span></div><div class="mini-pts">${(pts2 || 0).toFixed(1)}</div></div></div>`;
     }
 
-    // Lazy load wrapper for matchups so the page doesn't freeze on initial render
     function renderSleeperMatchups(target) {
         const { allMatchups } = currentLeagueData;
         let h = ``;
-        allMatchups.forEach((weekData, i) => {
-            if (!weekData || weekData.length === 0) return;
-            h += `<div class="week-container">
-                <div class="week-header" onclick="toggleWeek(${i}, this)">Week ${i+1} <span>▼</span></div>
-                <div class="week-content" id="week-content-${i}"></div>
-            </div>`;
-        });
+        allMatchups.forEach((weekData, i) => { if (weekData?.length) h += `<div class="week-container"><div class="week-header" onclick="toggleWeek(${i}, this)">Week ${i+1} <span>▼</span></div><div class="week-content" id="week-content-${i}"></div></div>`; });
         target.innerHTML = h;
     }
 
-    // Builds matchup HTML specifically for the targeted week when requested
     window.toggleWeek = function(weekIndex, el) {
-        const contentDiv = document.getElementById(`week-content-${weekIndex}`);
-        const arrowSpan = el.querySelector('span');
-
-        if (contentDiv.innerHTML.trim() !== '') {
-            const isActive = contentDiv.classList.toggle('active');
-            arrowSpan.textContent = isActive ? '▲' : '▼';
-            return;
-        }
-
+        const contentDiv = document.getElementById(`week-content-${weekIndex}`), arrowSpan = el.querySelector('span');
+        if (contentDiv.innerHTML.trim() !== '') { const isActive = contentDiv.classList.toggle('active'); arrowSpan.textContent = isActive ? '▲' : '▼'; return; }
         const { allMatchups, rosterToTeam, imageMap } = currentLeagueData;
         let matchups = {};
         allMatchups[weekIndex].forEach(m => { if (!matchups[m.matchup_id]) matchups[m.matchup_id] = []; matchups[m.matchup_id].push(m); });
-        
         let h = `<div class="matchup-grid">`;
         for (let id in matchups) {
             const[tA, tB] = matchups[id]; if (!tB) continue;
             const teamA = rosterToTeam[tA.roster_id], teamB = rosterToTeam[tB.roster_id], mid = `m-${weekIndex}-${id}`;
-            
-            let boxScoreHtml = (tA.starters && tA.starters.length > 0)
-                ? Math.max(tA.starters.length, tB.starters.length) > 0 ? Array.from({length: Math.max(tA.starters.length, tB.starters.length)}).map((_, idx) => getBoxScoreRowHTML(tA.starters[idx], tA.starters_points[idx], tB.starters[idx], tB.starters_points[idx])).join('') : ''
-                : `<div style="text-align:center; padding: 20px; color:#fff; font-size:11px; opacity:0.6;"><i>Box Score Unavailable</i></div>`;
-            
+            let boxScoreHtml = (tA.starters?.length) ? Array.from({length: Math.max(tA.starters.length, tB.starters.length)}).map((_, idx) => getBoxScoreRowHTML(tA.starters[idx], tA.starters_points[idx], tB.starters[idx], tB.starters_points[idx])).join('') : `<div style="text-align:center; padding: 20px; color:#fff; font-size:11px; opacity:0.6;"><i>Box Score Unavailable</i></div>`;
             h += `<div class="matchup-card"><div class="matchup-summary"><div class="team-side"><img src="${imageMap?.[teamA.user_id] || teamA.avatar}" class="team-avatar" style="width:32px;height:32px;"><h5>${teamA.name}</h5><div class="score-val">${tA.points.toFixed(1)}</div></div><div class="matchup-vs">VS</div><div class="team-side"><img src="${imageMap?.[teamB.user_id] || teamB.avatar}" class="team-avatar" style="width:32px;height:32px;"><h5>${teamB.name}</h5><div class="score-val">${tB.points.toFixed(1)}</div></div></div><button class="expand-btn" onclick="toggleDetail('${mid}')">View Box Score</button><div class="details-pane" id="${mid}"><div class="box-score-container">${boxScoreHtml}</div></div></div>`;
         }
-        h += `</div>`;
-        
-        contentDiv.innerHTML = h;
-        contentDiv.classList.add('active');
-        arrowSpan.textContent = '▲';
+        contentDiv.innerHTML = h + `</div>`; contentDiv.classList.add('active'); arrowSpan.textContent = '▲';
     };
+
+    async function toBase64(url) { try { const res = await fetch(url); const blob = await res.blob(); return new Promise((r, j) => { const rd = new FileReader(); rd.onloadend = () => r(rd.result); rd.onerror = j; rd.readAsDataURL(blob); }); } catch (e) { return null; } }
 
     async function exportLeagueData() {
         if(!currentLeagueData) return;
         showLoading("Encoding Images & Database Snapshot...");
-
         setTimeout(async () => {
             const imgMap = {};
-            for (const uid of Object.keys(currentLeagueData.userMap)) {
-                const url = currentLeagueData.userMap[uid].avatar;
-                if (url) imgMap[uid] = await toBase64(url);
-            }
-            
-            const playerSnapshot = {};
-            const pIds = new Set();
+            for (const uid of Object.keys(currentLeagueData.userMap)) { const url = currentLeagueData.userMap[uid].avatar; if (url) imgMap[uid] = await toBase64(url); }
+            const playerSnapshot = {}; const pIds = new Set();
             currentLeagueData.rosters.forEach(r => (r.players ||[]).forEach(p => pIds.add(p)));
             currentLeagueData.draftPicks.forEach(p => pIds.add(p.player_id));
             currentLeagueData.allMatchups.forEach(week => week.forEach(m => (m.starters ||[]).forEach(p => pIds.add(p))));
-            currentLeagueData.allTransactions.forEach(tr => {
-                if(tr.adds) Object.keys(tr.adds).forEach(id => pIds.add(id));
-                if(tr.drops) Object.keys(tr.drops).forEach(id => pIds.add(id));
-            });
-
+            currentLeagueData.allTransactions.forEach(tr => { if(tr.adds) Object.keys(tr.adds).forEach(id => pIds.add(id)); if(tr.drops) Object.keys(tr.drops).forEach(id => pIds.add(id)); });
             for (const pid of pIds) {
                 const p = nflPlayers[pid];
                 if (p) {
                     playerSnapshot[pid] = { first_name: p.first_name, last_name: p.last_name, position: p.position };
-                    const url = p.position === 'DEF' 
-                        ? `https://sleepercdn.com/images/team_logos/nfl/${pid.toLowerCase()}.png` 
-                        : `https://sleepercdn.com/content/nfl/players/thumb/${pid}.jpg`;
-                    const b64 = await toBase64(url);
-                    if (b64) imgMap[pid] = b64;
+                    const url = p.position === 'DEF' ? `https://sleepercdn.com/images/team_logos/nfl/${pid.toLowerCase()}.png` : `https://sleepercdn.com/content/nfl/players/thumb/${pid}.jpg`;
+                    const b64 = await toBase64(url); if (b64) imgMap[pid] = b64;
                 }
             }
-
-            currentLeagueData.imageMap = imgMap;
-            currentLeagueData.playerSnapshot = playerSnapshot;
-
+            currentLeagueData.imageMap = imgMap; currentLeagueData.playerSnapshot = playerSnapshot;
             const blob = new Blob([JSON.stringify(currentLeagueData)], {type: "application/json"});
-            const dnNode = document.createElement('a');
-            dnNode.href = URL.createObjectURL(blob);
-            dnNode.download = `sleeper_backup_${currentLeagueData.league.league_id}.json`;
-            document.body.appendChild(dnNode);
-            dnNode.click();
-            document.body.removeChild(dnNode);
-            
+            const dnNode = document.createElement('a'); dnNode.href = URL.createObjectURL(blob); dnNode.download = `sleeper_backup_${currentLeagueData.league.league_id}.json`;
+            document.body.appendChild(dnNode); dnNode.click(); document.body.removeChild(dnNode);
             hideLoading();
         }, 100);
     }
-
     window.onload = init;
 </script>
 </body>
