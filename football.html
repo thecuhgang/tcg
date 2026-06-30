@@ -131,7 +131,31 @@
     </style>
 </head>
 <body>
-    <video autoplay muted loop id="bg-video" playsinline><source src="https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/579720/8cfbe7b8bfd8c85d2798ddbf112741d6435528ff.mp4" type="video/mp4"></video>
+    <video autoplay muted loop id="bg-video" playsinline></video>
+    <script>
+        const bgVideos = [
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/579720/8cfbe7b8bfd8c85d2798ddbf112741d6435528ff.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/2512200/a4f94af7fc96d4b9c78842031d22712e916f1117.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/2331960/03839ef6c978115dd3ddd681f4aa2b25829e91ce.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/1069740/04ab4a7df94b15cbbcf60286fe49e14dcf606278.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/588650/2865b49d9a6d0dcdc89c617cbc186ab2ffa26f28.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/1263950/248954cba9bc08b6e16c676f5c1814ff823af907.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/1940340/fdc6faed91add24b6519612f9b9143bebb443e85.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/504400/2b0792025824dfe8a1aa161ebe74ddee128d39cd.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/874400/2fda5d3781c6d198d70775f53809db245151928d.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/1239690/f032ec4916fad9f6f64ecb7a9f083e835f65e362.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/2351080/8ce6c567aed34044b56bcaff41ba149a40c8ff71.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/1098340/f8401a4804ea458142ca8e1e80494d5a48cc1279.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/2265180/533bdec2099cc8f058efa01c3db01deb1e851c8a.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/1003360/e8e8381b784e01defa002fdfca3c05810e667396.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/570/8144f2b875ebda693f4dec2f7c43a7a1a916375f.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/1684350/83de58962f68ab5151573386be4901f84f5bd6f2.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/628670/75f08ec46d67386848ddb2d20589e2552aac015a.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/628750/5dd2e07e1a5da3d4aec1f673e006232b4e6ad2d2.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/2351080/36b91a312470df01bf848cb378655cd9d60cf8cb.mp4"
+        ];
+        document.getElementById('bg-video').src = bgVideos[Math.floor(Math.random() * bgVideos.length)];
+    </script>
     <button id="top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆</button>
 
     <div id="loading-overlay">
@@ -148,6 +172,7 @@
 <script>
     const GAMES = { 
         "Anime Fantasy": { type: "redirect", href: "index.html?game=Anime+Fantasy" },
+        "World Cup Fantasy": { type: "redirect", href: "index.html?game=World+Cup+Fantasy" },
         "SMTM Fantasy": { type: "redirect", href: "index.html?game=SMTM+Fantasy" },
         "Fantasy Football": { type: "current" }
     };
