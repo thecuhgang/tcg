@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TCG Fantasy Hub</title>
     <style>
-        body { margin: 0; font-family: 'IBM Plex Sans', sans-serif; color: #294a6b; min-height: 100vh; overflow-x: hidden; background: #000; }
+        body { margin: 0; font-family: 'IBM Plex Sans', sans-serif; color: #eef2f5; min-height: 100vh; overflow-x: hidden; background: #000; }
         #bg-video { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -1; object-fit: cover; pointer-events: none; }
         
         h1 { color: #ffffff; font-size: 3em; text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000; letter-spacing: 2px; text-transform: uppercase; margin: 20px 0; text-align: center; }
 
-        /* Modal Loading Overlay Styles */
         #loading-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
@@ -33,7 +32,6 @@
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Info Modal - Transparent UI */
         #modal-box { 
             position: fixed; bottom: 20px; right: 20px; width: 90%; max-width: 350px; 
             background: rgba(220, 240, 250, 0.9); backdrop-filter: blur(8px); 
@@ -57,7 +55,7 @@
         .desc-box { flex: 1; overflow-y: auto; font-size: 11px; padding: 0 10px; min-width: 0; color: #000; }
         .close-btn { cursor: pointer; padding: 5px; font-weight: bold; }
         
-        .main-container { display: flex; flex-direction: column; align-items: center; padding: 20px; z-index: 10; width: 100%; box-sizing: border-box; }
+        .main-container { display: flex; flex-direction: column; align-items: center; padding: 20px 20px 140px 20px; position: relative; z-index: 10; width: 100%; box-sizing: border-box; }
         #content-area { width: 100%; display: flex; flex-direction: column; align-items: center; }
         #game-menu, #season-menu { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; width: 100%; max-width: 900px; }
         
@@ -70,7 +68,7 @@
         .season-container { background: linear-gradient(180deg, #2a3a4a 0%, #1b2631 100%); color: #fff; border: 2px solid #5a7590; border-radius: 10px; padding: 20px; width: 95%; max-width: 1200px; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.6); margin-top: 20px; box-sizing: border-box; }
         .scoring-box { background: #222; border: 1px solid #555; padding: 8px; border-radius: 5px; font-size: 9px; color: #fff; z-index: 5; }
         .anime-absolute-box { position: absolute; top: 10px; right: 10px; width: 90px; }
-        
+
         .player-grid { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 20px; justify-content: center; width: 100%; }
         .player-card { background: rgba(255,255,255,0.9); border: 2px solid #5a7590; border-radius: 8px; padding: 15px; flex: 1 1 250px; max-width: 300px; color: #000; }
         .player-name { font-weight: bold; font-size: 1.3em; margin-bottom: 10px; text-align: center; border-bottom: 1px solid #aaa; padding-bottom: 5px; }
@@ -81,28 +79,119 @@
         .counter-label-line { color: #d00; font-size: 8px; font-weight: 900; text-align: center; margin: 4px 0; border-top: 1px solid #d00; border-bottom: 1px solid #d00; padding: 2px 0; width: 100%; background: rgba(255, 200, 200, 0.3); }
         .total-box { font-weight: bold; text-align: right; margin-top: 8px; border-top: 2px solid #aaa; padding-top: 4px; }
 
-        /* Modern SMTM Table */
-        .smtm-modern-table { width: 100%; border-collapse: collapse; margin: 0; font-size: 12px; text-align: center; background: #1b2631; color: #fff; overflow: hidden; border-radius: 4px; border: 2px solid #5a7590; }
-        .smtm-modern-table th { background: linear-gradient(180deg, #354a6a 0%, #293a5a 100%); color: #87e0f2; padding: 12px; font-weight: bold; border-bottom: 2px solid #87e0f2; border-right: 1px solid #334e68; text-transform: uppercase; letter-spacing: 1px; }
-        .smtm-modern-table td { padding: 8px 10px; border-bottom: 1px solid #293a5a; border-right: 1px solid #334e68; height: 28px; }
-        .smtm-modern-table td:first-child { font-weight: bold; background: #243547; color: #87e0f2; text-align: right; border-right: 2px solid #5a7590; }
+        .smtm-modern-table { width: 100%; border-collapse: collapse; margin: 0; font-size: 12px; text-align: center !important; background: #1b2631; color: #fff; overflow: hidden; border-radius: 4px; border: 2px solid #5a7590; }
+        .smtm-modern-table th { background: linear-gradient(180deg, #354a6a 0%, #293a5a 100%); color: #87e0f2; padding: 12px; font-weight: bold; border-bottom: 2px solid #87e0f2; border-right: 1px solid #334e68; text-transform: uppercase; letter-spacing: 1px; text-align: center !important; }
+        .smtm-modern-table td { padding: 8px 10px; border-bottom: 1px solid #293a5a; border-right: 1px solid #334e68; height: 28px; text-align: center !important; }
+        .smtm-modern-table td:first-child { font-weight: bold; background: #243547; color: #87e0f2; border-right: 2px solid #5a7590; text-align: center !important; }
         .smtm-modern-table tr:nth-child(even) td:not(:first-child) { background: rgba(255, 255, 255, 0.03); }
+
+        .score-badge { font-weight: bold; font-size: 9px; padding: 2px 5px; border-radius: 3px; display: inline-block; vertical-align: middle; }
+        .score-badge.score-plus { background: rgba(39, 174, 96, 0.2); color: #2ecc71; border: 1px solid rgba(39, 174, 96, 0.4); }
+        .score-badge.score-out { background: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.4); }
+
+        /* Tournament Bracket Layout Styles */
+        .bracket-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 25px; padding: 15px; background: rgba(20, 30, 40, 0.9); border-radius: 8px; border: 2px solid #4ab3c9; box-shadow: 0 0 20px rgba(74,179,201,0.2); box-sizing: border-box; }
+        .bracket-title { font-size: 1.5em; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; color: #87e0f2; margin-bottom: 15px; text-shadow: 0 0 10px rgba(135,224,242,0.4); text-align: center; }
         
-        .smtm-modern-table .section-header-rem td { background: #293a5a; color: #87e0f2; text-align: center; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; border-top: 2px solid #87e0f2; border-bottom: 2px solid #87e0f2; padding: 6px; }
-        .smtm-modern-table .section-header-elim td { background: #3a2929; color: #f28787; text-align: center; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; border-top: 2px solid #f28787; border-bottom: 2px solid #f28787; padding: 6px; }
+        .bracket-container { display: flex; justify-content: space-between; align-items: center; width: 100%; overflow-x: auto; overflow-y: hidden !important; gap: 8px; padding: 5px 0; }
+        .bracket-column { display: flex; flex-direction: column; justify-content: space-around; height: 700px !important; flex: 1; min-width: 80px; box-sizing: border-box; transition: all 0.2s; }
         
-        .smtm-modern-table td.eliminated { color: #888; text-decoration: line-through; opacity: 0.5; background: rgba(255, 60, 60, 0.1) !important; position: relative; }
-        .smtm-modern-table td.eliminated::after { content: ""; position: absolute; left: 10%; top: 50%; width: 80%; height: 2px; background: rgba(255, 0, 0, 0.5); transform: translateY(-50%); pointer-events: none; }
-        .smtm-modern-table .total-row td { background: #354a6a; font-weight: bold; font-size: 14px; border-top: 2px solid #87e0f2; color: #fff; }
+        .matchup-card { background: rgba(27, 38, 49, 0.95); border: 1px solid #334e68; border-radius: 4px; padding: 3px; display: flex; flex-direction: column; gap: 1px; box-shadow: 0 2px 6px rgba(0,0,0,0.6); transition: border-color 0.2s, transform 0.2s; position: relative; cursor: help; }
+        .matchup-card:hover { border-color: #87e0f2; transform: scale(1.03); box-shadow: 0 0 10px rgba(135,224,242,0.25); }
+        .matchup-card.has-meme::after { content: "🎬 Meme"; position: absolute; top: -8px; right: 3px; background: #e74c3c; color: white; font-size: 7px; font-weight: bold; padding: 1px 3px; border-radius: 2px; box-shadow: 0 0 4px #e74c3c; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
+        
+        .matchup-slot { display: flex; align-items: center; justify-content: space-between; background: #16222f; border-radius: 3px; padding: 4px 6px; font-size: 10px; height: 22px; border: 1px solid transparent; }
+        .matchup-slot.winner { border-color: rgba(39, 174, 96, 0.5); background: rgba(39, 174, 96, 0.15); color: #2ecc71; font-weight: bold; }
+        .matchup-slot span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 3px; width: 100%; }
+
+        span.bracket-team-display { display: flex; align-items: center; gap: 4px; overflow: hidden; width: 100%; }
+        span.team-flag { font-size: 13px; display: inline-block; }
+        span.bracket-name-full { display: inline-block !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        span.bracket-name-short { display: none !important; }
+        span.tbd-text { display: flex; justify-content: center !important; align-items: center; width: 100%; font-weight: bold; color: #5a7590; text-align: center; }
+
+        span.leaderboard-team-display { display: flex; align-items: center; justify-content: center; gap: 4px; width: auto; margin: 0 auto; }
+        span.leaderboard-name-full { display: inline-block !important; white-space: nowrap; }
+        span.leaderboard-name-short { display: none !important; }
+        .leaderboard-pick-container { display: flex; align-items: center; justify-content: center; font-size: 10px; margin-bottom: 2px; }
+
+        @media (max-width: 1450px) {
+            span.bracket-name-full { display: none !important; }
+            span.bracket-name-short { display: inline-block !important; }
+            .bracket-column { min-width: 65px; height: 600px !important; }
+            .matchup-card { padding: 2px; }
+            .matchup-slot { padding: 2px 4px; font-size: 8px; height: 18px; }
+        }
+        @media (max-width: 1000px) {
+            span.leaderboard-name-full { display: none !important; }
+            span.leaderboard-name-short { display: inline-block !important; }
+        }
+        @media (max-width: 900px) {
+            span.bracket-name-full { display: none !important; }
+            span.bracket-name-short { display: none !important; }
+            span.bracket-team-display { justify-content: center !important; }
+            span.team-flag { font-size: 15px; margin: 0 auto; display: block; text-align: center; }
+            .bracket-column { min-width: 35px; height: 500px !important; }
+            .bracket-title { font-size: 1.2em; }
+            .bracket-wrapper { padding: 10px; }
+        }
+        @media (max-width: 650px) {
+            span.leaderboard-name-full { display: none !important; }
+            span.leaderboard-name-short { display: none !important; }
+            .score-badge.score-out { font-size: 0; padding: 0; width: 6px; height: 6px; border-radius: 50%; border: 1px solid #e74c3c; display: inline-block; }
+            .score-badge.score-plus { padding: 1px 3px; }
+        }
+        
+        #meme-popover { 
+            position: fixed; 
+            display: none; 
+            z-index: 100000; 
+            background: rgba(17, 24, 32, 0.98); 
+            border: 2px solid #87e0f2; 
+            border-radius: 8px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(135,224,242,0.3); 
+            padding: 8px; 
+            text-align: center; 
+            transition: opacity 0.15s ease-out; 
+            width: max-content !important; 
+            max-width: 85vw !important; 
+            max-height: 85vh !important; 
+            overflow: auto; 
+        }
     </style>
 </head>
 <body>
-    <video autoplay muted loop id="bg-video" playsinline><source src="https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/579720/8cfbe7b8bfd8c85d2798ddbf112741d6435528ff.mp4" type="video/mp4"></video>
+    <video autoplay muted loop id="bg-video" playsinline></video>
+    <script>
+        const bgVideos = [
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/579720/8cfbe7b8bfd8c85d2798ddbf112741d6435528ff.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/2512200/a4f94af7fc96d4b9c78842031d22712e916f1117.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/2331960/03839ef6c978115dd3ddd681f4aa2b25829e91ce.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/1069740/04ab4a7df94b15cbbcf60286fe49e14dcf606278.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/588650/2865b49d9a6d0dcdc89c617cbc186ab2ffa26f28.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/1263950/248954cba9bc08b6e16c676f5c1814ff823af907.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/1940340/fdc6faed91add24b6519612f9b9143bebb443e85.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/504400/2b0792025824dfe8a1aa161ebe74ddee128d39cd.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/874400/2fda5d3781c6d198d70775f53809db245151928d.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/1239690/f032ec4916fad9f6f64ecb7a9f083e835f65e362.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/2351080/8ce6c567aed34044b56bcaff41ba149a40c8ff71.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/1098340/f8401a4804ea458142ca8e1e80494d5a48cc1279.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/2265180/533bdec2099cc8f058efa01c3db01deb1e851c8a.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/1003360/e8e8381b784e01defa002fdfca3c05810e667396.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/570/8144f2b875ebda693f4dec2f7c43a7a1a916375f.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/1684350/83de58962f68ab5151573386be4901f84f5bd6f2.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/628670/75f08ec46d67386848ddb2d20589e2552aac015a.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/628750/5dd2e07e1a5da3d4aec1f673e006232b4e6ad2d2.mp4",
+            "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/2351080/36b91a312470df01bf848cb378655cd9d60cf8cb.mp4"
+        ];
+        document.getElementById('bg-video').src = bgVideos[Math.floor(Math.random() * bgVideos.length)];
+    </script>
 
-    <!-- Circular Transparent Top Button -->
     <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" style="position: fixed; bottom: 20px; left: 20px; z-index: 10000; background: rgba(0,0,0,0.4); color: #87e0f2; border: 2px solid #87e0f2; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); font-size: 20px; padding: 0; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">⬆</button>
 
-    <!-- Modal Loading Overlay -->
+    <div id="meme-popover"></div>
+
     <div id="loading-overlay">
         <div class="loading-card" id="loading-card-content"></div>
     </div>
@@ -114,7 +203,6 @@
         <div id="content-area"></div>
     </div>
 
-    <!-- Info Modal -->
     <div id="modal-box">
         <div class="modal-header">
             <span id="toggle-icon" style="cursor:pointer" onclick="toggleSidebar()">◀◀</span>
@@ -133,6 +221,10 @@
             type: "anime",
             url: "https://script.google.com/macros/s/AKfycbxxaDlBOIqOMHKxf0WTtJ2u3Fd9r5Xt0jn_s3ZlO79OkKpP5VN17Wf902w98rd1ox9Zng/exec"
         },
+        "World Cup Fantasy": {
+            type: "worldcup",
+            url: "https://script.google.com/macros/s/AKfycbxqJvsEDCIH0muOKnMjUxl2IZP7WEsA2fbML_yUTDdddeXKRwTc9S6pw58BVHDJEvQnjw/exec"
+        },
         "SMTM Fantasy": {
             type: "smtm",
             seasons: {
@@ -146,24 +238,216 @@
         }
     };
 
-    const LOADING_TEXTS =[
+    const LOADING_TEXTS = [
         "Loading these hands...", "Loading L's...", "Loading ...", "l O a D i N g ...",
-		"Loading third leg protocol...", "Loading Mountain Dew Cold Red", "Loading ... dez nuts"
+        "Loading third leg protocol...", "Loading Mountain Dew Cold Red", "Loading ... dez nuts"
     ];
     
-    const LOADING_GIFS =[
+    const LOADING_GIFS = [
         "https://c.tenor.com/jfmI0j5FcpAAAAAd/tenor.gif", "https://c.tenor.com/FawYo00tBekAAAAC/tenor.gif",
         "https://c.tenor.com/Krf7sKoeHNUAAAAd/tenor.gif", "https://media.tenor.com/OSCT96zoz_0AAAAj/umbreon-loading.gif",
         "leon.gif", "https://c.tenor.com/5eIhXDwH73QAAAAd/tenor.gif", "https://c.tenor.com/jgDVuidR3bkAAAAd/tenor.gif",
         "https://c.tenor.com/hXpNeTG45kIAAAAC/tenor.gif", "https://c.tenor.com/8tA6lM4NHdAAAAAd/tenor.gif"
     ];
 
+    const COUNTRY_CODES = {
+        "Argentina": "ARG", "Brazil": "BRA", "Netherlands": "NED", "Morocco": "MAR",
+        "Germany": "GER", "Paraguay": "PAR", "Canada": "CAN", "Ivory Coast": "CIV",
+        "Norway": "NOR", "DR Congo": "COD", "Bosnia and Herzegovina": "BIH",
+        "Cape Verde": "CPV", "USA": "USA", "Spain": "ESP", "England": "ENG",
+        "Portugal": "POR", "Egypt": "EGY", "Switzerland": "SUI", "Colombia": "COL",
+        "Croatia": "CRO", "Japan": "JPN", "Ecuador": "ECU", "Ghana": "GHA",
+        "Senegal": "SEN", "South Africa": "RSA", "Algeria": "ALG", "Sweden": "SWE",
+        "Austria": "AUT", "Australia": "AUS", "United States": "USA"
+    };
+
     let allData = {}, animeCache = {}, isLocked = false;
     let currentSMTMSeason = ""; 
+    let lockedMemeEl = null;
+
+    function parseTeam(nameStr) {
+        if (!nameStr || nameStr === "IMAGE_PLACEHOLDER") return { flag: "", name: "" };
+        let cleanStr = String(nameStr).trim();
+        let flag = "";
+        let i = 0;
+        while (i < cleanStr.length) {
+            let code = cleanStr.charCodeAt(i);
+            if (code > 127) {
+                flag += cleanStr.charAt(i);
+                i++;
+            } else {
+                break;
+            }
+        }
+        let cleanName = cleanStr.substring(i).trim();
+        if (!cleanName && flag) { cleanName = flag; flag = ""; }
+        return { flag: flag, name: cleanName };
+    }
+
+    function formatBracketTeam(nameStr) {
+        let parsed = parseTeam(nameStr);
+        if (!parsed.name) return `<span class="tbd-text">TBD</span>`;
+        const abbrev = COUNTRY_CODES[parsed.name] || (parsed.name ? parsed.name.substring(0, 3).toUpperCase() : "");
+        return `
+            <span class="bracket-team-display">
+                <span class="team-flag">${parsed.flag}</span>
+                <span class="bracket-name-full">${parsed.name}</span>
+                <span class="bracket-name-short">${abbrev}</span>
+            </span>
+        `;
+    }
+
+    function formatLeaderboardTeam(nameStr) {
+        let parsed = parseTeam(nameStr);
+        if (!parsed.name) return "-";
+        const abbrev = COUNTRY_CODES[parsed.name] || (parsed.name ? parsed.name.substring(0, 3).toUpperCase() : "");
+        return `
+            <span class="leaderboard-team-display">
+                <span class="team-flag" style="font-size: 13px;">${parsed.flag}</span>
+                <span class="leaderboard-name-full" style="font-weight: bold;">${parsed.name}</span>
+                <span class="leaderboard-name-short" style="font-weight: bold;">${abbrev}</span>
+            </span>
+        `;
+    }
+
+    function parseBracketExact(rows, colIndex, rowPairs) {
+        let matches = [];
+        for (let pair of rowPairs) {
+            let r1 = pair[0];
+            let r2 = pair[1];
+            
+            let cellA = rows[r1] && rows[r1][colIndex] ? rows[r1][colIndex] : {};
+            let cellB = rows[r2] && rows[r2][colIndex] ? rows[r2][colIndex] : {};
+            
+            let tA = cellA.text ? String(cellA.text).trim() : "";
+            let tB = cellB.text ? String(cellB.text).trim() : "";
+            
+            if (tA === "IMAGE_PLACEHOLDER" || tA.startsWith("{")) tA = "";
+            if (tB === "IMAGE_PLACEHOLDER" || tB.startsWith("{")) tB = "";
+            
+            let rawMemes = [];
+            if (cellA.meme) rawMemes.push(cellA.meme);
+            else if (cellA.url) rawMemes.push(cellA.url);
+            
+            if (cellB.meme) rawMemes.push(cellB.meme);
+            else if (cellB.url) rawMemes.push(cellB.url);
+            
+            let finalMemes = [];
+            rawMemes.forEach(str => {
+                str.split(',').forEach(u => {
+                    let clean = u.trim();
+                    if (clean.startsWith('http') || clean.startsWith('data:') || clean.startsWith('blob:')) {
+                        finalMemes.push(clean);
+                    }
+                });
+            });
+            
+            matches.push({
+                teamA: tA,
+                teamB: tB,
+                meme: finalMemes.length > 0 ? finalMemes.join(",") : null,
+                label: `${tA || "TBD"} vs ${tB || "TBD"}`
+            });
+        }
+        return matches;
+    }
+
+    function renderBracketCard(m) {
+        if (!m) return "";
+        const hasMemeClass = m.meme ? 'has-meme' : '';
+        const safeMeme = m.meme ? m.meme.replace(/\r?\n|\r/g, "").replace(/'/g, "\\'").replace(/"/g, "&quot;") : '';
+        const safeLabel = m.label ? m.label.replace(/\r?\n|\r/g, "").replace(/'/g, "\\'").replace(/"/g, "&quot;") : '';
+
+        return `
+            <div class="matchup-card ${hasMemeClass}" 
+                 onmousemove="moveMeme(event)" 
+                 onmouseover="hoverMeme(event, '${safeMeme}', '${safeLabel}')" 
+                 onmouseleave="leaveMeme()"
+                 onclick="clickMeme(event, '${safeMeme}', '${safeLabel}', this)">
+                <div class="matchup-slot ${m.teamA && !m.teamB ? 'winner' : ''}">
+                    ${formatBracketTeam(m.teamA)}
+                </div>
+                <div class="matchup-slot ${m.teamB && !m.teamA ? 'winner' : ''}">
+                    ${formatBracketTeam(m.teamB)}
+                </div>
+            </div>
+        `;
+    }
+
+    function renderMemeGrid(urls) {
+        let cols = 1;
+        let itemSize = "200px";
+        
+        if (urls.length >= 5) {
+            cols = 3;
+        } else if (urls.length >= 2) {
+            cols = 2;
+        }
+        let rows = Math.ceil(urls.length / cols);
+        
+        let calculatedSize = Math.min(
+            Math.floor((window.innerWidth * 0.35) / cols),
+            Math.floor((window.innerHeight * 0.7) / rows)
+        );
+        if (urls.length > 1) {
+            itemSize = Math.max(70, Math.min(140, calculatedSize)) + "px";
+        }
+
+        let mediaHTML = `<div style="display: grid; grid-template-columns: repeat(${cols}, 1fr); gap: 6px; justify-content: center; align-items: center; max-width: 100%;">`;
+        
+        urls.forEach(function(url) {
+            let itemStyle = `width: ${itemSize}; height: ${itemSize}; object-fit: cover; border-radius: 4px; display: block; margin: 0 auto;`;
+            if (urls.length === 1) {
+                itemStyle = "max-width: 280px; max-height: 200px; border-radius: 4px; display: block; margin: 0 auto;";
+            }
+            
+            if (url.includes("tenor.com/view/")) {
+                let embedUrl = url.replace("tenor.com/view/", "tenor.com/embed/");
+                mediaHTML += `<iframe src="${embedUrl}" frameborder="0" allowfullscreen style="${itemStyle}"></iframe>`;
+            } else if (url.includes('.mp4') || url.includes('akamai.steamstatic') || url.includes('video')) {
+                mediaHTML += `<video autoplay muted loop playsinline src="${url}" style="${itemStyle}"></video>`;
+            } else {
+                mediaHTML += `<img src="${url}" style="${itemStyle}">`;
+            }
+        });
+        
+        mediaHTML += `</div>`;
+        return mediaHTML;
+    }
+
+    function clampPopover(event, popover) {
+        let gap = 15;
+        let padding = 10;
+        
+        let popoverWidth = popover.offsetWidth || 280;
+        let popoverHeight = popover.offsetHeight || 200;
+        
+        let windowWidth = window.innerWidth;
+        let windowHeight = window.innerHeight;
+        
+        let leftPos = event.clientX + gap;
+        if (event.clientX > (windowWidth / 2)) {
+            leftPos = event.clientX - popoverWidth - gap;
+        }
+        
+        let topPos = event.clientY + gap;
+        if (topPos + popoverHeight > windowHeight - padding) {
+            topPos = event.clientY - popoverHeight - gap;
+        }
+        
+        if (leftPos < padding) leftPos = padding;
+        if (leftPos + popoverWidth > windowWidth - padding) leftPos = windowWidth - popoverWidth - padding;
+        if (topPos < padding) topPos = padding;
+        if (topPos + popoverHeight > windowHeight - padding) topPos = windowHeight - popoverHeight - padding;
+        
+        popover.style.left = leftPos + 'px';
+        popover.style.top = topPos + 'px';
+    }
 
     function showLoading(contextText) {
         const overlay = document.getElementById('loading-overlay');
         const content = document.getElementById('loading-card-content');
+        if (!overlay || !content) return;
         
         const isGif = Math.random() < 0.7;
         let innerHTML = "";
@@ -186,11 +470,21 @@
     }
 
     function hideLoading() {
-        document.getElementById('loading-overlay').classList.remove('active');
+        const overlay = document.getElementById('loading-overlay');
+        if (overlay) overlay.classList.remove('active');
+    }
+
+    function getCleanMemeUrls(mediaSrc) {
+        if (!mediaSrc) return [];
+        return mediaSrc.split(',')
+            .map(s => s.trim())
+            .filter(s => s.indexOf("http") === 0 || s.indexOf("data:") === 0);
     }
 
     function init() {
         const menu = document.getElementById('game-menu');
+        if (!menu) return;
+        menu.innerHTML = "";
         for (let gameName in GAMES) {
             menu.innerHTML += `<button class="maple-btn" onclick="selectGame('${gameName}')">${gameName}</button>`;
         }
@@ -204,6 +498,7 @@
 
     async function selectGame(gameName) {
         const gameConfig = GAMES[gameName];
+        if (!gameConfig) return;
         if (gameConfig.type === "redirect") {
             window.location.href = gameConfig.href;
             return;
@@ -211,7 +506,7 @@
 
         const seasonMenu = document.getElementById('season-menu');
         const contentArea = document.getElementById('content-area');
-        seasonMenu.innerHTML = "";
+        if (seasonMenu) seasonMenu.innerHTML = "";
         
         showLoading(`Loading ${gameName}...`);
 
@@ -220,22 +515,303 @@
                 try {
                     const res = await fetch(gameConfig.url);
                     allData = await res.json();
-                    for (let year in allData) {
-                        for (let season in allData[year]) {
-                            seasonMenu.innerHTML += `<button class="maple-btn" onclick="renderAnimeDraft('${year}', '${season}')">${year} ${season}</button>`;
+                    if (seasonMenu) {
+                        for (let year in allData) {
+                            for (let season in allData[year]) {
+                                seasonMenu.innerHTML += `<button class="maple-btn" onclick="renderAnimeDraft('${year}', '${season}')">${year} ${season}</button>`;
+                            }
                         }
                     }
                     hideLoading();
-                } catch (e) { contentArea.innerHTML = `<h3 style="color:red;">Error loading data</h3>`; hideLoading(); }
+                } catch (e) { 
+                    if (contentArea) contentArea.innerHTML = `<h3 style="color:red;">Error loading data</h3>`; 
+                    hideLoading(); 
+                }
             } 
             else if (gameConfig.type === "smtm") {
-                for (let seasonName in gameConfig.seasons) {
-                    let url = gameConfig.seasons[seasonName];
-                    seasonMenu.innerHTML += `<button class="maple-btn" onclick="loadSMTMSeason('${seasonName}', '${url}')">${seasonName}</button>`;
+                if (seasonMenu) {
+                    for (let seasonName in gameConfig.seasons) {
+                        let url = gameConfig.seasons[seasonName];
+                        seasonMenu.innerHTML += `<button class="maple-btn" onclick="loadSMTMSeason('${seasonName}', '${url}')">${seasonName}</button>`;
+                    }
                 }
                 hideLoading();
+            } 
+            else if (gameConfig.type === "worldcup") {
+                try {
+                    const res = await fetch(gameConfig.url);
+                    allData = await res.json();
+                    if (seasonMenu) {
+                        for (let year in allData) {
+                            for (let season in allData[year]) {
+                                seasonMenu.innerHTML += `<button class="maple-btn" onclick="renderWorldCup('${year}', '${season}')">${year} World Cup</button>`;
+                            }
+                        }
+                    }
+                    hideLoading();
+                } catch (e) { 
+                    if (contentArea) contentArea.innerHTML = `<h3 style="color:red;">Error loading World Cup data</h3>`; 
+                    hideLoading(); 
+                }
             }
         }, 100);
+    }
+
+    function hoverMeme(event, mediaSrc, teamMatch) {
+        if (lockedMemeEl) return;
+        const popover = document.getElementById('meme-popover');
+        if (!popover) return;
+        if (!mediaSrc) {
+            popover.style.display = 'none';
+            return;
+        }
+        
+        let urls = getCleanMemeUrls(mediaSrc);
+        if (urls.length === 0) {
+            popover.style.display = 'none';
+            return;
+        }
+
+        popover.innerHTML = renderMemeGrid(urls); 
+        popover.style.display = 'block';
+        clampPopover(event, popover);
+    }
+
+    function moveMeme(event) {
+        if (lockedMemeEl) return;
+        const popover = document.getElementById('meme-popover');
+        if (popover && popover.style.display === 'block') {
+            clampPopover(event, popover);
+        }
+    }
+
+    function leaveMeme() {
+        if (lockedMemeEl) return;
+        const popover = document.getElementById('meme-popover');
+        if (popover) popover.style.display = 'none';
+    }
+
+    function clickMeme(event, mediaSrc, teamMatch, element) {
+        event.stopPropagation();
+        const popover = document.getElementById('meme-popover');
+        if (!popover) return;
+
+        if (lockedMemeEl === element) {
+            lockedMemeEl = null;
+            popover.style.display = 'none';
+            return;
+        }
+
+        lockedMemeEl = element;
+        
+        let urls = getCleanMemeUrls(mediaSrc);
+        if (urls.length === 0) {
+            lockedMemeEl = null;
+            popover.style.display = 'none';
+            return;
+        }
+
+        popover.innerHTML = renderMemeGrid(urls);
+        popover.style.display = 'block';
+        clampPopover(event, popover);
+    }
+
+    document.addEventListener('click', function(event) {
+        if (lockedMemeEl) {
+            const popover = document.getElementById('meme-popover');
+            if (popover && !popover.contains(event.target)) {
+                lockedMemeEl = null;
+                popover.style.display = 'none';
+            }
+        }
+    });
+    
+    async function renderWorldCup(year, season) {
+        showLoading(`Rendering ${year} World Cup...`);
+        setTimeout(async () => {
+            const container = document.getElementById('content-area');
+            if (!container) { hideLoading(); return; }
+            
+            const rows = allData[year] ? allData[year][season] : null;
+            if (!rows) { 
+                container.innerHTML = `<h3 style="color:red;">No World Cup data found</h3>`;
+                hideLoading(); 
+                return; 
+            }
+            
+            const header = rows[1];
+            if (!header) {
+                container.innerHTML = `<h3 style="color:red;">Invalid row structure</h3>`;
+                hideLoading();
+                return;
+            }
+            
+            let players = [];
+            let scoringInfo = { label: "", value: "" };
+            
+            for (let i = 2; i < header.length; i++) {
+                let txt = header[i] ? String(header[i].text).trim() : "";
+                if (!txt) continue;
+                if (txt === "Scoring") continue;
+                if (txt !== "Win" && txt !== "Lose " && txt !== "Out" && !txt.startsWith("Point") && !txt.startsWith("Contest")) {
+                    let nextCol = rows[10]; 
+                    let totalScore = nextCol && nextCol[i+1] ? parseFloat(nextCol[i+1].text) || 0 : 0;
+                    players.push({ name: txt, col: i, scoreCol: i+1, total: totalScore });
+                }
+                if (txt === "Scoring") {
+                    let scoreLabel = rows[2] && rows[2][i+1] ? String(rows[2][i+1].text) : "";
+                    let scoreVal = rows[2] && rows[2][i+2] ? String(rows[2][i+2].text) : "";
+                    scoringInfo = { label: scoreLabel, value: scoreVal };
+                }
+            }
+            
+            players.sort((a, b) => b.total - a.total);
+            let emojis = {};
+            for (let i = 0; i < players.length; i++) {
+                if (i === players.length - 1) emojis[players[i].name] = '💩';
+                else if (i === 0) emojis[players[i].name] = '🥇';
+                else if (i === 1) emojis[players[i].name] = '🥈';
+                else if (i === 2) emojis[players[i].name] = '🥉';
+            }
+            
+            let roundHeaders = [];
+            for (let r = 2; r < rows.length; r++) {
+                let row = rows[r];
+                let roundName = row[1] ? String(row[1].text).trim() : "";
+                if (!roundName || roundName.includes("Total") || roundName === "" || r > 10) continue;
+                roundHeaders.push(roundName);
+            }
+
+            let thHTML = `<th style="width: 100px;">Round</th>`;
+            players.forEach(p => {
+                let rankEmoji = emojis[p.name] || "";
+                thHTML += `<th>${rankEmoji} ${p.name}</th>`;
+            });
+
+            let tbHTML = "";
+            roundHeaders.forEach((rName, rIdx) => {
+                let rowCells = `<td style="font-weight:bold; background:#243547; color:#87e0f2;">${rName}</td>`;
+                players.forEach(p => {
+                    let pickRow = rows[rIdx + 2];
+                    let pick = pickRow && pickRow[p.col] ? String(pickRow[p.col].text).trim() : "";
+                    let scoreText = pickRow && pickRow[p.scoreCol] ? String(pickRow[p.scoreCol].text).trim() : "";
+                    let score = scoreText !== "" ? parseFloat(scoreText) : null;
+                    
+                    let badgeClass = score !== null ? (score > 0 ? 'score-plus' : 'score-out') : '';
+                    let badgeLabel = score !== null ? (score > 0 ? `+${score}` : 'OUT') : '';
+                    let formattedPick = pick ? formatLeaderboardTeam(pick) : '-';
+                    
+                    rowCells += `<td>
+                        <div class="leaderboard-pick-container">${formattedPick}</div>
+                        ${score !== null ? `<span class="score-badge ${badgeClass}">${badgeLabel}</span>` : ''}
+                    </td>`;
+                });
+                tbHTML += `<tr>${rowCells}</tr>`;
+            });
+
+            let totalCells = `<td style="font-weight:bold; background:#354a6a; color:#fff;">Total</td>`;
+            players.forEach(p => {
+                totalCells += `<td style="font-weight:bold; color:#fff; background:#293a5a;">${p.total}</td>`;
+            });
+            tbHTML += `<tr style="background:#293a5a; font-weight:bold; color:#fff;">${totalCells}</tr>`;
+            
+            let scoringHTML = "";
+            if (scoringInfo.label) {
+                scoringHTML = `<div class="scoring-box anime-absolute-box"><strong>Scoring</strong><br>${scoringInfo.label}: ${scoringInfo.value}</div>`;
+            }
+            
+            let html = `<div class="season-container">
+                ${scoringHTML}
+                <h2 style="text-align:center; text-transform:uppercase;">${year} Player Leaderboard</h2>
+                <div style="overflow-x:auto; width:100%; margin-top:15px; border-radius:4px; border:2px solid #5a7590;">
+                    <table class="smtm-modern-table" style="width:100%; border:none;">
+                        <thead>
+                            <tr>
+                                ${thHTML}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tbHTML}
+                        </tbody>
+                    </table>
+                </div>
+            </div>`;
+
+            const BRACKET_ROWS = {
+                R32:   [[13, 14], [16, 17], [19, 20], [22, 23], [26, 27], [29, 30], [32, 33], [34, 35]],
+                L_R16: [[19, 20], [22, 23], [26, 27], [29, 30]],
+                R_R16: [[19, 20], [22, 23], [26, 27], [29, 30]],
+                L_QF:  [[22, 23], [26, 27]],
+                R_QF:  [[22, 23], [26, 27]],
+                SF:    [[24, 25]],
+                F:     [[24, 25]]
+            };
+
+            const left_R32  = parseBracketExact(rows, 2, BRACKET_ROWS.R32);
+            const right_R32 = parseBracketExact(rows, 18, BRACKET_ROWS.R32);
+            
+            const left_R16  = parseBracketExact(rows, 4, BRACKET_ROWS.L_R16);
+            const right_R16 = parseBracketExact(rows, 16, BRACKET_ROWS.R_R16);
+            
+            const left_QF   = parseBracketExact(rows, 6, BRACKET_ROWS.L_QF);
+            const right_QF  = parseBracketExact(rows, 14, BRACKET_ROWS.R_QF);
+            
+            const left_SF   = parseBracketExact(rows, 8, BRACKET_ROWS.SF);
+            const right_SF  = parseBracketExact(rows, 12, BRACKET_ROWS.SF);
+            
+            const finals    = parseBracketExact(rows, 10, BRACKET_ROWS.F);
+
+            let bracketHTML = `
+                <div class="bracket-wrapper">
+                    <div class="bracket-title">🏆 2026 World Cup Round of 32 Bracket</div>
+                    <div class="bracket-container">
+                        
+                        <div class="bracket-column">
+                            ${left_R32.map(m => renderBracketCard(m)).join('')}
+                        </div>
+
+                        <div class="bracket-column">
+                            ${left_R16.map(m => renderBracketCard(m)).join('')}
+                        </div>
+
+                        <div class="bracket-column">
+                            ${left_QF.map(m => renderBracketCard(m)).join('')}
+                        </div>
+
+                        <div class="bracket-column">
+                            ${left_SF.map(m => renderBracketCard(m)).join('')}
+                        </div>
+
+                        <div class="bracket-column" style="justify-content: center; position: relative;">
+                            <div style="border: 2px solid #ffcc00; border-radius: 8px; background: rgba(255, 204, 0, 0.05); padding: 5px; width: 100%;">
+                                <div style="text-align:center; font-size:10px; font-weight:bold; color:#ffcc00; margin-bottom:5px; text-transform:uppercase;">🏆 FINALS</div>
+                                ${finals.map(m => renderBracketCard(m)).join('')}
+                            </div>
+                        </div>
+
+                        <div class="bracket-column">
+                            ${right_SF.map(m => renderBracketCard(m)).join('')}
+                        </div>
+
+                        <div class="bracket-column">
+                            ${right_QF.map(m => renderBracketCard(m)).join('')}
+                        </div>
+
+                        <div class="bracket-column">
+                            ${right_R16.map(m => renderBracketCard(m)).join('')}
+                        </div>
+
+                        <div class="bracket-column">
+                            ${right_R32.map(m => renderBracketCard(m)).join('')}
+                        </div>
+
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html + bracketHTML;
+            hideLoading();
+        }, 50);
     }
 
     async function loadSMTMSeason(seasonName, url) {
@@ -279,7 +855,7 @@
                 
                 let totalRow = overallData.find(r => r[1] && r[1].text && String(r[1].text).includes("Total"));
                 if (totalRow) {
-                    let players =[];
+                    let players = [];
                     for (let c = 2; c < mainColCount; c++) {
                         let name = r1[c] ? r1[c].text.trim() : "";
                         let score = parseFloat(totalRow[c] ? totalRow[c].text : "0") || 0;
@@ -320,11 +896,11 @@
         for (let i = mainColCount; i < r1.length; i++) {
             let txt = String(r1[i].text).trim();
             if (txt.includes("Point Critiera") || txt.includes("Point Criteria")) {
-                let criteriaPairs =[];
+                let criteriaPairs = [];
                 for (let r = 2; r < rows.length; r++) {
                     let key = rows[r][i-1] ? String(rows[r][i-1].text).trim() : "";
                     let val = rows[r][i] ? String(rows[r][i].text).trim() : "";
-                    if (key || val) criteriaPairs.push(`<tr><td style="padding-right:10px;">${key}</td><td style="text-align:right;">${val}</td></tr>`);
+                    if (key || val) criteriaPairs.push("<tr><td>" + key + "</td><td>" + val + "</td></tr>");
                 }
                 if (criteriaPairs.length > 0) {
                     scoringCriteriaHTML = `
@@ -335,7 +911,7 @@
                 }
             } else if (txt.includes("Contestants:")) {
                 let domesticContestants = [];
-                let globalContestants =[];
+                let globalContestants = [];
                 let isGlobalSection = false;
                 for (let r = 2; r < rows.length; r++) {
                     for (let c = i; c < rows[r].length; c++) {
@@ -479,7 +1055,7 @@
             const rows = allData[year][season];
             await fetchAllAnimeInfo(rows); 
             
-            const totalRow = rows.find(r => r.some(c => c.text === "Total"));
+            const totalRow = rows.find(r => Array.isArray(r) && r.some(c => c && c.text === "Total"));
             container.innerHTML = `<div class="season-container">
                 <div class="scoring-box anime-absolute-box"><strong>Scoring</strong><br>70+: Positive<br>70-: Negative<br>90+: Double</div>
                 <h2>${year} ${season}</h2><div class="player-grid" id="grid"></div></div>`;
@@ -488,7 +1064,7 @@
             const header = rows[1];
             let allPicksByPlayer = {}, animeRegistry = {}; 
             
-            let players =[];
+            let players = [];
             for (let i = 2; i < header.length; i += 2) {
                 let name = header[i].text, score = parseFloat(totalRow ? totalRow[i+1].text : "0") || 0;
                 if (name && !["Scoring", "70+"].includes(name)) players.push({name, score});
@@ -502,8 +1078,8 @@
             }
             
             for (let i = 2; i < header.length; i += 2) {
-                if (!header[i].text ||["Scoring", "70+"].includes(header[i].text)) continue;
-                allPicksByPlayer[i] =[];
+                if (!header[i].text || ["Scoring", "70+"].includes(header[i].text)) continue;
+                allPicksByPlayer[i] = [];
                 rows.forEach((r, idx) => {
                     if (idx > 1 && r[1] && r[1].text && !r[1].text.includes("Total") && r[i].text) {
                         let id = r[i].url ? parseInt(r[i].url.split('/')[4]) : null;
@@ -543,8 +1119,17 @@
     }
 
     async function fetchAllAnimeInfo(rows) {
-        let ids =[...new Set(rows.map(r => r.filter(c => c.url).map(c => parseInt(c.url.split('/')[4]))).flat())];
-        if(ids.length === 0) return;
+        if (!rows || !Array.isArray(rows)) return;
+        let ids = [...new Set(rows
+            .filter(r => Array.isArray(r))
+            .map(r => r.filter(c => c && c.url).map(c => {
+                const parts = c.url.split('/');
+                return parts[4] ? parseInt(parts[4]) : null;
+            }))
+            .flat()
+            .filter(id => id !== null && !isNaN(id))
+        )];
+        if (ids.length === 0) return;
         const query = `query ($ids: [Int]) { Page { media(id_in: $ids) { id, title { romaji }, description, coverImage { large, medium }, format, episodes, duration, status, averageScore, popularity, siteUrl } } }`;
         try {
             const res = await fetch('https://graphql.anilist.co', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({query, variables: {ids}}) });
@@ -590,7 +1175,11 @@
         document.getElementById('toggle-icon').innerText = "◀◀";
     }
 
-    window.onload = init;
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
 </script>
 </body>
 </html>
