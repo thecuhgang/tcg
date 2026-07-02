@@ -4,6 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TCG Fantasy Hub</title>
+    <!-- Official Async Twitter Widgets Script -->
+    <script>
+        window.twttr = (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0],
+            t = window.twttr || {};
+            if (d.getElementById(id)) return t;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://platform.twitter.com/widgets.js";
+            fjs.parentNode.insertBefore(js, fjs);
+
+            t._e = [];
+            t.ready = function(f) {
+                t._e.push(f);
+            };
+            return t;
+        }(document, "script", "twitter-wjs"));
+    </script>
     <style>
         body { margin: 0; font-family: 'IBM Plex Sans', sans-serif; color: #eef2f5; min-height: 100vh; overflow-x: hidden; background: #000; }
         #bg-video { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -1; object-fit: cover; pointer-events: none; }
@@ -89,7 +107,6 @@
         .score-badge.score-plus { background: rgba(39, 174, 96, 0.2); color: #2ecc71; border: 1px solid rgba(39, 174, 96, 0.4); }
         .score-badge.score-out { background: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.4); }
 
-        /* Tournament Bracket Layout Styles */
         .bracket-wrapper { 
             width: 100%; 
             display: flex; 
@@ -102,7 +119,7 @@
             border: 2px solid #4ab3c9; 
             box-shadow: 0 0 20px rgba(74,179,201,0.2); 
             box-sizing: border-box;
-            overflow: hidden; /* Clips the inner container's padding correctly */
+            overflow: hidden; 
         }
         .bracket-title { font-size: 1.5em; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; color: #87e0f2; margin-top: 15px; margin-bottom: 5px; text-shadow: 0 0 10px rgba(135,224,242,0.4); text-align: center; }
         
@@ -113,17 +130,15 @@
             width: 100%; 
             overflow-x: auto; 
             overflow-y: hidden; 
-            gap: 15px; /* Increased gap to prevent collision */
-            padding: 25px; /* REQUESTED: Added padding to inner edges */
+            gap: 15px; 
+            padding: 25px; 
             box-sizing: border-box;
-            scrollbar-width: none; /* REQUESTED: Hide scrollbar Firefox */
-            -ms-overflow-style: none; /* REQUESTED: Hide scrollbar IE/Edge */
+            scrollbar-width: none; 
+            -ms-overflow-style: none; 
         }
-        .bracket-container::-webkit-scrollbar { display: none; } /* REQUESTED: Hide scrollbar Chrome/Safari */
+        .bracket-container::-webkit-scrollbar { display: none; } 
 
         .bracket-column { display: flex; flex-direction: column; justify-content: space-around; height: 700px !important; flex: 1; min-width: 100px; box-sizing: border-box; transition: all 0.2s; }
-        
-        /* Specific column tuning for the center area */
         .bracket-column.finals-col { flex: 0 0 180px; margin: 0 10px; }
 
         .matchup-card { background: rgba(27, 38, 49, 0.95); border: 1px solid #334e68; border-radius: 4px; padding: 3px; display: flex; flex-direction: column; gap: 1px; box-shadow: 0 2px 6px rgba(0,0,0,0.6); transition: border-color 0.2s, transform 0.2s; position: relative; cursor: help; }
@@ -316,6 +331,21 @@
     let currentSMTMSeason = ""; 
     let lockedMemeEl = null;
 
+    let lastMemePos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
+    // OFFICIAL TWITTER WIDGET EVENT - Uses `.closest('.embed-container')` to trace out of the iframe
+    window.twttr.ready(function (twttr) {
+        twttr.events.bind('rendered', function (event) {
+            if (event.target) {
+                const container = event.target.closest('.embed-container');
+                if (container) {
+                    const spinner = container.querySelector('.tw-spinner');
+                    if (spinner) spinner.style.display = 'none';
+                }
+            }
+        });
+    });
+
     function parseTeam(nameStr) {
         if (!nameStr || nameStr === "IMAGE_PLACEHOLDER") return { flag: "", name: "" };
         let cleanStr = String(nameStr).trim();
@@ -427,38 +457,56 @@
 
     function renderMemeGrid(urls) {
         let cols = 1;
-        let itemSize = "200px";
-        
         if (urls.length >= 5) {
             cols = 3;
         } else if (urls.length >= 2) {
             cols = 2;
         }
-        let rows = Math.ceil(urls.length / cols);
         
-        let calculatedSize = Math.min(
-            Math.floor((window.innerWidth * 0.35) / cols),
-            Math.floor((window.innerHeight * 0.7) / rows)
-        );
-        if (urls.length > 1) {
-            itemSize = Math.max(70, Math.min(140, calculatedSize)) + "px";
-        }
+        let isSingle = urls.length === 1;
 
         let mediaHTML = `<div style="display: grid; grid-template-columns: repeat(${cols}, 1fr); gap: 6px; justify-content: center; align-items: center; max-width: 100%;">`;
         
         urls.forEach(function(url) {
-            let itemStyle = `width: ${itemSize}; height: ${itemSize}; object-fit: cover; border-radius: 4px; display: block; margin: 0 auto;`;
-            if (urls.length === 1) {
-                itemStyle = "max-width: 280px; max-height: 200px; border-radius: 4px; display: block; margin: 0 auto;";
+            let isTwitter = /^https?:\/\/(www\.)?(twitter\.com|x\.com)/.test(url);
+            let isReddit = /^https?:\/\/(www\.)?reddit\.com/.test(url);
+            
+            let itemStyle = "";
+            let twContainerStyle = "";
+
+            if (isSingle) {
+                itemStyle = "width: max(40vw, 300px); height: max(40vh, 300px); max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 4px; display: block; margin: 0 auto;";
+                twContainerStyle = "width: max(40vw, 300px); height: auto; min-height: 300px; max-width: 90vw; display: flex; justify-content: center; align-items: flex-start; overflow: hidden;";
+            } else {
+                let calcSize = Math.max(Math.floor((window.innerWidth * 0.4) / cols), 150) + "px";
+                itemStyle = `width: ${calcSize}; height: ${calcSize}; object-fit: cover; border-radius: 4px; display: block; margin: 0 auto;`;
+                twContainerStyle = `width: ${calcSize}; height: ${calcSize}; display: flex; justify-content: center; align-items: flex-start; overflow-y: auto;`;
             }
             
-            if (url.includes("tenor.com/view/")) {
+            if (isTwitter) {
+                let twUrl = url.replace("x.com", "twitter.com");
+                // Added `.embed-container` to lock the MutationObserver boundary
+                mediaHTML += `<div class="embed-container" style="${twContainerStyle}; position: relative;">
+                    <div class="spinner tw-spinner" style="position: absolute; width: 30px; height: 30px; border-width: 4px; z-index: 1; top: 150px; left: 50%; transform: translate(-50%, -50%);"></div>
+                    <blockquote class="twitter-tweet" data-theme="dark" style="margin: 0 auto; width: 100%; position: relative; z-index: 2;">
+                        <a href="${twUrl}"></a>
+                    </blockquote>
+                </div>`;
+            } else if (isReddit) {
+                // Added `.embed-container` to lock the MutationObserver boundary
+                mediaHTML += `<div class="embed-container" style="${twContainerStyle}; position: relative;">
+                    <div class="spinner tw-spinner" style="position: absolute; width: 30px; height: 30px; border-width: 4px; z-index: 1; top: 150px; left: 50%; transform: translate(-50%, -50%);"></div>
+                    <blockquote class="reddit-embed-bq" data-embed-show-media="true" data-embed-theme="dark" style="margin: 0 auto; width: 100%; position: relative; z-index: 2;">
+                        <a href="${url}"></a>
+                    </blockquote>
+                </div>`;
+            } else if (url.includes("tenor.com/view/")) {
                 let embedUrl = url.replace("tenor.com/view/", "tenor.com/embed/");
                 mediaHTML += `<iframe src="${embedUrl}" frameborder="0" allowfullscreen style="${itemStyle}"></iframe>`;
             } else if (url.includes('.mp4') || url.includes('akamai.steamstatic') || url.includes('video')) {
                 mediaHTML += `<video autoplay muted loop playsinline src="${url}" style="${itemStyle}"></video>`;
             } else {
-                mediaHTML += `<img src="${url}" style="${itemStyle}">`;
+                mediaHTML += `<img src="${url}" style="${itemStyle}" referrerpolicy="no-referrer">`;
             }
         });
         
@@ -467,6 +515,11 @@
     }
 
     function clampPopover(event, popover) {
+        if (event && event.clientX !== undefined) {
+            lastMemePos.x = event.clientX;
+            lastMemePos.y = event.clientY;
+        }
+        
         let gap = 15;
         let padding = 10;
         
@@ -476,14 +529,14 @@
         let windowWidth = window.innerWidth;
         let windowHeight = window.innerHeight;
         
-        let leftPos = event.clientX + gap;
-        if (event.clientX > (windowWidth / 2)) {
-            leftPos = event.clientX - popoverWidth - gap;
+        let leftPos = lastMemePos.x + gap;
+        if (lastMemePos.x > (windowWidth / 2)) {
+            leftPos = lastMemePos.x - popoverWidth - gap;
         }
         
-        let topPos = event.clientY + gap;
+        let topPos = lastMemePos.y + gap;
         if (topPos + popoverHeight > windowHeight - padding) {
-            topPos = event.clientY - popoverHeight - gap;
+            topPos = lastMemePos.y - popoverHeight - gap;
         }
         
         if (leftPos < padding) leftPos = padding;
@@ -608,6 +661,22 @@
         }, 100);
     }
 
+    function triggerEmbedScripts(urls) {
+        if (window.twttr && window.twttr.widgets) {
+            window.twttr.widgets.load(document.getElementById('meme-popover'));
+        }
+        
+        if (urls.some(u => /^https?:\/\/(www\.)?reddit\.com/.test(u))) {
+            let oldScript = document.getElementById('reddit-embed-script');
+            if (oldScript) oldScript.remove();
+            let script = document.createElement('script');
+            script.id = 'reddit-embed-script';
+            script.src = 'https://embed.reddit.com/widgets.js';
+            script.charset = 'UTF-8';
+            document.body.appendChild(script);
+        }
+    }
+
     function hoverMeme(event, mediaSrc, teamMatch) {
         if (lockedMemeEl) return;
         const popover = document.getElementById('meme-popover');
@@ -626,6 +695,7 @@
         popover.innerHTML = renderMemeGrid(urls); 
         popover.style.display = 'block';
         clampPopover(event, popover);
+        triggerEmbedScripts(urls);
     }
 
     function moveMeme(event) {
@@ -665,6 +735,7 @@
         popover.innerHTML = renderMemeGrid(urls);
         popover.style.display = 'block';
         clampPopover(event, popover);
+        triggerEmbedScripts(urls);
     }
 
     document.addEventListener('click', function(event) {
@@ -1226,9 +1297,62 @@
         document.getElementById('toggle-icon').innerText = "◀◀";
     }
 
+    function setupObserver() {
+        const popover = document.getElementById('meme-popover');
+        if (!popover) return;
+        
+        if (window.ResizeObserver) {
+            new ResizeObserver(() => {
+                if (popover.style.display === 'block') {
+                    popover.style.transition = 'none';
+                    clampPopover(null, popover);
+                    setTimeout(() => popover.style.transition = 'opacity 0.15s ease-out', 50);
+                }
+            }).observe(popover);
+        }
+
+        // MUTATION OBSERVER FIX - Searches up to `.embed-container` and adds onload to the exact injected iframe
+        const spinnerObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === 1) { 
+                        if (node.tagName === 'IFRAME') {
+                            let container = node.closest('.embed-container');
+                            if (container) {
+                                let spinner = container.querySelector('.tw-spinner');
+                                if (spinner) {
+                                    node.addEventListener('load', () => spinner.style.display = 'none');
+                                    setTimeout(() => spinner.style.display = 'none', 1500); 
+                                }
+                            }
+                        }
+                        if (node.querySelectorAll) {
+                            let iframes = node.querySelectorAll('iframe');
+                            iframes.forEach(ifr => {
+                                let container = ifr.closest('.embed-container');
+                                if (container) {
+                                    let spinner = container.querySelector('.tw-spinner');
+                                    if (spinner) {
+                                        ifr.addEventListener('load', () => spinner.style.display = 'none');
+                                        setTimeout(() => spinner.style.display = 'none', 1500);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+        });
+        spinnerObserver.observe(popover, { childList: true, subtree: true });
+    }
+
     if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", init);
+        document.addEventListener("DOMContentLoaded", () => {
+            setupObserver();
+            init();
+        });
     } else {
+        setupObserver();
         init();
     }
 </script>
