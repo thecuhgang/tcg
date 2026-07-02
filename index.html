@@ -317,7 +317,6 @@
     ];
 
     const COUNTRY_CODES = {
-        "Argentina": "ARG", "Brazil": "BRA", "Netherlands": "NED", "Morocco": "MAR",
         "Germany": "GER", "Paraguay": "PAR", "Canada": "CAN", "Ivory Coast": "CIV",
         "Norway": "NOR", "DR Congo": "COD", "Bosnia and Herzegovina": "BIH",
         "Cape Verde": "CPV", "USA": "USA", "Spain": "ESP", "England": "ENG",
@@ -333,7 +332,6 @@
 
     let lastMemePos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 
-    // OFFICIAL TWITTER WIDGET EVENT - Uses `.closest('.embed-container')` to trace out of the iframe
     window.twttr.ready(function (twttr) {
         twttr.events.bind('rendered', function (event) {
             if (event.target) {
@@ -485,7 +483,6 @@
             
             if (isTwitter) {
                 let twUrl = url.replace("x.com", "twitter.com");
-                // Added `.embed-container` to lock the MutationObserver boundary
                 mediaHTML += `<div class="embed-container" style="${twContainerStyle}; position: relative;">
                     <div class="spinner tw-spinner" style="position: absolute; width: 30px; height: 30px; border-width: 4px; z-index: 1; top: 150px; left: 50%; transform: translate(-50%, -50%);"></div>
                     <blockquote class="twitter-tweet" data-theme="dark" style="margin: 0 auto; width: 100%; position: relative; z-index: 2;">
@@ -493,7 +490,6 @@
                     </blockquote>
                 </div>`;
             } else if (isReddit) {
-                // Added `.embed-container` to lock the MutationObserver boundary
                 mediaHTML += `<div class="embed-container" style="${twContainerStyle}; position: relative;">
                     <div class="spinner tw-spinner" style="position: absolute; width: 30px; height: 30px; border-width: 4px; z-index: 1; top: 150px; left: 50%; transform: translate(-50%, -50%);"></div>
                     <blockquote class="reddit-embed-bq" data-embed-show-media="true" data-embed-theme="dark" style="margin: 0 auto; width: 100%; position: relative; z-index: 2;">
@@ -681,17 +677,29 @@
         if (lockedMemeEl) return;
         const popover = document.getElementById('meme-popover');
         if (!popover) return;
+        
         if (!mediaSrc) {
             popover.style.display = 'none';
+            popover.innerHTML = ''; // Deload memory
+            popover.dataset.currentSrc = '';
+            return;
+        }
+
+        // Stops the embed from flickering/refreshing when moving the mouse around the same card
+        if (popover.dataset.currentSrc === mediaSrc && popover.style.display === 'block') {
+            clampPopover(event, popover);
             return;
         }
         
         let urls = getCleanMemeUrls(mediaSrc);
         if (urls.length === 0) {
             popover.style.display = 'none';
+            popover.innerHTML = ''; // Deload memory
+            popover.dataset.currentSrc = '';
             return;
         }
 
+        popover.dataset.currentSrc = mediaSrc;
         popover.innerHTML = renderMemeGrid(urls); 
         popover.style.display = 'block';
         clampPopover(event, popover);
@@ -709,7 +717,11 @@
     function leaveMeme() {
         if (lockedMemeEl) return;
         const popover = document.getElementById('meme-popover');
-        if (popover) popover.style.display = 'none';
+        if (popover) {
+            popover.style.display = 'none';
+            popover.innerHTML = ''; // Instantly destroy iframe/video to stop audio & free memory
+            popover.dataset.currentSrc = '';
+        }
     }
 
     function clickMeme(event, mediaSrc, teamMatch, element) {
@@ -717,9 +729,12 @@
         const popover = document.getElementById('meme-popover');
         if (!popover) return;
 
+        // If clicking the currently locked meme, unlock it and deload
         if (lockedMemeEl === element) {
             lockedMemeEl = null;
             popover.style.display = 'none';
+            popover.innerHTML = ''; // Instantly destroy iframe/video
+            popover.dataset.currentSrc = '';
             return;
         }
 
@@ -729,21 +744,31 @@
         if (urls.length === 0) {
             lockedMemeEl = null;
             popover.style.display = 'none';
+            popover.innerHTML = '';
+            popover.dataset.currentSrc = '';
             return;
         }
 
-        popover.innerHTML = renderMemeGrid(urls);
+        // Only rebuild HTML if changing directly to a different meme
+        if (popover.dataset.currentSrc !== mediaSrc) {
+            popover.dataset.currentSrc = mediaSrc;
+            popover.innerHTML = renderMemeGrid(urls);
+            triggerEmbedScripts(urls);
+        }
+
         popover.style.display = 'block';
         clampPopover(event, popover);
-        triggerEmbedScripts(urls);
     }
 
     document.addEventListener('click', function(event) {
         if (lockedMemeEl) {
             const popover = document.getElementById('meme-popover');
+            // If user clicked anywhere outside the active locked popover, hide & deload it
             if (popover && !popover.contains(event.target)) {
                 lockedMemeEl = null;
                 popover.style.display = 'none';
+                popover.innerHTML = ''; // Instantly destroy iframe/video
+                popover.dataset.currentSrc = '';
             }
         }
     });
@@ -1311,7 +1336,6 @@
             }).observe(popover);
         }
 
-        // MUTATION OBSERVER FIX - Searches up to `.embed-container` and adds onload to the exact injected iframe
         const spinnerObserver = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 mutation.addedNodes.forEach((node) => {
