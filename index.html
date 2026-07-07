@@ -317,6 +317,7 @@
     ];
 
     const COUNTRY_CODES = {
+        "Argentina": "ARG", "Brazil": "BRA", "Netherlands": "NED", "Morocco": "MAR",
         "Germany": "GER", "Paraguay": "PAR", "Canada": "CAN", "Ivory Coast": "CIV",
         "Norway": "NOR", "DR Congo": "COD", "Bosnia and Herzegovina": "BIH",
         "Cape Verde": "CPV", "USA": "USA", "Spain": "ESP", "England": "ENG",
@@ -680,12 +681,11 @@
         
         if (!mediaSrc) {
             popover.style.display = 'none';
-            popover.innerHTML = ''; // Deload memory
+            popover.innerHTML = ''; 
             popover.dataset.currentSrc = '';
             return;
         }
 
-        // Stops the embed from flickering/refreshing when moving the mouse around the same card
         if (popover.dataset.currentSrc === mediaSrc && popover.style.display === 'block') {
             clampPopover(event, popover);
             return;
@@ -694,7 +694,7 @@
         let urls = getCleanMemeUrls(mediaSrc);
         if (urls.length === 0) {
             popover.style.display = 'none';
-            popover.innerHTML = ''; // Deload memory
+            popover.innerHTML = ''; 
             popover.dataset.currentSrc = '';
             return;
         }
@@ -719,7 +719,7 @@
         const popover = document.getElementById('meme-popover');
         if (popover) {
             popover.style.display = 'none';
-            popover.innerHTML = ''; // Instantly destroy iframe/video to stop audio & free memory
+            popover.innerHTML = ''; 
             popover.dataset.currentSrc = '';
         }
     }
@@ -729,11 +729,10 @@
         const popover = document.getElementById('meme-popover');
         if (!popover) return;
 
-        // If clicking the currently locked meme, unlock it and deload
         if (lockedMemeEl === element) {
             lockedMemeEl = null;
             popover.style.display = 'none';
-            popover.innerHTML = ''; // Instantly destroy iframe/video
+            popover.innerHTML = ''; 
             popover.dataset.currentSrc = '';
             return;
         }
@@ -749,7 +748,6 @@
             return;
         }
 
-        // Only rebuild HTML if changing directly to a different meme
         if (popover.dataset.currentSrc !== mediaSrc) {
             popover.dataset.currentSrc = mediaSrc;
             popover.innerHTML = renderMemeGrid(urls);
@@ -763,11 +761,10 @@
     document.addEventListener('click', function(event) {
         if (lockedMemeEl) {
             const popover = document.getElementById('meme-popover');
-            // If user clicked anywhere outside the active locked popover, hide & deload it
             if (popover && !popover.contains(event.target)) {
                 lockedMemeEl = null;
                 popover.style.display = 'none';
-                popover.innerHTML = ''; // Instantly destroy iframe/video
+                popover.innerHTML = ''; 
                 popover.dataset.currentSrc = '';
             }
         }
@@ -835,6 +832,59 @@
                 thHTML += `<th>${rankEmoji} ${p.name}</th>`;
             });
 
+            // PARSE BRACKET ARRAYS EARLY TO CALCULATE ELIMINATIONS
+            const BRACKET_ROWS = {
+                R32:   [[13, 14], [16, 17], [19, 20], [22, 23], [26, 27], [29, 30], [32, 33], [35, 36]],
+                L_R16: [[19, 20], [22, 23], [26, 27], [29, 30]],
+                R_R16: [[19, 20], [22, 23], [26, 27], [29, 30]],
+                L_QF:  [[22, 23], [26, 27]],
+                R_QF:  [[22, 23], [26, 27]],
+                SF:    [[24, 25]],
+                F:     [[24, 25]]
+            };
+
+            const left_R32  = parseBracketExact(rows, 2, BRACKET_ROWS.R32);
+            const right_R32 = parseBracketExact(rows, 18, BRACKET_ROWS.R32);
+            const left_R16  = parseBracketExact(rows, 4, BRACKET_ROWS.L_R16);
+            const right_R16 = parseBracketExact(rows, 16, BRACKET_ROWS.R_R16);
+            const left_QF   = parseBracketExact(rows, 6, BRACKET_ROWS.L_QF);
+            const right_QF  = parseBracketExact(rows, 14, BRACKET_ROWS.R_QF);
+            const left_SF   = parseBracketExact(rows, 8, BRACKET_ROWS.SF);
+            const right_SF  = parseBracketExact(rows, 12, BRACKET_ROWS.SF);
+            const finals    = parseBracketExact(rows, 10, BRACKET_ROWS.F);
+
+            // COMPUTE ELIMINATED TEAMS BY SCANNING BRACKET MATCHUPS
+            let all_R32 = [...left_R32, ...right_R32];
+            let all_R16 = [...left_R16, ...right_R16];
+            let all_QF  = [...left_QF, ...right_QF];
+            let all_SF  = [...left_SF, ...right_SF];
+            let all_F   = [...finals];
+
+            let getTName = (str) => parseTeam(str).name;
+            let eliminatedTeams = new Set();
+            
+            let r16_names = new Set(all_R16.flatMap(m => [getTName(m.teamA), getTName(m.teamB)]).filter(n => n && n !== 'TBD'));
+            let qf_names  = new Set(all_QF.flatMap(m => [getTName(m.teamA), getTName(m.teamB)]).filter(n => n && n !== 'TBD'));
+            let sf_names  = new Set(all_SF.flatMap(m => [getTName(m.teamA), getTName(m.teamB)]).filter(n => n && n !== 'TBD'));
+            let f_names   = new Set(all_F.flatMap(m => [getTName(m.teamA), getTName(m.teamB)]).filter(n => n && n !== 'TBD'));
+
+            function checkEliminations(matches, nextRoundNames) {
+                matches.forEach(m => {
+                    let a = getTName(m.teamA);
+                    let b = getTName(m.teamB);
+                    if (a && b && a !== 'TBD' && b !== 'TBD') {
+                        if (nextRoundNames.has(a)) eliminatedTeams.add(b);
+                        if (nextRoundNames.has(b)) eliminatedTeams.add(a);
+                    }
+                });
+            }
+            
+            checkEliminations(all_R32, r16_names);
+            checkEliminations(all_R16, qf_names);
+            checkEliminations(all_QF, sf_names);
+            checkEliminations(all_SF, f_names);
+
+            // RENDER LEADERBOARD
             let tbHTML = "";
             roundHeaders.forEach((rName, rIdx) => {
                 let rowCells = `<td style="font-weight:bold; background:#243547; color:#87e0f2;">${rName}</td>`;
@@ -842,15 +892,42 @@
                     let pickRow = rows[rIdx + 2];
                     let pick = pickRow && pickRow[p.col] ? String(pickRow[p.col].text).trim() : "";
                     let scoreText = pickRow && pickRow[p.scoreCol] ? String(pickRow[p.scoreCol].text).trim() : "";
-                    let score = scoreText !== "" ? parseFloat(scoreText) : null;
                     
-                    let badgeClass = score !== null ? (score > 0 ? 'score-plus' : 'score-out') : '';
-                    let badgeLabel = score !== null ? (score > 0 ? `+${score}` : 'OUT') : '';
+                    let rawText = scoreText.toUpperCase();
+                    let isExplicitOut = rawText.includes('OUT');
+                    let scoreMatch = scoreText.match(/-?\d+(\.\d+)?/);
+                    let score = scoreMatch ? parseFloat(scoreMatch[0]) : null;
+
+                    let tName = getTName(pick);
+                    let isBracketOut = tName && eliminatedTeams.has(tName);
+                    let isOut = isExplicitOut || isBracketOut;
+
+                    // Support fallback logic if user exclusively wrote '0' or manually typed exactly 'OUT'
+                    if (score === 0 || (!scoreMatch && rawText !== "")) {
+                        isOut = true;
+                    }
+
+                    let badges = [];
+                    // Inject Point Score Badge
+                    if (score !== null && score !== 0) {
+                        if (score > 0) {
+                            badges.push(`<span class="score-badge score-plus">+${score}</span>`);
+                        } else {
+                            badges.push(`<span class="score-badge score-out">${score}</span>`);
+                        }
+                    }
+                    // Inject OUT Badge separately
+                    if (isOut) {
+                        badges.push(`<span class="score-badge score-out">OUT</span>`);
+                    }
+
                     let formattedPick = pick ? formatLeaderboardTeam(pick) : '-';
+                    // Horizontally stack the multiple badges perfectly next to each other
+                    let finalBadgesHTML = badges.join('<span style="margin-left:4px;"></span>');
                     
                     rowCells += `<td>
                         <div class="leaderboard-pick-container">${formattedPick}</div>
-                        ${score !== null ? `<span class="score-badge ${badgeClass}">${badgeLabel}</span>` : ''}
+                        ${finalBadgesHTML ? `<div style="display:flex; justify-content:center; align-items:center;">${finalBadgesHTML}</div>` : ''}
                     </td>`;
                 });
                 tbHTML += `<tr>${rowCells}</tr>`;
@@ -883,30 +960,6 @@
                     </table>
                 </div>
             </div>`;
-
-            const BRACKET_ROWS = {
-                R32:   [[13, 14], [16, 17], [19, 20], [22, 23], [26, 27], [29, 30], [32, 33], [35, 36]],
-                L_R16: [[19, 20], [22, 23], [26, 27], [29, 30]],
-                R_R16: [[19, 20], [22, 23], [26, 27], [29, 30]],
-                L_QF:  [[22, 23], [26, 27]],
-                R_QF:  [[22, 23], [26, 27]],
-                SF:    [[24, 25]],
-                F:     [[24, 25]]
-            };
-
-            const left_R32  = parseBracketExact(rows, 2, BRACKET_ROWS.R32);
-            const right_R32 = parseBracketExact(rows, 18, BRACKET_ROWS.R32);
-            
-            const left_R16  = parseBracketExact(rows, 4, BRACKET_ROWS.L_R16);
-            const right_R16 = parseBracketExact(rows, 16, BRACKET_ROWS.R_R16);
-            
-            const left_QF   = parseBracketExact(rows, 6, BRACKET_ROWS.L_QF);
-            const right_QF  = parseBracketExact(rows, 14, BRACKET_ROWS.R_QF);
-            
-            const left_SF   = parseBracketExact(rows, 8, BRACKET_ROWS.SF);
-            const right_SF  = parseBracketExact(rows, 12, BRACKET_ROWS.SF);
-            
-            const finals    = parseBracketExact(rows, 10, BRACKET_ROWS.F);
 
             let bracketHTML = `
                 <div class="bracket-wrapper">
