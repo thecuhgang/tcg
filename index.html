@@ -174,50 +174,217 @@
         span.team-flag { font-size: 13px; display: inline-block; }
         span.bracket-name-full { display: inline-block !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         span.bracket-name-short { display: none !important; }
-        span.tbd-text { display: flex; justify-content: center !important; align-items: center; width: 100%; font-weight: bold; color: #5a7590; text-align: center; }
+        span.tbd-text { display: flex; align-items: center; width: 100%; font-weight: bold; color: #5a7590; }
 
         span.leaderboard-team-display { display: flex; align-items: center; justify-content: center; gap: 4px; width: auto; margin: 0 auto; }
         span.leaderboard-name-full { display: inline-block !important; white-space: nowrap; }
         span.leaderboard-name-short { display: none !important; }
-        .leaderboard-pick-container { display: flex; align-items: center; justify-content: center; font-size: 11px; margin-bottom: 2px; }
+        .leaderboard-pick-container { display: flex; align-items: center; font-size: 11px; margin-bottom: 2px; }
 
-        /* --- VCT SPECIFIC STYLES --- */
-        .vct-groups-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-            width: 100%;
-            padding: 15px 20px;
-            box-sizing: border-box;
+        /* --- STAT PILL IN LEADERBOARD --- */
+        .stat-pill {
+            background: rgba(135, 224, 242, 0.15);
+            color: #87e0f2;
+            border: 1px solid rgba(135, 224, 242, 0.35);
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-weight: 800;
+            font-size: 10px;
+            margin-left: 6px;
+            display: inline-block;
+            letter-spacing: 0.5px;
         }
-        .vct-group-card {
-            background: rgba(22, 34, 47, 0.85);
-            border: 1px solid #334e68;
-            border-radius: 6px;
-            padding: 12px;
+
+        /* --- AUTHENTIC GSL BRACKET PRESENTATION (IMAGE 2) --- */
+        .gsl-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .gsl-tab-btn {
+            background: #18181b;
+            color: #a1a1aa;
+            border: 1px solid #27272a;
+            padding: 6px 14px;
+            font-weight: bold;
+            font-size: 11px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .gsl-tab-btn.active, .gsl-tab-btn:hover {
+            background: #27272a;
+            color: #87e0f2;
+            border-color: #87e0f2;
+        }
+
+        .gsl-groups-container {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            gap: 30px;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            align-items: center;
         }
-        .vct-group-title {
-            font-size: 13px;
-            font-weight: bold;
+        .gsl-group-wrapper {
+            background: #0f1115;
+            border: 1px solid #27272a;
+            border-radius: 8px;
+            padding: 25px;
+            width: 100%;
+            max-width: 900px;
+            box-sizing: border-box;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+        }
+        .gsl-group-heading {
+            font-size: 15px;
+            font-weight: 800;
             color: #87e0f2;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 1px solid #334e68;
-            padding-bottom: 5px;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
             text-align: center;
+            border-bottom: 1px solid #27272a;
+            padding-bottom: 8px;
         }
-        .vct-stage-label {
-            font-size: 9px;
+        .gsl-tree {
+            display: flex;
+            flex-direction: column;
+            gap: 35px;
+            width: 100%;
+            overflow-x: auto;
+        }
+        .gsl-upper-section, .gsl-lower-section {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .gsl-col {
+            display: flex;
+            flex-direction: column;
+            min-width: 230px;
+            position: relative;
+        }
+        .gsl-col.gsl-col-round1 {
+            gap: 25px;
+        }
+        .gsl-header-pill {
+            background: #e4e4e7;
+            color: #18181b;
             font-weight: 800;
-            text-transform: uppercase;
-            color: #8aa0b8;
-            margin: 4px 0 2px 0;
-            text-align: center;
+            font-size: 11px;
+            padding: 5px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 12px;
             letter-spacing: 0.5px;
+            text-transform: uppercase;
+            align-self: flex-start;
+        }
+        
+        .gsl-match-card {
+            background: #18181b;
+            border: 1px solid #27272a;
+            border-radius: 6px;
+            width: 230px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .gsl-slot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            height: 34px;
+            box-sizing: border-box;
+            background: #18181b;
+            transition: all 0.2s;
+        }
+        .gsl-slot:first-child {
+            border-bottom: 1px solid #27272a;
+        }
+        .gsl-slot.winner {
+            background: rgba(34, 197, 94, 0.08);
+        }
+        .gsl-slot.winner .gsl-name {
+            color: #4ade80;
+            font-weight: 800;
+        }
+        .gsl-slot.loser {
+            opacity: 0.45;
+        }
+        .gsl-slot.tbd .gsl-name {
+            color: #71717a;
+        }
+        .gsl-name {
+            flex: 1;
+            font-size: 12px;
+            font-weight: 600;
+            color: #f4f4f5;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+        }
+        .gsl-score {
+            font-weight: 800;
+            font-size: 13px;
+            color: #f4f4f5;
+            min-width: 20px;
+            text-align: right;
+            padding-left: 8px;
+        }
+        .gsl-score.win-score {
+            color: #4ade80;
+        }
+
+        /* Bracket connecting lines */
+        .gsl-branch-line {
+            width: 45px;
+            height: 110px;
+            position: relative;
+            margin: 0 10px;
+            flex-shrink: 0;
+        }
+        .gsl-branch-line::before {
+            content: "";
+            position: absolute;
+            top: 25px;
+            bottom: 25px;
+            left: 0;
+            width: 22px;
+            border-right: 2px solid #3f3f46;
+            border-top: 2px solid #3f3f46;
+            border-bottom: 2px solid #3f3f46;
+        }
+        .gsl-branch-line::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 22px;
+            width: 23px;
+            border-top: 2px solid #3f3f46;
+        }
+
+        .gsl-straight-line {
+            width: 45px;
+            position: relative;
+            margin: 0 10px;
+            flex-shrink: 0;
+        }
+        .gsl-straight-line::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 45px;
+            border-top: 2px solid #3f3f46;
         }
 
         /* --- PLAYOFFS ARCHITECTURE --- */
@@ -336,8 +503,8 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            pointer-events: none !important; /* Never blocks clicks */
-            z-index: 50; /* Overlays on top of webpage content */
+            pointer-events: none !important;
+            z-index: 50;
             overflow: hidden;
         }
         .ambient-meme-item {
@@ -354,7 +521,7 @@
             filter: drop-shadow(0 4px 15px rgba(0,0,0,0.6));
         }
         .ambient-meme-item.fade-in {
-            opacity: 0.20; /* Low opacity watermark ensures text remains 100% readable */
+            opacity: 0.20;
             transform: scale(1);
         }
         .ambient-meme-item.fade-out {
@@ -566,7 +733,6 @@
         const container = document.getElementById('ambient-meme-layer');
         if (!container || activeAmbientMemes.length === 0) return;
 
-        // Pick a random meme URL (avoids immediate repeats if >1 available)
         let randIdx = Math.floor(Math.random() * activeAmbientMemes.length);
         if (activeAmbientMemes.length > 1 && randIdx === lastAmbientMemeIdx) {
             randIdx = (randIdx + 1) % activeAmbientMemes.length;
@@ -604,6 +770,31 @@
     }
 
     /* --- TEAM PARSING HELPERS --- */
+    function parseTeamCell(rawStr) {
+        if (!rawStr || rawStr === "IMAGE_PLACEHOLDER") return { name: "", score: null };
+        let s = String(rawStr).trim();
+        if (s.startsWith("{") && s.endsWith("}")) return { name: "", score: null };
+        
+        let score = null;
+        let scoreMatch = s.match(/\s*\(([0-9]+(?:\.[0-9]+)?)\)\s*$/);
+        if (scoreMatch) {
+            score = scoreMatch[1];
+            s = s.replace(/\s*\([0-9]+(?:\.[0-9]+)?\)\s*$/, '').trim();
+        }
+        return { name: s, score: score };
+    }
+
+    function isSameTeam(t1, t2) {
+        if (!t1 || !t2) return false;
+        let s1 = parseTeamCell(t1).name.toLowerCase().trim();
+        let s2 = parseTeamCell(t2).name.toLowerCase().trim();
+        if (!s1 || !s2 || s1 === "tbd" || s2 === "tbd") return false;
+        if (s1 === s2) return true;
+        let tag1 = (VCT_TEAMS[s1] || VCT_TEAMS[s1.toUpperCase()] || {}).tag || s1;
+        let tag2 = (VCT_TEAMS[s2] || VCT_TEAMS[s2.toUpperCase()] || {}).tag || s2;
+        return tag1.toLowerCase() === tag2.toLowerCase();
+    }
+
     function parseVCTTeam(nameStr) {
         if (!nameStr || nameStr === "IMAGE_PLACEHOLDER") return { flag: "", tag: "", name: "" };
         let clean = String(nameStr).trim();
@@ -611,6 +802,56 @@
         let flag = info ? info.flag : "🎯";
         let tag = info ? info.tag : (clean.length > 5 ? clean.substring(0, 3).toUpperCase() : clean);
         return { flag, tag, name: clean };
+    }
+
+    function formatVCTLeaderboardTeam(nameStr) {
+        let parsed = parseVCTTeam(nameStr);
+        if (!parsed.name) return "-";
+        return `
+            <span class="leaderboard-team-display" style="justify-content: flex-start; margin: 0;">
+                <span class="team-flag" style="font-size: 13px;">${parsed.flag}</span>
+                <span class="leaderboard-name-full" style="font-weight: bold;">${parsed.name}</span>
+                <span class="leaderboard-name-short" style="font-weight: bold;">${parsed.tag}</span>
+            </span>
+        `;
+    }
+
+    /* --- FORMAT PICK & EMBED STAT INSIDE A PILL WINDOW --- */
+    function formatVCTPick(pickStr) {
+        if (!pickStr || pickStr === "-") return "-";
+        let clean = String(pickStr).trim();
+
+        let statInside = null;
+        let parenMatch = clean.match(/\s*\(([^)]+)\)\s*$/);
+        if (parenMatch) {
+            statInside = parenMatch[1];
+            clean = clean.replace(/\s*\([^)]+\)\s*$/, '').trim();
+        }
+
+        let statPillHTML = statInside !== null ? `<span class="stat-pill">${statInside}</span>` : "";
+
+        if (VCT_TEAMS[clean] || VCT_TEAMS[clean.toUpperCase()]) {
+            let teamDisplay = formatVCTLeaderboardTeam(clean);
+            return `<div style="display: flex; align-items: center; gap: 4px;">${teamDisplay}${statPillHTML}</div>`;
+        }
+
+        let spaceIdx = clean.indexOf(" ");
+        if (spaceIdx > 0) {
+            let possibleTag = clean.substring(0, spaceIdx).trim();
+            let playerHandle = clean.substring(spaceIdx + 1).trim();
+            let teamInfo = VCT_TEAMS[possibleTag] || VCT_TEAMS[possibleTag.toUpperCase()];
+            if (teamInfo) {
+                return `
+                    <div style="display: flex; align-items: center; justify-content: flex-start; gap: 4px; overflow: hidden;">
+                        <span class="team-flag" style="font-size: 12px;">${teamInfo.flag}</span>
+                        <span style="background: rgba(135,224,242,0.15); color: #87e0f2; border: 1px solid rgba(135,224,242,0.3); border-radius: 3px; padding: 1px 4px; font-weight: bold; font-size: 9px;">${teamInfo.tag}</span>
+                        <span style="font-weight: bold; color: #fff; white-space: nowrap;">${playerHandle}</span>
+                        ${statPillHTML}
+                    </div>
+                `;
+            }
+        }
+        return `<div style="display: flex; align-items: center; gap: 4px;"><span style="font-weight: bold; color: #fff;">${clean}</span>${statPillHTML}</div>`;
     }
 
     function formatVCTBracketTeam(nameStr, isChampion = false) {
@@ -627,44 +868,69 @@
         `;
     }
 
-    function formatVCTLeaderboardTeam(nameStr) {
-        let parsed = parseVCTTeam(nameStr);
-        if (!parsed.name) return "-";
+    /* --- AUTHENTIC GSL CARD & SLOT RENDERER (IMAGE 2) --- */
+    function renderGSLSlot(teamStr, scoreVal, isWinner, isLoser) {
+        let parsed = parseTeamCell(teamStr);
+        let name = parsed.name;
+        let score = scoreVal !== null ? scoreVal : (parsed.score !== null ? parsed.score : (name && name !== "TBD" ? "0" : "-"));
+
+        if (!name || name === "TBD") {
+            return `
+                <div class="gsl-slot tbd">
+                    <span style="display:flex; align-items:center; gap:6px;">
+                        <span style="color:#52525b; font-size:12px;">⊝</span>
+                        <span class="gsl-name" style="color:#71717a;">TBD</span>
+                    </span>
+                    <span class="gsl-score" style="color:#52525b;">-</span>
+                </div>
+            `;
+        }
+
+        let info = VCT_TEAMS[name] || VCT_TEAMS[name.toUpperCase()] || null;
+        let flag = info ? info.flag : "🎯";
+        let tag = info ? info.tag : (name.length > 5 ? name.substring(0, 3).toUpperCase() : name);
+
+        let statusClass = isWinner ? "winner" : (isLoser ? "loser" : "");
+
         return `
-            <span class="leaderboard-team-display" style="justify-content: flex-start; margin: 0;">
-                <span class="team-flag" style="font-size: 13px;">${parsed.flag}</span>
-                <span class="leaderboard-name-full" style="font-weight: bold;">${parsed.name}</span>
-                <span class="leaderboard-name-short" style="font-weight: bold;">${parsed.tag}</span>
-            </span>
+            <div class="gsl-slot ${statusClass}">
+                <span style="display:flex; align-items:center; gap:6px; overflow:hidden;">
+                    <span class="team-flag" style="font-size: 13px;">${flag}</span>
+                    <span class="gsl-name" title="${name}">
+                        <span class="bracket-name-full">${name}</span>
+                        <span class="bracket-name-short">${tag}</span>
+                    </span>
+                </span>
+                <span class="gsl-score ${isWinner ? 'win-score' : ''}">${score}</span>
+            </div>
         `;
     }
 
-    function formatVCTPick(pickStr) {
-        if (!pickStr || pickStr === "-") return "-";
-        let clean = String(pickStr).trim();
-        
-        if (VCT_TEAMS[clean] || VCT_TEAMS[clean.toUpperCase()]) {
-            return formatVCTLeaderboardTeam(clean);
-        }
-        
-        let spaceIdx = clean.indexOf(" ");
-        if (spaceIdx > 0) {
-            let possibleTag = clean.substring(0, spaceIdx).trim();
-            let playerHandle = clean.substring(spaceIdx + 1).trim();
-            let teamInfo = VCT_TEAMS[possibleTag] || VCT_TEAMS[possibleTag.toUpperCase()];
-            if (teamInfo) {
-                return `
-                    <div style="display: flex; align-items: center; justify-content: flex-start; gap: 5px;">
-                        <span class="team-flag" style="font-size: 12px;">${teamInfo.flag}</span>
-                        <span style="background: rgba(135,224,242,0.15); color: #87e0f2; border: 1px solid rgba(135,224,242,0.3); border-radius: 3px; padding: 1px 4px; font-weight: bold; font-size: 9px;">${teamInfo.tag}</span>
-                        <span style="font-weight: bold; color: #fff;">${playerHandle}</span>
-                    </div>
-                `;
-            }
-        }
-        return `<span style="font-weight: bold; color: #fff;">${clean}</span>`;
+    function renderGSLCard(m) {
+        if (!m) return "";
+        return `
+            <div class="gsl-match-card">
+                ${renderGSLSlot(m.teamA, m.scoreA, m.isWinnerA, m.isLoserA)}
+                ${renderGSLSlot(m.teamB, m.scoreB, m.isWinnerB, m.isLoserB)}
+            </div>
+        `;
     }
 
+    function renderPlayoffCard(m) {
+        if (!m) return "";
+        return `
+            <div class="matchup-card" style="cursor: default; background: #18181b; border: 1px solid #27272a;">
+                <div class="matchup-slot" style="background:#18181b;">
+                    ${formatVCTBracketTeam(m.teamA)}
+                </div>
+                <div class="matchup-slot" style="background:#18181b;">
+                    ${formatVCTBracketTeam(m.teamB)}
+                </div>
+            </div>
+        `;
+    }
+
+    /* --- WORLD CUP PARSING HELPERS --- */
     function parseTeam(nameStr) {
         if (!nameStr || nameStr === "IMAGE_PLACEHOLDER") return { flag: "", name: "" };
         let cleanStr = String(nameStr).trim();
@@ -707,20 +973,6 @@
                 <span class="leaderboard-name-full" style="font-weight: bold;">${parsed.name}</span>
                 <span class="leaderboard-name-short" style="font-weight: bold;">${abbrev}</span>
             </span>
-        `;
-    }
-
-    function renderVCTCard(m) {
-        if (!m) return "";
-        return `
-            <div class="matchup-card" style="cursor: default;">
-                <div class="matchup-slot">
-                    ${formatVCTBracketTeam(m.teamA)}
-                </div>
-                <div class="matchup-slot">
-                    ${formatVCTBracketTeam(m.teamB)}
-                </div>
-            </div>
         `;
     }
 
@@ -1075,7 +1327,7 @@
     });
 
     /* =====================================================================
-       VALORANT FANTASY RENDERER (Updated & Randomized)
+       VALORANT FANTASY RENDERER (Full Authentic GSL Presentation & Deduction)
        ===================================================================== */
     async function renderValorant(year, season) {
         showLoading(`Rendering ${year} ${season}...`);
@@ -1099,7 +1351,7 @@
                 startAmbientMemes(memesList);
             }
 
-            // 1. EXTRACT PLAYERS (Thomas, Steven, Melvin, Anthony at Columns 2, 4, 6, 8)
+            // 1. EXTRACT PLAYERS (Columns 2, 4, 6, 8)
             const headerRow = rows[1] || [];
             let players = [];
             
@@ -1133,7 +1385,7 @@
                 thHTML += `<th>${rankEmoji} ${p.name}</th>`;
             });
 
-            // 2. EXTRACT PICK ROWS WITH SCORES TO THE RIGHT (Rows 2 to 8)
+            // 2. EXTRACT PICK ROWS WITH STAT PILLS & RIGHT-ALIGNED SCORES
             let tbHTML = "";
             for (let r = 2; r <= 8; r++) {
                 let categoryLabel = rows[r] && rows[r][1] ? String(rows[r][1].text).trim() : "";
@@ -1204,7 +1456,7 @@
                 </div>
             `;
 
-            // 3. PARSE BRACKETS (GROUPS + PLAYOFFS)
+            // 3. PARSE GSL GROUP STAGES (PRESENTATION MATCHING IMAGE 2)
             function getCellText(r, c) {
                 if (!rows[r] || !rows[r][c] || !rows[r][c].text) return "";
                 let txt = String(rows[r][c].text).trim();
@@ -1212,63 +1464,176 @@
             }
 
             function getMatch(r1, r2, c) {
-                return { teamA: getCellText(r1, c), teamB: getCellText(r2, c) };
+                let parsedA = parseTeamCell(getCellText(r1, c));
+                let parsedB = parseTeamCell(getCellText(r2, c));
+                return {
+                    teamA: parsedA.name,
+                    scoreA: parsedA.score,
+                    isWinnerA: false,
+                    isLoserA: false,
+                    teamB: parsedB.name,
+                    scoreB: parsedB.score,
+                    isWinnerB: false,
+                    isLoserB: false
+                };
             }
 
-            // Group Stage (4 GSL Groups) - Fixed Sheet Coordinates
-            const groups = [
-                {
-                    name: "Group A",
-                    op1: getMatch(13, 14, 2), // 100 Thieves vs T1
-                    op2: getMatch(17, 18, 2), // JD Gaming vs FUT Esports
-                    uf:  getMatch(15, 16, 4),
-                    dec: getMatch(19, 20, 6)
-                },
-                {
-                    name: "Group B",
-                    op1: getMatch(24, 25, 2), // GLOBAL ESPORTS vs Team Vitality
-                    op2: getMatch(28, 29, 2), // LOUD vs EDWARD Gaming
-                    uf:  getMatch(26, 27, 4),
-                    dec: getMatch(30, 31, 6)
-                },
-                {
-                    name: "Group C",
-                    op1: getMatch(35, 36, 2), // TYLOO GAMING vs G2 Esports
-                    op2: getMatch(39, 40, 2), // Team Liquid vs Paper Rex
-                    uf:  getMatch(37, 38, 4),
-                    dec: getMatch(41, 42, 6)
-                },
-                {
-                    name: "Group D",
-                    op1: getMatch(46, 47, 2), // Karmine Corp vs Xi Lai Gaming
-                    op2: getMatch(50, 51, 2), // NONGSHIM REDFORCE vs NRG
-                    uf:  getMatch(48, 49, 4),
-                    dec: getMatch(52, 53, 6)
+            // Build GSL Structure for a group and perform automatic outcome deduction
+            function buildGSLGroup(name, op1RowA, op1RowB, op2RowA, op2RowB, ufRowA, ufRowB, decRowA, decRowB) {
+                let m1 = getMatch(op1RowA, op1RowB, 2);
+                let m2 = getMatch(op2RowA, op2RowB, 2);
+                let uf = getMatch(ufRowA, ufRowB, 4);
+                let dec = getMatch(decRowA, decRowB, 6);
+
+                let winner1 = null, loser1 = null;
+                let winner2 = null, loser2 = null;
+
+                // Deduce Match 1 outcome
+                if (m1.scoreA !== null && m1.scoreB !== null && parseFloat(m1.scoreA) !== parseFloat(m1.scoreB)) {
+                    if (parseFloat(m1.scoreA) > parseFloat(m1.scoreB)) {
+                        winner1 = m1.teamA; loser1 = m1.teamB;
+                    } else {
+                        winner1 = m1.teamB; loser1 = m1.teamA;
+                    }
+                } else if (uf.teamA || uf.teamB) {
+                    if (isSameTeam(uf.teamA, m1.teamA) || isSameTeam(uf.teamB, m1.teamA)) {
+                        winner1 = m1.teamA; loser1 = m1.teamB;
+                    } else if (isSameTeam(uf.teamA, m1.teamB) || isSameTeam(uf.teamB, m1.teamB)) {
+                        winner1 = m1.teamB; loser1 = m1.teamA;
+                    }
                 }
+
+                if (winner1) {
+                    m1.isWinnerA = isSameTeam(m1.teamA, winner1);
+                    m1.isLoserA = !m1.isWinnerA;
+                    m1.isWinnerB = isSameTeam(m1.teamB, winner1);
+                    m1.isLoserB = !m1.isWinnerB;
+                }
+
+                // Deduce Match 2 outcome
+                if (m2.scoreA !== null && m2.scoreB !== null && parseFloat(m2.scoreA) !== parseFloat(m2.scoreB)) {
+                    if (parseFloat(m2.scoreA) > parseFloat(m2.scoreB)) {
+                        winner2 = m2.teamA; loser2 = m2.teamB;
+                    } else {
+                        winner2 = m2.teamB; loser2 = m2.teamA;
+                    }
+                } else if (uf.teamA || uf.teamB) {
+                    if (isSameTeam(uf.teamA, m2.teamA) || isSameTeam(uf.teamB, m2.teamA)) {
+                        winner2 = m2.teamA; loser2 = m2.teamB;
+                    } else if (isSameTeam(uf.teamA, m2.teamB) || isSameTeam(uf.teamB, m2.teamB)) {
+                        winner2 = m2.teamB; loser2 = m2.teamA;
+                    }
+                }
+
+                if (winner2) {
+                    m2.isWinnerA = isSameTeam(m2.teamA, winner2);
+                    m2.isLoserA = !m2.isWinnerA;
+                    m2.isWinnerB = isSameTeam(m2.teamB, winner2);
+                    m2.isLoserB = !m2.isWinnerB;
+                }
+
+                // Auto-populate Upper Final if not manually entered
+                if (!uf.teamA && winner1) uf.teamA = winner1;
+                if (!uf.teamB && winner2) uf.teamB = winner2;
+
+                // Deduce Upper Final outcome
+                let winnerUF = null, loserUF = null;
+                if (uf.scoreA !== null && uf.scoreB !== null && parseFloat(uf.scoreA) !== parseFloat(uf.scoreB)) {
+                    if (parseFloat(uf.scoreA) > parseFloat(uf.scoreB)) {
+                        winnerUF = uf.teamA; loserUF = uf.teamB;
+                    } else {
+                        winnerUF = uf.teamB; loserUF = uf.teamA;
+                    }
+                }
+                if (winnerUF) {
+                    uf.isWinnerA = isSameTeam(uf.teamA, winnerUF);
+                    uf.isLoserA = !uf.isWinnerA;
+                    uf.isWinnerB = isSameTeam(uf.teamB, winnerUF);
+                    uf.isLoserB = !uf.isWinnerB;
+                }
+
+                // Build Lower Bracket Round 1 (Elimination Match between the 2 losers)
+                let lr1 = {
+                    teamA: loser1 || "TBD",
+                    scoreA: null,
+                    isWinnerA: false,
+                    isLoserA: false,
+                    teamB: loser2 || "TBD",
+                    scoreB: null,
+                    isWinnerB: false,
+                    isLoserB: false
+                };
+
+                // Deduce Lower Final (Decider Match)
+                if (!dec.teamA && loserUF) dec.teamA = loserUF;
+
+                return { name, m1, m2, uf, lr1, dec };
+            }
+
+            const gslGroups = [
+                buildGSLGroup("Group A", 13, 14, 17, 18, 15, 16, 19, 20),
+                buildGSLGroup("Group B", 24, 25, 28, 29, 26, 27, 30, 31),
+                buildGSLGroup("Group C", 35, 36, 39, 40, 37, 38, 41, 42),
+                buildGSLGroup("Group D", 46, 47, 50, 51, 48, 49, 52, 53)
             ];
+
+            function renderGSLGroupTree(g) {
+                return `
+                    <div class="gsl-group-wrapper" id="gsl-${g.name.replace(/\s+/g, '-')}">
+                        <div class="gsl-group-heading">${g.name}</div>
+                        <div class="gsl-tree">
+                            
+                            <!-- UPPER BRACKET -->
+                            <div class="gsl-upper-section">
+                                <div class="gsl-col gsl-col-round1">
+                                    <div class="gsl-header-pill">ROUND 1</div>
+                                    <div class="gsl-match-wrap">${renderGSLCard(g.m1)}</div>
+                                    <div class="gsl-match-wrap">${renderGSLCard(g.m2)}</div>
+                                </div>
+                                <div class="gsl-branch-line"></div>
+                                <div class="gsl-col" style="align-self: center;">
+                                    <div class="gsl-header-pill">UPPER BRACKET - FINALS</div>
+                                    <div class="gsl-match-wrap">${renderGSLCard(g.uf)}</div>
+                                </div>
+                            </div>
+
+                            <!-- LOWER BRACKET -->
+                            <div class="gsl-lower-section">
+                                <div class="gsl-col" style="margin-left: 285px;">
+                                    <div class="gsl-header-pill">LOWER BRACKET - ROUND 1</div>
+                                    <div class="gsl-match-wrap">${renderGSLCard(g.lr1)}</div>
+                                </div>
+                                <div class="gsl-straight-line"></div>
+                                <div class="gsl-col">
+                                    <div class="gsl-header-pill">LOWER BRACKET - FINALS</div>
+                                    <div class="gsl-match-wrap">${renderGSLCard(g.dec)}</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                `;
+            }
 
             let groupsHTML = `
                 <div class="bracket-wrapper" style="margin-top: 25px;">
                     <div class="bracket-title">⚔️ Group Stage (GSL Format)</div>
-                    <div class="vct-groups-grid">
-                        ${groups.map(g => `
-                            <div class="vct-group-card">
-                                <div class="vct-group-title">${g.name}</div>
-                                <div class="vct-stage-label">Opening Match 1</div>
-                                ${renderVCTCard(g.op1)}
-                                <div class="vct-stage-label">Opening Match 2</div>
-                                ${renderVCTCard(g.op2)}
-                                <div class="vct-stage-label">Upper Final (Winners)</div>
-                                ${renderVCTCard(g.uf)}
-                                <div class="vct-stage-label">Decider Match</div>
-                                ${renderVCTCard(g.dec)}
-                            </div>
-                        `).join('')}
+                    
+                    <div class="gsl-tabs">
+                        <button class="gsl-tab-btn active" onclick="switchGSLTab('All')">All Groups</button>
+                        <button class="gsl-tab-btn" onclick="switchGSLTab('Group-A')">Group A</button>
+                        <button class="gsl-tab-btn" onclick="switchGSLTab('Group-B')">Group B</button>
+                        <button class="gsl-tab-btn" onclick="switchGSLTab('Group-C')">Group C</button>
+                        <button class="gsl-tab-btn" onclick="switchGSLTab('Group-D')">Group D</button>
+                    </div>
+
+                    <div class="gsl-groups-container">
+                        ${gslGroups.map(g => renderGSLGroupTree(g)).join('')}
                     </div>
                 </div>
             `;
 
-            // 4. DOUBLE ELIMINATION PLAYOFF BRACKET (UPPER ON TOP, LOWER ON BOTTOM)
+            // 4. DOUBLE ELIMINATION PLAYOFF BRACKET
             const playoffQFs = [
                 getMatch(13, 14, 8),
                 getMatch(17, 18, 8),
@@ -1294,10 +1659,8 @@
             ];
 
             const lowerFinal = getMatch(31, 32, 14);
-
             const grandFinal = getMatch(23, 24, 18);
 
-            // Safe Winner Check (Exclude column title word 'Winner')
             let winnerRaw = getCellText(24, 20) || getCellText(25, 20);
             if (winnerRaw.toLowerCase() === "winner" || winnerRaw.toLowerCase() === "tbd" || !winnerRaw) {
                 winnerRaw = "";
@@ -1322,49 +1685,49 @@
                     <div class="bracket-title">🏆 Double Elimination Playoffs</div>
                     <div class="playoff-grid-container">
                         
-                        <!-- UPPER BRACKET (TOP) -->
+                        <!-- UPPER BRACKET -->
                         <div class="bracket-sub-section">
                             <div class="bracket-sub-title">▲ Upper Bracket</div>
                             <div class="bracket-rounds-row">
                                 <div class="bracket-round-col">
                                     <div class="round-label">Upper Quarterfinals</div>
-                                    ${playoffQFs.map(m => renderVCTCard(m)).join('')}
+                                    ${playoffQFs.map(m => renderPlayoffCard(m)).join('')}
                                 </div>
                                 <div class="bracket-round-col">
                                     <div class="round-label">Upper Semifinals</div>
-                                    ${playoffSFs.map(m => renderVCTCard(m)).join('')}
+                                    ${playoffSFs.map(m => renderPlayoffCard(m)).join('')}
                                 </div>
                                 <div class="bracket-round-col">
                                     <div class="round-label">Upper Final</div>
-                                    ${renderVCTCard(playoffUF)}
+                                    ${renderPlayoffCard(playoffUF)}
                                 </div>
                             </div>
                         </div>
 
-                        <!-- LOWER BRACKET (BOTTOM) -->
+                        <!-- LOWER BRACKET -->
                         <div class="bracket-sub-section">
                             <div class="bracket-sub-title" style="color: #ff9f43;">▼ Lower Bracket</div>
                             <div class="bracket-rounds-row">
                                 <div class="bracket-round-col">
                                     <div class="round-label">Lower Quarterfinals</div>
-                                    ${lowerR1.map(m => renderVCTCard(m)).join('')}
+                                    ${lowerR1.map(m => renderPlayoffCard(m)).join('')}
                                 </div>
                                 <div class="bracket-round-col">
                                     <div class="round-label">Lower Semifinals</div>
-                                    ${lowerSF.map(m => renderVCTCard(m)).join('')}
+                                    ${lowerSF.map(m => renderPlayoffCard(m)).join('')}
                                 </div>
                                 <div class="bracket-round-col">
                                     <div class="round-label">Lower Final</div>
-                                    ${renderVCTCard(lowerFinal)}
+                                    ${renderPlayoffCard(lowerFinal)}
                                 </div>
                             </div>
                         </div>
 
-                        <!-- GRAND FINALS (COLLIDING AT THE END) -->
+                        <!-- GRAND FINALS -->
                         <div class="grand-finals-section">
                             <div style="width: 100%; max-width: 250px;">
                                 <div class="round-label" style="color: #ffcc00; font-size: 11px; margin-bottom: 8px;">Grand Finals</div>
-                                ${renderVCTCard(grandFinal)}
+                                ${renderPlayoffCard(grandFinal)}
                             </div>
                             ${winnerCardHTML}
                         </div>
@@ -1377,6 +1740,20 @@
             hideLoading();
         }, 50);
     }
+
+    /* Tab switcher for GSL group inspection */
+    window.switchGSLTab = function(groupTab) {
+        document.querySelectorAll('.gsl-tab-btn').forEach(btn => btn.classList.remove('active'));
+        if (event && event.target) event.target.classList.add('active');
+
+        document.querySelectorAll('.gsl-group-wrapper').forEach(wrapper => {
+            if (groupTab === 'All') {
+                wrapper.style.display = 'block';
+            } else {
+                wrapper.style.display = wrapper.id === `gsl-${groupTab}` ? 'block' : 'none';
+            }
+        });
+    };
 
     /* =====================================================================
        WORLD CUP FANTASY RENDERER
