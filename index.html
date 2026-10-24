@@ -122,53 +122,37 @@
             overflow: hidden; 
         }
         .bracket-title { font-size: 1.4em; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; color: #87e0f2; margin: 15px 0 10px 0; text-shadow: 0 0 10px rgba(135,224,242,0.4); text-align: center; }
-        
+
+        /* --- WORLD CUP BRACKET --- */
         .bracket-container { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            width: 100%; 
-            overflow-x: auto; 
-            overflow-y: hidden; 
-            gap: 15px; 
-            padding: 25px; 
-            box-sizing: border-box;
-            scrollbar-width: none; 
-            -ms-overflow-style: none; 
+            display: flex; justify-content: space-between; align-items: center; width: 100%; 
+            overflow-x: auto; overflow-y: hidden; gap: 15px; padding: 25px; box-sizing: border-box;
+            scrollbar-width: none; -ms-overflow-style: none; 
         }
         .bracket-container::-webkit-scrollbar { display: none; } 
-
         .bracket-column { display: flex; flex-direction: column; justify-content: space-around; height: 700px !important; flex: 1; min-width: 100px; box-sizing: border-box; transition: all 0.2s; }
         .bracket-column.finals-col { flex: 0 0 180px; margin: 0 10px; }
-
         .matchup-card { background: rgba(27, 38, 49, 0.95); border: 1px solid #334e68; border-radius: 4px; padding: 3px; display: flex; flex-direction: column; gap: 1px; box-shadow: 0 2px 6px rgba(0,0,0,0.6); position: relative; }
         .matchup-card.interactive { cursor: help; }
         .matchup-card.interactive:hover { border-color: #87e0f2; transform: scale(1.03); box-shadow: 0 0 10px rgba(135,224,242,0.25); }
-
         .matchup-card.has-meme::after { 
-            content: "🎬"; 
-            position: absolute; 
-            top: -6px; 
-            right: -6px; 
-            background: #e74c3c; 
-            color: white; 
-            font-size: 8px; 
-            width: 14px; 
-            height: 14px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            border-radius: 50%; 
-            border: 1.5px solid #fff; 
-            box-shadow: 0 0 6px rgba(231, 76, 60, 0.8); 
-            animation: pulse 2s infinite;
-            z-index: 10;
+            content: "🎬"; position: absolute; top: -6px; right: -6px; background: #e74c3c; color: white; font-size: 8px; 
+            width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; 
+            border-radius: 50%; border: 1.5px solid #fff; box-shadow: 0 0 6px rgba(231, 76, 60, 0.8); 
+            animation: pulse 2s infinite; z-index: 10;
         }
         @keyframes pulse { 0% { opacity: 0.8; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } 100% { opacity: 0.8; transform: scale(1); } }
-        
         .matchup-slot { display: flex; align-items: center; justify-content: space-between; background: #16222f; border-radius: 3px; padding: 4px 6px; font-size: 10px; height: 22px; border: 1px solid transparent; }
         .matchup-slot.winner { border-color: rgba(39, 174, 96, 0.5); background: rgba(39, 174, 96, 0.15); color: #2ecc71; font-weight: bold; }
         .matchup-slot span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 3px; width: 100%; }
+
+        #meme-popover { 
+            position: fixed; display: none; z-index: 100000; 
+            background: rgba(17, 24, 32, 0.98); border: 2px solid #87e0f2; border-radius: 8px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(135,224,242,0.3); 
+            padding: 8px; text-align: center; transition: opacity 0.15s ease-out; 
+            width: max-content !important; max-width: 85vw !important; max-height: 85vh !important; overflow: auto; 
+        }
 
         span.bracket-team-display { display: flex; align-items: center; gap: 4px; overflow: hidden; width: 100%; }
         span.team-flag { font-size: 13px; display: inline-block; }
@@ -181,7 +165,6 @@
         span.leaderboard-name-short { display: none !important; }
         .leaderboard-pick-container { display: flex; align-items: center; font-size: 11px; margin-bottom: 2px; }
 
-        /* --- STAT PILL IN LEADERBOARD --- */
         .stat-pill {
             background: rgba(135, 224, 242, 0.15);
             color: #87e0f2;
@@ -195,259 +178,188 @@
             letter-spacing: 0.5px;
         }
 
-        /* --- AUTHENTIC GSL BRACKET PRESENTATION (IMAGE 2) --- */
-        .gsl-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .gsl-tab-btn {
-            background: #18181b;
-            color: #a1a1aa;
-            border: 1px solid #27272a;
-            padding: 6px 14px;
-            font-weight: bold;
-            font-size: 11px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .gsl-tab-btn.active, .gsl-tab-btn:hover {
-            background: #27272a;
-            color: #87e0f2;
-            border-color: #87e0f2;
-        }
+        /* --- GENERIC VCT GSL & PLAYOFF BRACKET STYLES --- */
+        .gsl-tabs { display: flex; gap: 8px; margin-bottom: 15px; justify-content: center; flex-wrap: wrap; }
+        .gsl-tab-btn { background: #18181b; color: #a1a1aa; border: 1px solid #27272a; padding: 6px 14px; font-weight: bold; font-size: 11px; border-radius: 4px; cursor: pointer; transition: all 0.2s; }
+        .gsl-tab-btn.active, .gsl-tab-btn:hover { background: #27272a; color: #87e0f2; border-color: #87e0f2; }
+        .gsl-groups-container { display: flex; flex-direction: column; gap: 30px; width: 100%; padding: 20px; box-sizing: border-box; align-items: center; }
+        .gsl-group-wrapper { background: #0f1115; border: 1px solid #27272a; border-radius: 8px; padding: 25px; width: 100%; max-width: 900px; box-sizing: border-box; box-shadow: 0 4px 20px rgba(0,0,0,0.7); }
+        .gsl-group-heading { font-size: 15px; font-weight: 800; color: #87e0f2; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px; text-align: center; border-bottom: 1px solid #27272a; padding-bottom: 8px; }
+        .gsl-tree { display: flex; flex-direction: column; gap: 35px; width: 100%; overflow-x: auto; }
+        .gsl-upper-section, .gsl-lower-section { display: flex; align-items: center; position: relative; }
+        .gsl-col { display: flex; flex-direction: column; min-width: 230px; position: relative; }
+        .gsl-col.gsl-col-round1 { gap: 25px; }
+        .gsl-header-pill { background: #e4e4e7; color: #18181b; font-weight: 800; font-size: 11px; padding: 5px 12px; border-radius: 4px; display: inline-block; margin-bottom: 12px; letter-spacing: 0.5px; text-transform: uppercase; align-self: flex-start; }
+        
+        .gsl-match-card { background: #18181b; border: 1px solid #27272a; border-radius: 6px; width: 230px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); overflow: hidden; display: flex; flex-direction: column; }
+        .gsl-slot { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; height: 34px; box-sizing: border-box; background: #18181b; transition: all 0.2s; }
+        .gsl-slot:first-child { border-bottom: 1px solid #27272a; }
+        .gsl-slot.winner { background: rgba(34, 197, 94, 0.08); }
+        .gsl-slot.winner .gsl-name { color: #4ade80; font-weight: 800; }
+        .gsl-slot.loser { opacity: 0.45; }
+        .gsl-slot.tbd .gsl-name { color: #71717a; }
+        .gsl-name { flex: 1; font-size: 12px; font-weight: 600; color: #f4f4f5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; }
+        .gsl-score { font-weight: 800; font-size: 13px; color: #f4f4f5; min-width: 20px; text-align: right; padding-left: 8px; }
+        .gsl-score.win-score { color: #4ade80; }
 
-        .gsl-groups-container {
+        .gsl-branch-line { width: 45px; height: 110px; position: relative; margin: 0 10px; flex-shrink: 0; }
+        .gsl-branch-line::before { content: ""; position: absolute; top: 25px; bottom: 25px; left: 0; width: 22px; border-right: 2px solid #3f3f46; border-top: 2px solid #3f3f46; border-bottom: 2px solid #3f3f46; }
+        .gsl-branch-line::after { content: ""; position: absolute; top: 50%; left: 22px; width: 23px; border-top: 2px solid #3f3f46; }
+        .gsl-straight-line { width: 45px; position: relative; margin: 0 10px; flex-shrink: 0; }
+        .gsl-straight-line::after { content: ""; position: absolute; top: 50%; left: 0; width: 45px; border-top: 2px solid #3f3f46; }
+
+        .playoff-grid-container { display: flex; flex-direction: column; width: 100%; padding: 20px; box-sizing: border-box; gap: 20px; }
+        .bracket-sub-section { background: rgba(18, 28, 38, 0.85); border: 1px solid #334e68; border-radius: 6px; padding: 15px; width: 100%; box-sizing: border-box; }
+        .bracket-sub-title { font-size: 13px; font-weight: bold; color: #87e0f2; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; border-bottom: 1px solid #334e68; padding-bottom: 6px; }
+        .bracket-rounds-row { display: flex; gap: 15px; overflow-x: auto; justify-content: space-between; align-items: center; width: 100%; }
+        .bracket-round-col { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 150px; }
+        .round-label { font-size: 10px; font-weight: bold; color: #87e0f2; text-align: center; text-transform: uppercase; margin-bottom: 4px; }
+        .grand-finals-section { display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(22, 34, 47, 0.95); border: 2px solid #5a7590; border-radius: 8px; padding: 20px; width: 100%; box-sizing: border-box; }
+
+        /* --- UNIFIED BROADCAST BRACKET STYLING (FOR ALL 3 LOL WORLDS STAGES) --- */
+        .lol-container { border-color: #4ab3c9 !important; box-shadow: 0 0 25px rgba(74, 179, 201, 0.25) !important; }
+        .lol-title { color: #87e0f2 !important; text-shadow: 0 0 10px rgba(135, 224, 242, 0.4) !important; }
+        
+        .swiss-broadcast-wrapper {
+            width: 100%;
+            background: linear-gradient(180deg, #060e1a 0%, #03070f 100%);
+            border: 2px solid #173252;
+            border-radius: 8px;
+            padding: 20px 15px;
+            box-sizing: border-box;
+            box-shadow: 0 0 30px rgba(0, 162, 255, 0.15);
             display: flex;
             flex-direction: column;
-            gap: 30px;
-            width: 100%;
-            padding: 20px;
-            box-sizing: border-box;
             align-items: center;
         }
-        .gsl-group-wrapper {
-            background: #0f1115;
-            border: 1px solid #27272a;
-            border-radius: 8px;
-            padding: 25px;
-            width: 100%;
-            max-width: 900px;
-            box-sizing: border-box;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.7);
-        }
-        .gsl-group-heading {
-            font-size: 15px;
-            font-weight: 800;
-            color: #87e0f2;
+        .swiss-banner {
+            background: linear-gradient(90deg, #0055aa 0%, #00d2ff 50%, #0055aa 100%);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 20px;
+            letter-spacing: 2px;
+            padding: 8px 30px;
+            border-radius: 4px;
+            margin-bottom: 25px;
             text-align: center;
-            border-bottom: 1px solid #27272a;
-            padding-bottom: 8px;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+            width: 90%;
+            max-width: 750px;
         }
-        .gsl-tree {
+        .swiss-tree-container {
             display: flex;
-            flex-direction: column;
-            gap: 35px;
+            gap: 16px;
             width: 100%;
             overflow-x: auto;
+            padding: 10px 5px 25px 5px;
+            box-sizing: border-box;
+            justify-content: flex-start;
         }
-        .gsl-upper-section, .gsl-lower-section {
-            display: flex;
-            align-items: center;
-            position: relative;
-        }
-        .gsl-col {
+        .swiss-column {
             display: flex;
             flex-direction: column;
-            min-width: 230px;
-            position: relative;
+            min-width: 200px;
+            flex: 1;
+            gap: 12px;
         }
-        .gsl-col.gsl-col-round1 {
-            gap: 25px;
-        }
-        .gsl-header-pill {
-            background: #e4e4e7;
-            color: #18181b;
+        .swiss-col-header {
+            background: #002b4d;
+            border: 1px solid #00d2ff;
+            color: #87e0f2;
+            font-size: 10px;
             font-weight: 800;
-            font-size: 11px;
-            padding: 5px 12px;
-            border-radius: 4px;
-            display: inline-block;
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
+            padding: 5px 8px;
+            border-radius: 3px;
+            text-align: center;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            align-self: flex-start;
         }
-        
-        .gsl-match-card {
-            background: #18181b;
-            border: 1px solid #27272a;
-            border-radius: 6px;
-            width: 230px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            overflow: hidden;
+        .swiss-pool-tag {
+            font-size: 9px;
+            font-weight: bold;
+            color: #87e0f2;
+            background: rgba(0, 210, 255, 0.15);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            border-radius: 3px;
+            padding: 3px 6px;
+            margin-bottom: 2px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+        .swiss-match-card {
+            background: #0d1a2d;
+            border: 1px solid #1d3557;
+            border-radius: 5px;
+            padding: 4px 6px;
             display: flex;
             flex-direction: column;
+            gap: 3px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+            transition: all 0.2s;
         }
-        .gsl-slot {
+        .swiss-match-card:hover {
+            border-color: #00d2ff;
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
+        }
+        .swiss-slot {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 8px 10px;
-            height: 34px;
-            box-sizing: border-box;
-            background: #18181b;
-            transition: all 0.2s;
+            font-size: 11px;
+            height: 25px;
+            padding: 2px 6px;
+            background: #08111e;
+            border-radius: 3px;
+            color: #e2e8f0;
         }
-        .gsl-slot:first-child {
-            border-bottom: 1px solid #27272a;
+        .swiss-slot.won {
+            background: rgba(46, 204, 113, 0.18);
+            color: #2ecc71;
+            font-weight: bold;
+            border-left: 2px solid #2ecc71;
         }
-        .gsl-slot.winner {
-            background: rgba(34, 197, 94, 0.08);
-        }
-        .gsl-slot.winner .gsl-name {
-            color: #4ade80;
-            font-weight: 800;
-        }
-        .gsl-slot.loser {
+        .swiss-slot.lost {
             opacity: 0.45;
         }
-        .gsl-slot.tbd .gsl-name {
-            color: #71717a;
-        }
-        .gsl-name {
-            flex: 1;
-            font-size: 12px;
-            font-weight: 600;
-            color: #f4f4f5;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: flex;
-            align-items: center;
-        }
-        .gsl-score {
+        .swiss-slot .score {
             font-weight: 800;
-            font-size: 13px;
-            color: #f4f4f5;
-            min-width: 20px;
+            font-size: 11px;
+            min-width: 18px;
             text-align: right;
-            padding-left: 8px;
         }
-        .gsl-score.win-score {
-            color: #4ade80;
+        .swiss-seed-badge {
+            font-size: 8px;
+            color: #718096;
+            font-weight: 800;
+            margin-right: 5px;
+            display: inline-block;
+            min-width: 32px;
         }
-
-        /* Bracket connecting lines */
-        .gsl-branch-line {
-            width: 45px;
-            height: 110px;
-            position: relative;
-            margin: 0 10px;
-            flex-shrink: 0;
-        }
-        .gsl-branch-line::before {
-            content: "";
-            position: absolute;
-            top: 25px;
-            bottom: 25px;
-            left: 0;
-            width: 22px;
-            border-right: 2px solid #3f3f46;
-            border-top: 2px solid #3f3f46;
-            border-bottom: 2px solid #3f3f46;
-        }
-        .gsl-branch-line::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 22px;
-            width: 23px;
-            border-top: 2px solid #3f3f46;
-        }
-
-        .gsl-straight-line {
-            width: 45px;
-            position: relative;
-            margin: 0 10px;
-            flex-shrink: 0;
-        }
-        .gsl-straight-line::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 45px;
-            border-top: 2px solid #3f3f46;
-        }
-
-        /* --- PLAYOFFS ARCHITECTURE --- */
-        .playoff-grid-container {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            padding: 20px;
-            box-sizing: border-box;
-            gap: 20px;
-        }
-        .bracket-sub-section {
-            background: rgba(18, 28, 38, 0.85);
-            border: 1px solid #334e68;
-            border-radius: 6px;
-            padding: 15px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .bracket-sub-title {
-            font-size: 13px;
-            font-weight: bold;
-            color: #87e0f2;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 12px;
-            border-bottom: 1px solid #334e68;
-            padding-bottom: 6px;
-        }
-        .bracket-rounds-row {
-            display: flex;
-            gap: 15px;
-            overflow-x: auto;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-        .bracket-round-col {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            flex: 1;
-            min-width: 150px;
-        }
-        .round-label {
-            font-size: 10px;
-            font-weight: bold;
-            color: #87e0f2;
+        .swiss-adv-badge {
+            background: #00d2ff;
+            color: #03070f;
+            font-weight: 900;
+            font-size: 9px;
+            padding: 4px 6px;
+            border-radius: 3px;
             text-align: center;
+            margin-top: 5px;
             text-transform: uppercase;
-            margin-bottom: 4px;
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+            letter-spacing: 0.5px;
         }
-        .grand-finals-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: rgba(22, 34, 47, 0.95);
-            border: 2px solid #5a7590;
-            border-radius: 8px;
-            padding: 20px;
-            width: 100%;
-            box-sizing: border-box;
+        .swiss-elim-badge {
+            background: #e74c3c;
+            color: #fff;
+            font-weight: 900;
+            font-size: 9px;
+            padding: 4px 6px;
+            border-radius: 3px;
+            text-align: center;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         @media (max-width: 1450px) {
@@ -478,25 +390,8 @@
             .score-badge.score-out { font-size: 0; padding: 0; width: 6px; height: 6px; border-radius: 50%; border: 1px solid #e74c3c; display: inline-block; }
             .score-badge.score-plus { padding: 1px 3px; }
         }
-        
-        #meme-popover { 
-            position: fixed; 
-            display: none; 
-            z-index: 100000; 
-            background: rgba(17, 24, 32, 0.98); 
-            border: 2px solid #87e0f2; 
-            border-radius: 8px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(135,224,242,0.3); 
-            padding: 8px; 
-            text-align: center; 
-            transition: opacity 0.15s ease-out; 
-            width: max-content !important; 
-            max-width: 85vw !important; 
-            max-height: 85vh !important; 
-            overflow: auto; 
-        }
 
-        /* --- AMBIENT MEME TOP-LAYER OVERLAY --- */
+        /* --- AMBIENT MEME OVERLAY --- */
         #ambient-meme-layer {
             position: fixed;
             top: 0;
@@ -521,7 +416,7 @@
             filter: drop-shadow(0 4px 15px rgba(0,0,0,0.6));
         }
         .ambient-meme-item.fade-in {
-            opacity: 0.20;
+            opacity: 0.22;
             transform: scale(1);
         }
         .ambient-meme-item.fade-out {
@@ -609,6 +504,10 @@
             type: "valorant",
             url: "https://script.google.com/macros/s/AKfycbwVNt4XGnsLdKL7886CI7AdSX8J5erooFEHQEmBWuSONW8Q4Mh7oKfKHASnWNnqgUtOjg/exec"
         },
+        "LoL Fantasy": {
+            type: "lol",
+            url: "https://script.google.com/macros/s/AKfycbwH0ZIgRL7N6QAilLwIdK5KQfy-YljgkMd8sw3azDs96p24i-NaziIquo4zrnTLZ2PYMQ/exec"
+        },
         "SMTM Fantasy": {
             type: "smtm",
             seasons: {
@@ -656,6 +555,46 @@
         "EDG": { tag: "EDG", flag: "🇨🇳" }
     };
 
+    const LOL_TEAMS = {
+        "GenG": { name: "Gen.G", tag: "GEN", flag: "🇰🇷", seed: "LCK #1" },
+        "GEN": { name: "Gen.G", tag: "GEN", flag: "🇰🇷", seed: "LCK #1" },
+        "Gen.G": { name: "Gen.G", tag: "GEN", flag: "🇰🇷", seed: "LCK #1" },
+        "HLE": { name: "Hanwha Life Esports", tag: "HLE", flag: "🇰🇷", seed: "LCK #2" },
+        "Hanwha Life Esports": { name: "Hanwha Life Esports", tag: "HLE", flag: "🇰🇷", seed: "LCK #2" },
+        "T1": { name: "T1", tag: "T1", flag: "🇰🇷", seed: "LCK #3" },
+        "DK": { name: "Dplus KIA", tag: "DK", flag: "🇰🇷", seed: "LCK #4" },
+        "Dplus KIA": { name: "Dplus KIA", tag: "DK", flag: "🇰🇷", seed: "LCK #4" },
+        "BLG": { name: "Bilibili Gaming", tag: "BLG", flag: "🇨🇳", seed: "LPL #2" },
+        "Bilibili Gaming": { name: "Bilibili Gaming", tag: "BLG", flag: "🇨🇳", seed: "LPL #2" },
+        "TES": { name: "Top Esports", tag: "TES", flag: "🇨🇳", seed: "LPL #3" },
+        "Top Esports": { name: "Top Esports", tag: "TES", flag: "🇨🇳", seed: "LPL #3" },
+        "IG": { name: "Invictus Gaming", tag: "IG", flag: "🇨🇳", seed: "LPL #4" },
+        "Invictus Gaming": { name: "Invictus Gaming", tag: "IG", flag: "🇨🇳", seed: "LPL #4" },
+        "AL": { name: "Anyone's Legend", tag: "AL", flag: "🇨🇳", seed: "LPL #1" },
+        "Anyone's Legend": { name: "Anyone's Legend", tag: "AL", flag: "🇨🇳", seed: "LPL #1" },
+        "G2": { name: "G2 Esports", tag: "G2", flag: "🇩🇪", seed: "LEC #1" },
+        "G2 Esports": { name: "G2 Esports", tag: "G2", flag: "🇩🇪", seed: "LEC #1" },
+        "MKOI": { name: "Movistar KOI", tag: "MKOI", flag: "🇪🇸", seed: "LEC #2" },
+        "Movistar KOI": { name: "Movistar KOI", tag: "MKOI", flag: "🇪🇸", seed: "LEC #2" },
+        "KC": { name: "Karmine Corp", tag: "KC", flag: "🇫🇷", seed: "LEC #3" },
+        "Karmine Corp": { name: "Karmine Corp", tag: "KC", flag: "🇫🇷", seed: "LEC #3" },
+        "TL": { name: "Team Liquid", tag: "TLAW", flag: "🇺🇸", seed: "LCS #1" },
+        "TLAW": { name: "Team Liquid", tag: "TLAW", flag: "🇺🇸", seed: "LCS #1" },
+        "Team Liquid": { name: "Team Liquid", tag: "TLAW", flag: "🇺🇸", seed: "LCS #1" },
+        "LYON": { name: "Lyon Gaming", tag: "LYON", flag: "🇲🇽", seed: "LCS #2" },
+        "Lyon Gaming": { name: "Lyon Gaming", tag: "LYON", flag: "🇲🇽", seed: "LCS #2" },
+        "LOS": { name: "Los Grandes", tag: "LOS", flag: "🇧🇷", seed: "CBLOL #1" },
+        "Los Grandes": { name: "Los Grandes", tag: "LOS", flag: "🇧🇷", seed: "CBLOL #1" },
+        "TSW": { name: "Team Secret Whales", tag: "TSW", flag: "🇻🇳", seed: "LCP #1" },
+        "CFO": { name: "CTBC Flying Oyster", tag: "CFO", flag: "🇹🇼", seed: "LCP #2" },
+        "C9": { name: "Cloud9", tag: "C9", flag: "🇺🇸", seed: "LCS #3" },
+        "Cloud9": { name: "Cloud9", tag: "C9", flag: "🇺🇸", seed: "LCS #3" },
+        "FUR": { name: "FURIA", tag: "FUR", flag: "🇧🇷", seed: "CBLOL #2" },
+        "FURIA": { name: "FURIA", tag: "FUR", flag: "🇧🇷", seed: "CBLOL #2" },
+        "MVK": { name: "MVK Esports", tag: "MVK", flag: "🇹🇼", seed: "LCP #3" },
+        "MVK Esports": { name: "MVK Esports", tag: "MVK", flag: "🇹🇼", seed: "LCP #3" }
+    };
+
     const LOADING_TEXTS = [
         "Loading these hands...", "Loading L's...", "Loading ...", "l O a D i N g ...",
         "Loading third leg protocol...", "Loading Mountain Dew Cold Red", "Loading ... dez nuts"
@@ -700,11 +639,11 @@
         });
     });
 
-    /* --- AMBIENT MEME BACKGROUND FUNCTIONS (RANDOMIZED) --- */
+    /* --- AMBIENT MEME BACKGROUND FUNCTIONS --- */
     function startAmbientMemes(urls) {
         stopAmbientMemes();
         if (!urls || urls.length === 0) return;
-        activeAmbientMemes = urls.filter(u => !u.includes("tenor.com/view/"));
+        activeAmbientMemes = urls;
         lastAmbientMemeIdx = -1;
 
         let ambientContainer = document.getElementById('ambient-meme-layer');
@@ -716,7 +655,7 @@
 
         setTimeout(showNextAmbientMeme, 400);
         setTimeout(showNextAmbientMeme, 1600);
-        ambientMemeTimer = setInterval(showNextAmbientMeme, 2200);
+        ambientMemeTimer = setInterval(showNextAmbientMeme, 2500);
     }
 
     function stopAmbientMemes() {
@@ -743,16 +682,24 @@
         const memeEl = document.createElement('div');
         memeEl.className = 'ambient-meme-item';
 
-        const randTop = Math.floor(Math.random() * 70) + 5;
-        const randLeft = Math.floor(Math.random() * 75) + 5;
+        const randTop = Math.floor(Math.random() * 65) + 5;
+        const randLeft = Math.floor(Math.random() * 70) + 5;
         memeEl.style.top = randTop + '%';
         memeEl.style.left = randLeft + '%';
 
         let mediaHTML = "";
         if (url.includes('.mp4') || url.includes('video')) {
             mediaHTML = `<video autoplay muted loop playsinline src="${url}" class="ambient-media"></video>`;
+        } else if (url.includes('tenor.com/view/')) {
+            let idMatch = url.match(/-(\d+)$/);
+            let tenorId = idMatch ? idMatch[1] : null;
+            if (tenorId) {
+                mediaHTML = `<iframe src="https://tenor.com/embed/${tenorId}" frameborder="0" allowfullscreen style="width:230px; height:190px; border-radius:6px; pointer-events:none;" onerror="this.closest('.ambient-meme-item').remove()"></iframe>`;
+            } else {
+                return;
+            }
         } else {
-            mediaHTML = `<img src="${url}" class="ambient-media" referrerpolicy="no-referrer" onerror="this.parentElement.remove()" />`;
+            mediaHTML = `<img src="${url}" class="ambient-media" referrerpolicy="no-referrer" onerror="this.closest('.ambient-meme-item').remove()" />`;
         }
 
         memeEl.innerHTML = mediaHTML;
@@ -790,8 +737,8 @@
         let s2 = parseTeamCell(t2).name.toLowerCase().trim();
         if (!s1 || !s2 || s1 === "tbd" || s2 === "tbd") return false;
         if (s1 === s2) return true;
-        let tag1 = (VCT_TEAMS[s1] || VCT_TEAMS[s1.toUpperCase()] || {}).tag || s1;
-        let tag2 = (VCT_TEAMS[s2] || VCT_TEAMS[s2.toUpperCase()] || {}).tag || s2;
+        let tag1 = (VCT_TEAMS[s1] || VCT_TEAMS[s1.toUpperCase()] || LOL_TEAMS[s1] || LOL_TEAMS[s1.toUpperCase()] || {}).tag || s1;
+        let tag2 = (VCT_TEAMS[s2] || VCT_TEAMS[s2.toUpperCase()] || LOL_TEAMS[s2] || LOL_TEAMS[s2.toUpperCase()] || {}).tag || s2;
         return tag1.toLowerCase() === tag2.toLowerCase();
     }
 
@@ -816,7 +763,6 @@
         `;
     }
 
-    /* --- FORMAT PICK & EMBED STAT INSIDE A PILL WINDOW --- */
     function formatVCTPick(pickStr) {
         if (!pickStr || pickStr === "-") return "-";
         let clean = String(pickStr).trim();
@@ -868,7 +814,157 @@
         `;
     }
 
-    /* --- AUTHENTIC GSL CARD & SLOT RENDERER (IMAGE 2) --- */
+    /* --- LOL PICK & BRACKET FORMATTING --- */
+    function formatLolPick(pickStr) {
+        if (!pickStr || pickStr === "-") return "-";
+        let clean = String(pickStr).trim();
+
+        let statInside = null;
+        let parenMatch = clean.match(/\s*\(([^)]+)\)\s*$/);
+        if (parenMatch) {
+            statInside = parenMatch[1];
+            clean = clean.replace(/\s*\([^)]+\)\s*$/, '').trim();
+        }
+
+        let statPillHTML = statInside !== null ? `<span class="stat-pill" style="border-color:#00d2ff; color:#00d2ff; background:rgba(0,210,255,0.15);">${statInside}</span>` : "";
+
+        // Team Pick (GenG, T1, BLG...)
+        let teamInfo = LOL_TEAMS[clean] || LOL_TEAMS[clean.toUpperCase()];
+        if (teamInfo) {
+            return `
+                <div style="display: flex; align-items: center; justify-content: flex-start; gap: 5px;">
+                    <span class="team-flag" style="font-size: 13px;">${teamInfo.flag}</span>
+                    <span style="font-weight: bold; color: #87e0f2;">${teamInfo.name}</span>
+                    ${statPillHTML}
+                </div>
+            `;
+        }
+
+        // Player with Team Tag (BLG Knight, GenG Chovy...)
+        let spaceIdx = clean.indexOf(" ");
+        if (spaceIdx > 0) {
+            let possibleTag = clean.substring(0, spaceIdx).trim();
+            let playerHandle = clean.substring(spaceIdx + 1).trim();
+            let pTeam = LOL_TEAMS[possibleTag] || LOL_TEAMS[possibleTag.toUpperCase()];
+            if (pTeam) {
+                return `
+                    <div style="display: flex; align-items: center; justify-content: flex-start; gap: 4px; overflow: hidden;">
+                        <span class="team-flag" style="font-size: 12px;">${pTeam.flag}</span>
+                        <span style="background: rgba(0, 210, 255, 0.15); color: #00d2ff; border: 1px solid rgba(0, 210, 255, 0.35); border-radius: 3px; padding: 1px 4px; font-weight: bold; font-size: 9px;">${pTeam.tag}</span>
+                        <span style="font-weight: bold; color: #fff; white-space: nowrap;">${playerHandle}</span>
+                        ${statPillHTML}
+                    </div>
+                `;
+            }
+        }
+
+        // Dragons
+        const dLower = clean.toLowerCase();
+        let dIcon = "";
+        if (dLower.includes("inferno") || dLower.includes("infernal")) dIcon = "🔥";
+        else if (dLower.includes("earth") || dLower.includes("mountain")) dIcon = "⛰️";
+        else if (dLower.includes("ocean")) dIcon = "🌊";
+        else if (dLower.includes("hex")) dIcon = "⚡";
+        else if (dLower.includes("cloud")) dIcon = "☁️";
+
+        if (dIcon) {
+            return `
+                <div style="display: flex; align-items: center; justify-content: flex-start; gap: 4px;">
+                    <span>${dIcon}</span>
+                    <span style="font-weight: bold; color: #fff;">${clean}</span>
+                    ${statPillHTML}
+                </div>
+            `;
+        }
+
+        return `
+            <div style="display: flex; align-items: center; gap: 4px;">
+                <span style="font-weight: bold; color: #fff;">${clean}</span>
+                ${statPillHTML}
+            </div>
+        `;
+    }
+
+    function formatLolBracketTeam(nameStr, isChampion = false) {
+        if (!nameStr || nameStr === "IMAGE_PLACEHOLDER" || nameStr.toUpperCase() === "TBD") {
+            return `<span class="tbd-text">⊝ TBD</span>`;
+        }
+        let clean = String(nameStr).trim();
+        let info = LOL_TEAMS[clean] || LOL_TEAMS[clean.toUpperCase()] || null;
+        let flag = info ? info.flag : "🎯";
+        let tag = info ? info.tag : clean;
+        let trophy = isChampion ? `<span style="font-size:12px; margin-right:3px; filter: drop-shadow(0 0 3px rgba(135,224,242,0.8));">🏆</span>` : "";
+        return `
+            <span class="bracket-team-display">
+                ${trophy}
+                <span class="team-flag">${flag}</span>
+                <span class="bracket-name-full">${info ? info.name : clean}</span>
+                <span class="bracket-name-short">${tag}</span>
+            </span>
+        `;
+    }
+
+    /* --- UNIFIED BROADCAST CARD RENDERER (IMAGE 3 DESIGN LANGUAGE) --- */
+    function renderBroadcastMatchCard(seedA, teamA, scoreA, seedB, teamB, scoreB, advBadge = null, elimBadge = null) {
+        let isTbdA = !teamA || teamA.toUpperCase() === "TBD";
+        let isTbdB = !teamB || teamB.toUpperCase() === "TBD";
+        
+        let hasScoreA = scoreA !== undefined && scoreA !== null;
+        let hasScoreB = scoreB !== undefined && scoreB !== null;
+        
+        let wonA = hasScoreA && hasScoreB && (parseFloat(scoreA) > parseFloat(scoreB));
+        let wonB = hasScoreA && hasScoreB && (parseFloat(scoreB) > parseFloat(scoreA));
+        let lostA = hasScoreA && hasScoreB && (parseFloat(scoreA) < parseFloat(scoreB));
+        let lostB = hasScoreA && hasScoreB && (parseFloat(scoreB) < parseFloat(scoreA));
+
+        let infoA = LOL_TEAMS[teamA] || (isTbdA ? null : { name: teamA, tag: teamA, flag: "🎯" });
+        let infoB = LOL_TEAMS[teamB] || (isTbdB ? null : { name: teamB, tag: teamB, flag: "🎯" });
+
+        let slotA = `
+            <div class="swiss-slot ${wonA ? 'won' : (lostA ? 'lost' : '')}">
+                <div style="display:flex; align-items:center; overflow:hidden;">
+                    ${seedA ? `<span class="swiss-seed-badge">${seedA}</span>` : ''}
+                    ${isTbdA ? `<span class="tbd-text">⊝ TBD</span>` : `
+                        <span style="font-size:12px; margin-right:4px;">${infoA.flag}</span>
+                        <span style="font-weight:bold;">${infoA.tag}</span>
+                    `}
+                </div>
+                <span class="score">${hasScoreA ? scoreA : (isTbdA ? '-' : '0')}</span>
+            </div>
+        `;
+
+        let slotB = `
+            <div class="swiss-slot ${wonB ? 'won' : (lostB ? 'lost' : '')}">
+                <div style="display:flex; align-items:center; overflow:hidden;">
+                    ${seedB ? `<span class="swiss-seed-badge">${seedB}</span>` : ''}
+                    ${isTbdB ? `<span class="tbd-text">⊝ TBD</span>` : `
+                        <span style="font-size:12px; margin-right:4px;">${infoB.flag}</span>
+                        <span style="font-weight:bold;">${infoB.tag}</span>
+                    `}
+                </div>
+                <span class="score">${hasScoreB ? scoreB : (isTbdB ? '-' : '0')}</span>
+            </div>
+        `;
+
+        return `
+            <div class="swiss-match-card">
+                ${slotA}
+                ${slotB}
+                ${advBadge ? `<div class="swiss-adv-badge">${advBadge}</div>` : ''}
+                ${elimBadge ? `<div class="swiss-elim-badge">${elimBadge}</div>` : ''}
+            </div>
+        `;
+    }
+
+    function renderBroadcastPendingMatch(label) {
+        return `
+            <div class="swiss-match-card" style="opacity: 0.55; min-height: 52px; justify-content: center; align-items: center; border-style: dashed; border-color: #24416b;">
+                <span style="font-size:10px; font-weight:bold; color:#5a7590;">${label || 'VS'}</span>
+            </div>
+        `;
+    }
+
+    /* --- VCT SPECIFIC RENDERERS (KEPT INTACT) --- */
     function renderGSLSlot(teamStr, scoreVal, isWinner, isLoser) {
         let parsed = parseTeamCell(teamStr);
         let name = parsed.name;
@@ -1076,7 +1172,7 @@
             } else if (url.includes("tenor.com/view/")) {
                 let embedUrl = url.replace("tenor.com/view/", "tenor.com/embed/");
                 mediaHTML += `<iframe src="${embedUrl}" frameborder="0" allowfullscreen style="${itemStyle}"></iframe>`;
-            } else if (url.includes('.mp4') || url.includes('akamai.steamstatic') || url.includes('video')) {
+            } else if (url.includes('.mp4') || url.includes('video')) {
                 mediaHTML += `<video autoplay muted loop playsinline src="${url}" style="${itemStyle}"></video>`;
             } else {
                 mediaHTML += `<img src="${url}" style="${itemStyle}" referrerpolicy="no-referrer">`;
@@ -1117,23 +1213,12 @@
         const content = document.getElementById('loading-card-content');
         if (!overlay || !content) return;
         
-        const isGif = Math.random() < 0.7;
-        let innerHTML = "";
-        if (isGif) {
-            const randomGif = LOADING_GIFS[Math.floor(Math.random() * LOADING_GIFS.length)];
-            innerHTML = `
-                <img src="${randomGif}" style="max-width: 100%; max-height: 180px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);" />
-                <h3 style="margin:0; text-transform:uppercase; letter-spacing: 2px; color: #87e0f2; text-align: center; font-size: 14px;">${contextText}</h3>
-            `;
-        } else {
-            const randomText = LOADING_TEXTS[Math.floor(Math.random() * LOADING_TEXTS.length)];
-            innerHTML = `
-                <div class="spinner"></div>
-                <h3 style="margin:0; text-transform:uppercase; letter-spacing: 2px; color: #87e0f2; text-align: center; font-size: 14px;">${randomText}</h3>
-                <p style="margin:10px 0 0 0; color:#aaa; font-size:11px;">${contextText}</p>
-            `;
-        }
-        content.innerHTML = innerHTML;
+        const randomText = LOADING_TEXTS[Math.floor(Math.random() * LOADING_TEXTS.length)];
+        content.innerHTML = `
+            <div class="spinner"></div>
+            <h3 style="margin:0; text-transform:uppercase; letter-spacing: 2px; color: #87e0f2; text-align: center; font-size: 14px;">${randomText}</h3>
+            <p style="margin:10px 0 0 0; color:#aaa; font-size:11px;">${contextText}</p>
+        `;
         overlay.classList.add('active');
     }
 
@@ -1240,6 +1325,23 @@
                     hideLoading(); 
                 }
             }
+            else if (gameConfig.type === "lol") {
+                try {
+                    const res = await fetch(gameConfig.url);
+                    allData = await res.json();
+                    if (seasonMenu) {
+                        for (let year in allData) {
+                            for (let season in allData[year]) {
+                                seasonMenu.innerHTML += `<button class="maple-btn" onclick="renderLolWorlds('${year}', '${season}')">${year} ${season}</button>`;
+                            }
+                        }
+                    }
+                    hideLoading();
+                } catch (e) {
+                    if (contentArea) contentArea.innerHTML = `<h3 style="color:red;">Error loading LoL data</h3>`;
+                    hideLoading();
+                }
+            }
         }, 100);
     }
 
@@ -1327,7 +1429,323 @@
     });
 
     /* =====================================================================
-       VALORANT FANTASY RENDERER (Full Authentic GSL Presentation & Deduction)
+       LEAGUE OF LEGENDS FANTASY RENDERER (WORLDS 2026 AUTHENTIC)
+       ===================================================================== */
+    async function renderLolWorlds(year, season) {
+        showLoading(`Rendering ${year} ${season}...`);
+        stopAmbientMemes();
+
+        setTimeout(async () => {
+            const container = document.getElementById('content-area');
+            if (!container) { hideLoading(); return; }
+
+            const seasonObj = (allData[year] && allData[year][season]) ? allData[year][season] : (allData["LoL"] ? allData["LoL"]["Worlds"] : null);
+            if (!seasonObj) {
+                container.innerHTML = `<h3 style="color:red;">No LoL Worlds data found</h3>`;
+                hideLoading();
+                return;
+            }
+
+            const rows = Array.isArray(seasonObj) ? seasonObj : (seasonObj.data || []);
+            const memesList = Array.isArray(seasonObj.memes) ? seasonObj.memes : [];
+
+            if (memesList.length > 0) {
+                startAmbientMemes(memesList);
+            }
+
+            // 1. EXTRACT PLAYERS (Columns 2, 4, 6, 8)
+            const headerRow = rows[1] || [];
+            let players = [];
+            
+            for (let c = 2; c < Math.min(headerRow.length, 11); c += 2) {
+                let name = headerRow[c] && headerRow[c].text ? String(headerRow[c].text).trim() : "";
+                if (!name || name === "IMAGE_PLACEHOLDER") continue;
+                if (name.toLowerCase().includes("scoring") || name.toLowerCase().includes("meme") || name.includes("http")) break;
+
+                let scoreCol = c + 1;
+                let total = 0;
+                if (rows[17] && rows[17][scoreCol]) {
+                    total = parseFloat(rows[17][scoreCol].text) || 0;
+                } else if (rows[17] && rows[17][c]) {
+                    total = parseFloat(rows[17][c].text) || 0;
+                }
+                players.push({ name: name, col: c, scoreCol: scoreCol, total: total });
+            }
+
+            players.sort((a, b) => b.total - a.total);
+            let emojis = {};
+            for (let i = 0; i < players.length; i++) {
+                if (i === players.length - 1) emojis[players[i].name] = '💩';
+                else if (i === 0) emojis[players[i].name] = '🥇';
+                else if (i === 1) emojis[players[i].name] = '🥈';
+                else if (i === 2) emojis[players[i].name] = '🥉';
+            }
+
+            let thHTML = `<th style="width: 140px;">Category</th>`;
+            players.forEach(p => {
+                let rankEmoji = emojis[p.name] || "";
+                thHTML += `<th>${rankEmoji} ${p.name}</th>`;
+            });
+
+            // 2. EXTRACT PICK ROWS WITH STAT PILLS & SCORES
+            let tbHTML = "";
+            for (let r = 2; r <= 16; r++) {
+                let categoryLabel = rows[r] && rows[r][1] ? String(rows[r][1].text).trim() : "";
+                if (!categoryLabel) continue;
+
+                let rowCells = `<td style="font-weight:bold; background:#243547; color:#87e0f2;">${categoryLabel}</td>`;
+                players.forEach(p => {
+                    let pickCell = rows[r] ? rows[r][p.col] : null;
+                    let scoreCell = rows[r] ? rows[r][p.scoreCol] : null;
+                    let pick = pickCell && pickCell.text ? String(pickCell.text).trim() : "";
+                    let scoreText = scoreCell && scoreCell.text ? String(scoreCell.text).trim() : "";
+
+                    let scoreNum = parseFloat(scoreText);
+                    let scoreDisplay = scoreText ? scoreText : "0";
+                    let badgeStyle = "background: rgba(135,224,242,0.1); color: #87e0f2; border: 1px solid rgba(135,224,242,0.3);";
+
+                    if (!isNaN(scoreNum) && scoreNum > 0) {
+                        badgeStyle = "background: rgba(39, 174, 96, 0.2); color: #2ecc71; border: 1px solid rgba(39, 174, 96, 0.4);";
+                        scoreDisplay = "+" + scoreNum;
+                    }
+
+                    let formattedPick = formatLolPick(pick);
+
+                    rowCells += `<td>
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 2px 8px; gap: 8px;">
+                            <div style="flex: 1; display: flex; align-items: center; overflow: hidden;">${formattedPick}</div>
+                            <span class="score-badge" style="${badgeStyle} min-width: 24px; text-align: center; font-size: 10px;">${scoreDisplay}</span>
+                        </div>
+                    </td>`;
+                });
+                tbHTML += `<tr>${rowCells}</tr>`;
+            }
+
+            // Total Score Row
+            let totalCells = `<td style="font-weight:bold; background:#354a6a; color:#fff;">Total</td>`;
+            players.forEach(p => {
+                totalCells += `<td style="font-weight:bold; color:#fff; background:#293a5a; font-size: 13px;">${p.total}</td>`;
+            });
+            tbHTML += `<tr style="background:#293a5a; font-weight:bold; color:#fff;">${totalCells}</tr>`;
+
+            const scoringHTML = `
+                <div class="scoring-box anime-absolute-box" style="width: 140px; font-size: 8px;">
+                    <strong>Scoring</strong><br>
+                    <strong>Standing:</strong> 1 pt for each bracket final standing (max 7)<br>
+                    <strong>Bonus:</strong> -1 for final ranking among picks starting from 4
+                </div>
+            `;
+
+            let leaderboardHTML = `
+                <div class="season-container lol-container">
+                    ${scoringHTML}
+                    <h2 class="bracket-title lol-title" style="margin-top:0;">🏆 2026 Worlds League of Legends Leaderboard</h2>
+                    <div style="overflow-x:auto; width:100%; margin-top:15px; border-radius:4px; border:2px solid #5a7590;">
+                        <table class="smtm-modern-table" style="width:100%; border:none;">
+                            <thead><tr>${thHTML}</tr></thead>
+                            <tbody>${tbHTML}</tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            // 3. TOURNAMENT PRESENTATION (UNIFIED BROADCAST STYLING ACROSS ALL 3 STAGES)
+            let tournamentHTML = `
+                <div class="bracket-wrapper lol-container" style="margin-top: 25px;">
+                    <div class="bracket-title lol-title">⚔️ 2026 World Championship Tournament</div>
+                    
+                    <div class="gsl-tabs">
+                        <button class="gsl-tab-btn lol-tab-btn" onclick="switchLolTab('Playin')">🛡️ Play-In Stage</button>
+                        <button class="gsl-tab-btn active lol-tab-btn" onclick="switchLolTab('Swiss')">⚔️ Swiss Stage (Main Event)</button>
+                        <button class="gsl-tab-btn lol-tab-btn" onclick="switchLolTab('Playoffs')">🏆 Knockout Stage (Playoffs)</button>
+                    </div>
+
+                    <!-- 1. PLAY-IN STAGE (BROADCAST TREE) -->
+                    <div id="lol-view-playin" class="swiss-broadcast-wrapper" style="display: none;">
+                        <div class="swiss-banner">PLAY-IN STAGE &bull; OCT. 15–18 &bull; DOUBLE ELIMINATION</div>
+                        <div class="swiss-tree-container">
+                            
+                            <div class="swiss-column">
+                                <div class="swiss-col-header">OCT. 15-16 &bull; BO5</div>
+                                <div class="swiss-pool-tag">Upper Semifinals</div>
+                                ${renderBroadcastMatchCard("LCS #3", "C9", 2, "LEC #3", "KC", 3)}
+                                ${renderBroadcastMatchCard("CBLOL #2", "FUR", 0, "LCP #3", "MVK", 3)}
+                            </div>
+
+                            <div class="swiss-column">
+                                <div class="swiss-col-header">OCT. 17 &bull; BO5</div>
+                                <div class="swiss-pool-tag">Upper Final</div>
+                                ${renderBroadcastMatchCard("LEC #3", "KC", 3, "LCP #3", "MVK", 0)}
+                                <div class="swiss-pool-tag" style="margin-top: 20px;">Lower Round 1</div>
+                                ${renderBroadcastMatchCard("LCS #3", "C9", 1, "CBLOL #2", "FUR", 3, null, "C9 Eliminated")}
+                            </div>
+
+                            <div class="swiss-column">
+                                <div class="swiss-col-header">OCT. 18 &bull; BO5</div>
+                                <div class="swiss-pool-tag">Lower Decider Final</div>
+                                ${renderBroadcastMatchCard("LCP #3", "MVK", 3, "CBLOL #2", "FUR", 1, null, "FUR Eliminated")}
+                            </div>
+
+                            <div class="swiss-column">
+                                <div class="swiss-col-header">OCT. 18 &bull; BO5</div>
+                                <div class="swiss-pool-tag">Qualifying Final</div>
+                                ${renderBroadcastMatchCard("LEC #3", "KC", 3, "LCP #3", "MVK", 0, "🇫🇷 KARMINE CORP QUALIFIED", "MVK Eliminated")}
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- 2. SWISS STAGE (AUTHENTIC TREE MATCHING IMAGE 3) -->
+                    <div id="lol-view-swiss" class="swiss-broadcast-wrapper" style="display: flex;">
+                        <div class="swiss-banner">SWISS STAGE &bull; FRIDAY, OCTOBER 23 AT 12:00 CDT</div>
+                        
+                        <div class="swiss-tree-container">
+                            
+                            <!-- ROUND 1 -->
+                            <div class="swiss-column">
+                                <div class="swiss-col-header">OCT. 23 &bull; BO1</div>
+                                <div class="swiss-pool-tag">Round 1 (0-0)</div>
+                                ${renderBroadcastMatchCard("LCK #1", "GEN", 1, "LPL #4", "IG", 0)}
+                                ${renderBroadcastMatchCard("LCS #1", "TL", null, "LCP #2", "CFO", null)}
+                                ${renderBroadcastMatchCard("LPL #1", "AL", null, "LEC #3", "KC", null)}
+                                ${renderBroadcastMatchCard("LEC #1", "G2", null, "LCK #4", "DK", null)}
+                                ${renderBroadcastMatchCard("LCK #2", "HLE", null, "LPL #3", "TES", null)}
+                                ${renderBroadcastMatchCard("CBLOL #1", "LOS", null, "LCK #3", "T1", null)}
+                                ${renderBroadcastMatchCard("LCP #1", "TSW", null, "LCS #2", "LYON", null)}
+                                ${renderBroadcastMatchCard("LPL #2", "BLG", null, "LEC #2", "MKOI", null)}
+                            </div>
+
+                            <!-- ROUND 2 -->
+                            <div class="swiss-column">
+                                <div class="swiss-col-header">OCT. 24 &bull; BO1</div>
+                                <div class="swiss-pool-tag">(1-0) High Pool</div>
+                                ${renderBroadcastPendingMatch("1-0 Match")}
+                                ${renderBroadcastPendingMatch("1-0 Match")}
+                                ${renderBroadcastPendingMatch("1-0 Match")}
+                                ${renderBroadcastPendingMatch("1-0 Match")}
+                                <div class="swiss-pool-tag" style="margin-top: 15px;">(0-1) Low Pool</div>
+                                ${renderBroadcastPendingMatch("0-1 Match")}
+                                ${renderBroadcastPendingMatch("0-1 Match")}
+                                ${renderBroadcastPendingMatch("0-1 Match")}
+                                ${renderBroadcastPendingMatch("0-1 Match")}
+                            </div>
+
+                            <!-- ROUND 3 -->
+                            <div class="swiss-column">
+                                <div class="swiss-col-header">OCT. 25 & 26</div>
+                                <div class="swiss-pool-tag">OCT. 25 &bull; BO3 (2-0)</div>
+                                ${renderBroadcastPendingMatch("2-0 Qualifying")}
+                                ${renderBroadcastPendingMatch("2-0 Qualifying")}
+                                <div class="swiss-adv-badge">Advances 1st / 2nd</div>
+
+                                <div class="swiss-pool-tag" style="margin-top: 15px;">BO1 (1-1) Mid Pool</div>
+                                ${renderBroadcastPendingMatch("1-1 Match")}
+                                ${renderBroadcastPendingMatch("1-1 Match")}
+                                ${renderBroadcastPendingMatch("1-1 Match")}
+                                ${renderBroadcastPendingMatch("1-1 Match")}
+
+                                <div class="swiss-pool-tag" style="margin-top: 15px;">OCT. 26 &bull; BO3 (0-2)</div>
+                                ${renderBroadcastPendingMatch("0-2 Elimination")}
+                                ${renderBroadcastPendingMatch("0-2 Elimination")}
+                                <div class="swiss-elim-badge">Eliminated (15th/16th)</div>
+                            </div>
+
+                            <!-- ROUND 4 -->
+                            <div class="swiss-column">
+                                <div class="swiss-col-header">OCT. 28-30 &bull; BO3</div>
+                                <div class="swiss-pool-tag">(2-1) High Pool</div>
+                                ${renderBroadcastPendingMatch("2-1 Qualifying")}
+                                ${renderBroadcastPendingMatch("2-1 Qualifying")}
+                                ${renderBroadcastPendingMatch("2-1 Qualifying")}
+                                <div class="swiss-adv-badge">Advances 3rd / 4th / 5th</div>
+
+                                <div class="swiss-pool-tag" style="margin-top: 25px;">(1-2) Low Pool</div>
+                                ${renderBroadcastPendingMatch("1-2 Elimination")}
+                                ${renderBroadcastPendingMatch("1-2 Elimination")}
+                                ${renderBroadcastPendingMatch("1-2 Elimination")}
+                                <div class="swiss-elim-badge">Eliminated (12th-14th)</div>
+                            </div>
+
+                            <!-- ROUND 5 -->
+                            <div class="swiss-column">
+                                <div class="swiss-col-header">OCT. 31 &bull; BO3</div>
+                                <div class="swiss-pool-tag">(2-2) Decider Pool</div>
+                                ${renderBroadcastPendingMatch("2-2 Decider")}
+                                ${renderBroadcastPendingMatch("2-2 Decider")}
+                                ${renderBroadcastPendingMatch("2-2 Decider")}
+                                <div class="swiss-adv-badge">Advances 6th / 7th / 8th</div>
+                                <div class="swiss-elim-badge" style="margin-top: 8px;">Eliminated (9th-11th)</div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- 3. KNOCKOUT PLAYOFFS BRACKET (UNIFIED BROADCAST STYLING) -->
+                    <div id="lol-view-playoffs" class="swiss-broadcast-wrapper" style="display: none;">
+                        <div class="swiss-banner">KNOCKOUT STAGE &bull; SINGLE ELIMINATION BO5</div>
+                        <div class="swiss-tree-container" style="justify-content: center; gap: 24px;">
+                            
+                            <div class="swiss-column">
+                                <div class="swiss-col-header">QUARTERFINALS &bull; BO5</div>
+                                <div class="swiss-pool-tag">QF Match 1</div>
+                                ${renderBroadcastMatchCard("", "TBD", null, "", "TBD", null)}
+                                <div class="swiss-pool-tag" style="margin-top: 10px;">QF Match 2</div>
+                                ${renderBroadcastMatchCard("", "TBD", null, "", "TBD", null)}
+                                <div class="swiss-pool-tag" style="margin-top: 10px;">QF Match 3</div>
+                                ${renderBroadcastMatchCard("", "TBD", null, "", "TBD", null)}
+                                <div class="swiss-pool-tag" style="margin-top: 10px;">QF Match 4</div>
+                                ${renderBroadcastMatchCard("", "TBD", null, "", "TBD", null)}
+                            </div>
+
+                            <div class="swiss-column" style="justify-content: center; gap: 35px;">
+                                <div>
+                                    <div class="swiss-col-header">SEMIFINALS &bull; BO5</div>
+                                    <div class="swiss-pool-tag">SF Match 1</div>
+                                    ${renderBroadcastMatchCard("", "TBD", null, "", "TBD", null)}
+                                </div>
+                                <div>
+                                    <div class="swiss-col-header">SEMIFINALS &bull; BO5</div>
+                                    <div class="swiss-pool-tag">SF Match 2</div>
+                                    ${renderBroadcastMatchCard("", "TBD", null, "", "TBD", null)}
+                                </div>
+                            </div>
+
+                            <div class="swiss-column" style="justify-content: center;">
+                                <div class="swiss-col-header">GRAND FINALS &bull; BO5</div>
+                                <div class="swiss-pool-tag">World Championship Final</div>
+                                ${renderBroadcastMatchCard("", "TBD", null, "", "TBD", null)}
+                                <div class="swiss-adv-badge" style="margin-top: 15px; padding: 8px;">
+                                    🏆 SUMMONER'S CUP CHAMPION (Awaiting Finals)
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            `;
+
+            container.innerHTML = leaderboardHTML + tournamentHTML;
+            hideLoading();
+        }, 50);
+    }
+
+    /* Tab switcher for LoL Tournament views */
+    window.switchLolTab = function(tabName) {
+        document.querySelectorAll('.lol-tab-btn').forEach(btn => btn.classList.remove('active'));
+        if (event && event.target) event.target.classList.add('active');
+
+        const playinView = document.getElementById('lol-view-playin');
+        const swissView = document.getElementById('lol-view-swiss');
+        const playoffView = document.getElementById('lol-view-playoffs');
+
+        if (playinView) playinView.style.display = tabName === 'Playin' ? 'flex' : 'none';
+        if (swissView) swissView.style.display = tabName === 'Swiss' ? 'flex' : 'none';
+        if (playoffView) playoffView.style.display = tabName === 'Playoffs' ? 'flex' : 'none';
+    };
+
+    /* =====================================================================
+       VALORANT FANTASY RENDERER (KEPT 100% INTACT)
        ===================================================================== */
     async function renderValorant(year, season) {
         showLoading(`Rendering ${year} ${season}...`);
@@ -1351,7 +1769,6 @@
                 startAmbientMemes(memesList);
             }
 
-            // 1. EXTRACT PLAYERS (Columns 2, 4, 6, 8)
             const headerRow = rows[1] || [];
             let players = [];
             
@@ -1385,7 +1802,6 @@
                 thHTML += `<th>${rankEmoji} ${p.name}</th>`;
             });
 
-            // 2. EXTRACT PICK ROWS WITH STAT PILLS & RIGHT-ALIGNED SCORES
             let tbHTML = "";
             for (let r = 2; r <= 8; r++) {
                 let categoryLabel = rows[r] && rows[r][1] ? String(rows[r][1].text).trim() : "";
@@ -1428,7 +1844,6 @@
                 tbHTML += `<tr>${rowCells}</tr>`;
             }
 
-            // Total Score Row
             let totalCells = `<td style="font-weight:bold; background:#354a6a; color:#fff;">Total</td>`;
             players.forEach(p => {
                 totalCells += `<td style="font-weight:bold; color:#fff; background:#293a5a;">${p.total}</td>`;
@@ -1456,7 +1871,6 @@
                 </div>
             `;
 
-            // 3. PARSE GSL GROUP STAGES (PRESENTATION MATCHING IMAGE 2)
             function getCellText(r, c) {
                 if (!rows[r] || !rows[r][c] || !rows[r][c].text) return "";
                 let txt = String(rows[r][c].text).trim();
@@ -1478,7 +1892,6 @@
                 };
             }
 
-            // Build GSL Structure for a group and perform automatic outcome deduction
             function buildGSLGroup(name, op1RowA, op1RowB, op2RowA, op2RowB, ufRowA, ufRowB, decRowA, decRowB) {
                 let m1 = getMatch(op1RowA, op1RowB, 2);
                 let m2 = getMatch(op2RowA, op2RowB, 2);
@@ -1488,7 +1901,6 @@
                 let winner1 = null, loser1 = null;
                 let winner2 = null, loser2 = null;
 
-                // Deduce Match 1 outcome
                 if (m1.scoreA !== null && m1.scoreB !== null && parseFloat(m1.scoreA) !== parseFloat(m1.scoreB)) {
                     if (parseFloat(m1.scoreA) > parseFloat(m1.scoreB)) {
                         winner1 = m1.teamA; loser1 = m1.teamB;
@@ -1510,7 +1922,6 @@
                     m1.isLoserB = !m1.isWinnerB;
                 }
 
-                // Deduce Match 2 outcome
                 if (m2.scoreA !== null && m2.scoreB !== null && parseFloat(m2.scoreA) !== parseFloat(m2.scoreB)) {
                     if (parseFloat(m2.scoreA) > parseFloat(m2.scoreB)) {
                         winner2 = m2.teamA; loser2 = m2.teamB;
@@ -1532,11 +1943,9 @@
                     m2.isLoserB = !m2.isWinnerB;
                 }
 
-                // Auto-populate Upper Final if not manually entered
                 if (!uf.teamA && winner1) uf.teamA = winner1;
                 if (!uf.teamB && winner2) uf.teamB = winner2;
 
-                // Deduce Upper Final outcome
                 let winnerUF = null, loserUF = null;
                 if (uf.scoreA !== null && uf.scoreB !== null && parseFloat(uf.scoreA) !== parseFloat(uf.scoreB)) {
                     if (parseFloat(uf.scoreA) > parseFloat(uf.scoreB)) {
@@ -1552,7 +1961,6 @@
                     uf.isLoserB = !uf.isWinnerB;
                 }
 
-                // Build Lower Bracket Round 1 (Elimination Match between the 2 losers)
                 let lr1 = {
                     teamA: loser1 || "TBD",
                     scoreA: null,
@@ -1564,7 +1972,6 @@
                     isLoserB: false
                 };
 
-                // Deduce Lower Final (Decider Match)
                 if (!dec.teamA && loserUF) dec.teamA = loserUF;
 
                 return { name, m1, m2, uf, lr1, dec };
@@ -1582,8 +1989,6 @@
                     <div class="gsl-group-wrapper" id="gsl-${g.name.replace(/\s+/g, '-')}">
                         <div class="gsl-group-heading">${g.name}</div>
                         <div class="gsl-tree">
-                            
-                            <!-- UPPER BRACKET -->
                             <div class="gsl-upper-section">
                                 <div class="gsl-col gsl-col-round1">
                                     <div class="gsl-header-pill">ROUND 1</div>
@@ -1597,7 +2002,6 @@
                                 </div>
                             </div>
 
-                            <!-- LOWER BRACKET -->
                             <div class="gsl-lower-section">
                                 <div class="gsl-col" style="margin-left: 285px;">
                                     <div class="gsl-header-pill">LOWER BRACKET - ROUND 1</div>
@@ -1609,7 +2013,6 @@
                                     <div class="gsl-match-wrap">${renderGSLCard(g.dec)}</div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 `;
@@ -1633,7 +2036,6 @@
                 </div>
             `;
 
-            // 4. DOUBLE ELIMINATION PLAYOFF BRACKET
             const playoffQFs = [
                 getMatch(13, 14, 8),
                 getMatch(17, 18, 8),
@@ -1685,7 +2087,6 @@
                     <div class="bracket-title">🏆 Double Elimination Playoffs</div>
                     <div class="playoff-grid-container">
                         
-                        <!-- UPPER BRACKET -->
                         <div class="bracket-sub-section">
                             <div class="bracket-sub-title">▲ Upper Bracket</div>
                             <div class="bracket-rounds-row">
@@ -1704,7 +2105,6 @@
                             </div>
                         </div>
 
-                        <!-- LOWER BRACKET -->
                         <div class="bracket-sub-section">
                             <div class="bracket-sub-title" style="color: #ff9f43;">▼ Lower Bracket</div>
                             <div class="bracket-rounds-row">
@@ -1723,7 +2123,6 @@
                             </div>
                         </div>
 
-                        <!-- GRAND FINALS -->
                         <div class="grand-finals-section">
                             <div style="width: 100%; max-width: 250px;">
                                 <div class="round-label" style="color: #ffcc00; font-size: 11px; margin-bottom: 8px;">Grand Finals</div>
@@ -1741,7 +2140,6 @@
         }, 50);
     }
 
-    /* Tab switcher for GSL group inspection */
     window.switchGSLTab = function(groupTab) {
         document.querySelectorAll('.gsl-tab-btn').forEach(btn => btn.classList.remove('active'));
         if (event && event.target) event.target.classList.add('active');
