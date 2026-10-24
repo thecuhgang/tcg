@@ -506,7 +506,7 @@
         },
         "LoL Fantasy": {
             type: "lol",
-            url: "https://script.google.com/macros/s/AKfycbwH0ZIgRL7N6QAilLwIdK5KQfy-YljgkMd8sw3azDs96p24i-NaziIquo4zrnTLZ2PYMQ/exec"
+            url: "https://script.google.com/macros/s/AKfycbzZE5CUk4GyztshoVKRxx-H-oi7SSC1XBzjMR_ovcXZ9GnOT3oJqY_Qyeo_N7cb7-6UdA/exec"
         },
         "SMTM Fantasy": {
             type: "smtm",
@@ -583,8 +583,8 @@
         "Team Liquid": { name: "Team Liquid", tag: "TLAW", flag: "🇺🇸", seed: "LCS #1" },
         "LYON": { name: "Lyon Gaming", tag: "LYON", flag: "🇲🇽", seed: "LCS #2" },
         "Lyon Gaming": { name: "Lyon Gaming", tag: "LYON", flag: "🇲🇽", seed: "LCS #2" },
-        "LOS": { name: "Los Grandes", tag: "LOS", flag: "🇧🇷", seed: "CBLOL #1" },
-        "Los Grandes": { name: "Los Grandes", tag: "LOS", flag: "🇧🇷", seed: "CBLOL #1" },
+        "LØS": { name: "Los Grandes", tag: "LØS", flag: "🇧🇷", seed: "CBLOL #1" },
+        "Los Grandes": { name: "Los Grandes", tag: "LØS", flag: "🇧🇷", seed: "CBLOL #1" },
         "TSW": { name: "Team Secret Whales", tag: "TSW", flag: "🇻🇳", seed: "LCP #1" },
         "CFO": { name: "CTBC Flying Oyster", tag: "CFO", flag: "🇹🇼", seed: "LCP #2" },
         "C9": { name: "Cloud9", tag: "C9", flag: "🇺🇸", seed: "LCS #3" },
@@ -1595,89 +1595,14 @@
                         </div>
                     </div>
 
-                    <!-- 2. SWISS STAGE (AUTHENTIC TREE MATCHING IMAGE 3) -->
+                    <!-- 2. SWISS STAGE (DYNAMIC - filled by loadSwissStage) -->
                     <div id="lol-view-swiss" class="swiss-broadcast-wrapper" style="display: flex;">
-                        <div class="swiss-banner">SWISS STAGE &bull; FRIDAY, OCTOBER 23 AT 12:00 CDT</div>
-                        
-                        <div class="swiss-tree-container">
-                            
-                            <!-- ROUND 1 -->
-                            <div class="swiss-column">
-                                <div class="swiss-col-header">OCT. 23 &bull; BO1</div>
-                                <div class="swiss-pool-tag">Round 1 (0-0)</div>
-                                ${renderBroadcastMatchCard("LCK #1", "GEN", 1, "LPL #4", "IG", 0)}
-                                ${renderBroadcastMatchCard("LCS #1", "TL", null, "LCP #2", "CFO", null)}
-                                ${renderBroadcastMatchCard("LPL #1", "AL", null, "LEC #3", "KC", null)}
-                                ${renderBroadcastMatchCard("LEC #1", "G2", null, "LCK #4", "DK", null)}
-                                ${renderBroadcastMatchCard("LCK #2", "HLE", null, "LPL #3", "TES", null)}
-                                ${renderBroadcastMatchCard("CBLOL #1", "LOS", null, "LCK #3", "T1", null)}
-                                ${renderBroadcastMatchCard("LCP #1", "TSW", null, "LCS #2", "LYON", null)}
-                                ${renderBroadcastMatchCard("LPL #2", "BLG", null, "LEC #2", "MKOI", null)}
-                            </div>
-
-                            <!-- ROUND 2 -->
-                            <div class="swiss-column">
-                                <div class="swiss-col-header">OCT. 24 &bull; BO1</div>
-                                <div class="swiss-pool-tag">(1-0) High Pool</div>
-                                ${renderBroadcastPendingMatch("1-0 Match")}
-                                ${renderBroadcastPendingMatch("1-0 Match")}
-                                ${renderBroadcastPendingMatch("1-0 Match")}
-                                ${renderBroadcastPendingMatch("1-0 Match")}
-                                <div class="swiss-pool-tag" style="margin-top: 15px;">(0-1) Low Pool</div>
-                                ${renderBroadcastPendingMatch("0-1 Match")}
-                                ${renderBroadcastPendingMatch("0-1 Match")}
-                                ${renderBroadcastPendingMatch("0-1 Match")}
-                                ${renderBroadcastPendingMatch("0-1 Match")}
-                            </div>
-
-                            <!-- ROUND 3 -->
-                            <div class="swiss-column">
-                                <div class="swiss-col-header">OCT. 25 & 26</div>
-                                <div class="swiss-pool-tag">OCT. 25 &bull; BO3 (2-0)</div>
-                                ${renderBroadcastPendingMatch("2-0 Qualifying")}
-                                ${renderBroadcastPendingMatch("2-0 Qualifying")}
-                                <div class="swiss-adv-badge">Advances 1st / 2nd</div>
-
-                                <div class="swiss-pool-tag" style="margin-top: 15px;">BO1 (1-1) Mid Pool</div>
-                                ${renderBroadcastPendingMatch("1-1 Match")}
-                                ${renderBroadcastPendingMatch("1-1 Match")}
-                                ${renderBroadcastPendingMatch("1-1 Match")}
-                                ${renderBroadcastPendingMatch("1-1 Match")}
-
-                                <div class="swiss-pool-tag" style="margin-top: 15px;">OCT. 26 &bull; BO3 (0-2)</div>
-                                ${renderBroadcastPendingMatch("0-2 Elimination")}
-                                ${renderBroadcastPendingMatch("0-2 Elimination")}
-                                <div class="swiss-elim-badge">Eliminated (15th/16th)</div>
-                            </div>
-
-                            <!-- ROUND 4 -->
-                            <div class="swiss-column">
-                                <div class="swiss-col-header">OCT. 28-30 &bull; BO3</div>
-                                <div class="swiss-pool-tag">(2-1) High Pool</div>
-                                ${renderBroadcastPendingMatch("2-1 Qualifying")}
-                                ${renderBroadcastPendingMatch("2-1 Qualifying")}
-                                ${renderBroadcastPendingMatch("2-1 Qualifying")}
-                                <div class="swiss-adv-badge">Advances 3rd / 4th / 5th</div>
-
-                                <div class="swiss-pool-tag" style="margin-top: 25px;">(1-2) Low Pool</div>
-                                ${renderBroadcastPendingMatch("1-2 Elimination")}
-                                ${renderBroadcastPendingMatch("1-2 Elimination")}
-                                ${renderBroadcastPendingMatch("1-2 Elimination")}
-                                <div class="swiss-elim-badge">Eliminated (12th-14th)</div>
-                            </div>
-
-                            <!-- ROUND 5 -->
-                            <div class="swiss-column">
-                                <div class="swiss-col-header">OCT. 31 &bull; BO3</div>
-                                <div class="swiss-pool-tag">(2-2) Decider Pool</div>
-                                ${renderBroadcastPendingMatch("2-2 Decider")}
-                                ${renderBroadcastPendingMatch("2-2 Decider")}
-                                ${renderBroadcastPendingMatch("2-2 Decider")}
-                                <div class="swiss-adv-badge">Advances 6th / 7th / 8th</div>
-                                <div class="swiss-elim-badge" style="margin-top: 8px;">Eliminated (9th-11th)</div>
-                            </div>
-
+                        <div class="swiss-banner">SWISS STAGE &bull; OCT. 23 &ndash; 31</div>
+                        <div style="display:flex; align-items:center; gap:10px; margin: -10px 0 12px 0; font-size:10px; color:#87e0f2;">
+                            <span id="swiss-status">Loading results...</span>
+                            <button class="gsl-tab-btn" style="padding:3px 8px; font-size:10px;" onclick="loadSwissStage(true)">&#x21bb; Refresh</button>
                         </div>
+                        <div class="swiss-tree-container" id="swiss-tree"></div>
                     </div>
 
                     <!-- 3. KNOCKOUT PLAYOFFS BRACKET (UNIFIED BROADCAST STYLING) -->
@@ -1726,8 +1651,169 @@
             `;
 
             container.innerHTML = leaderboardHTML + tournamentHTML;
+            loadSwissStage();
             hideLoading();
         }, 50);
+    }
+
+        /* =====================================================================
+       DYNAMIC SWISS STAGE (loads live results from Leaguepedia on every open)
+       ===================================================================== */
+    const SWISS_CARGO_URL = 'https://lol.fandom.com/api.php?' + new URLSearchParams({
+        action: 'cargoquery', format: 'json', origin: '*', limit: '500',
+        tables: 'MatchSchedule',
+        fields: 'Team1=TeamA,Team2=TeamB,Team1Score=ScoreA,Team2Score=ScoreB,Winner=Win,DateTime_UTC=Start,BestOf=Bo',
+        where: 'OverviewPage="2026 Season World Championship/Main Event"',
+        order_by: 'DateTime_UTC'
+    }).toString();
+    const SWISS_CACHE_KEY = 'swissStage2026Cache';
+    const SWISS_TEAM_KEYS = ['GEN','HLE','T1','DK','BLG','TES','IG','AL','G2','MKOI','KC','TL','LYON','LØS','TSW','CFO'];
+
+    const SWISS_LAYOUT = [
+        { round: 1, header: 'OCT. 23 &bull; BO1', groups: [
+            { rec: '0-0', label: 'Round 1 (0-0)', slots: 8, ph: 'Round 1' } ] },
+        { round: 2, header: 'OCT. 24 &bull; BO1', groups: [
+            { rec: '1-0', label: '(1-0) High Pool', slots: 4, ph: '1-0 Match' },
+            { rec: '0-1', label: '(0-1) Low Pool', slots: 4, ph: '0-1 Match' } ] },
+        { round: 3, header: 'OCT. 25 &amp; 26', groups: [
+            { rec: '2-0', label: 'OCT. 25 &bull; BO3 (2-0)', slots: 2, ph: '2-0 Qualifying', badges: [['adv', 'Advances 1st / 2nd']] },
+            { rec: '1-1', label: 'BO1 (1-1) Mid Pool', slots: 4, ph: '1-1 Match' },
+            { rec: '0-2', label: 'OCT. 26 &bull; BO3 (0-2)', slots: 2, ph: '0-2 Elimination', badges: [['elim', 'Eliminated (15th/16th)']] } ] },
+        { round: 4, header: 'OCT. 28-30 &bull; BO3', groups: [
+            { rec: '2-1', label: '(2-1) High Pool', slots: 3, ph: '2-1 Qualifying', badges: [['adv', 'Advances 3rd / 4th / 5th']] },
+            { rec: '1-2', label: '(1-2) Low Pool', slots: 3, ph: '1-2 Elimination', badges: [['elim', 'Eliminated (12th-14th)']] } ] },
+        { round: 5, header: 'OCT. 31 &bull; BO3', groups: [
+            { rec: '2-2', label: '(2-2) Decider Pool', slots: 3, ph: '2-2 Decider', badges: [['adv', 'Advances 6th / 7th / 8th'], ['elim', 'Eliminated (9th-11th)']] } ] }
+    ];
+
+    // Maps any Leaguepedia team name to the keys used in LOL_TEAMS
+    function swissKey(name) {
+        const n = String(name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (!n || n === 'tbd') return null;
+        if (n === 'geng' || n === 'gen') return 'GEN';
+        if (n === 't1') return 'T1';
+        if (n === 'LØS' || n.startsWith('losgrandes')) return 'LØS';
+        if (n.startsWith('g2')) return 'G2';
+        if (n.includes('hanwha') || n === 'hle') return 'HLE';
+        if (n.includes('dplus') || n.includes('kia') || n === 'dk') return 'DK';
+        if (n.includes('bilibili') || n === 'blg') return 'BLG';
+        if (n.includes('topesports') || n === 'tes') return 'TES';
+        if (n.includes('invictus') || n === 'ig') return 'IG';
+        if (n.includes('anyone') || n === 'al') return 'AL';
+        if (n.includes('movistar') || n.includes('koi')) return 'MKOI';
+        if (n.includes('karmine') || n === 'kc') return 'KC';
+        if (n.includes('liquid') || n === 'tl' || n === 'tlaw') return 'TL';
+        if (n.includes('lyon')) return 'LYON';
+        if (n.includes('whales') || n === 'tsw') return 'TSW';
+        if (n.includes('flyingoyster') || n === 'cfo') return 'CFO';
+        return null;
+    }
+
+    // Turns the raw match list into { "round|W-L": [matches] }.
+    // Round = each team's Nth Swiss match; a team stops at 3 wins / 3 losses.
+    function buildSwissModel(rows) {
+        const valid = new Set(SWISS_TEAM_KEYS);
+        const ms = rows.map(r => ({
+            a: swissKey(r.TeamA), b: swissKey(r.TeamB),
+            sa: r.ScoreA, sb: r.ScoreB, win: String(r.Win || ''), bo: parseInt(r.Bo) || 1,
+            start: String(r.Start || '')
+        })).filter(m => m.a && m.b && valid.has(m.a) && valid.has(m.b) && m.bo < 5)
+          .sort((x, y) => x.start.localeCompare(y.start));
+
+        const st = {};
+        SWISS_TEAM_KEYS.forEach(k => st[k] = { n: 0, w: 0, l: 0 });
+        const model = {};
+        ms.forEach(m => {
+            const A = st[m.a], B = st[m.b];
+            if (A.w >= 3 || A.l >= 3 || B.w >= 3 || B.l >= 3) return;
+            const played = m.win === '1' || m.win === '2';
+            let sa = '-', sb = '-';
+            if (played) {
+                const pa = parseInt(m.sa), pb = parseInt(m.sb);
+                sa = isNaN(pa) ? (m.win === '1' ? 1 : 0) : pa;
+                sb = isNaN(pb) ? (m.win === '2' ? 1 : 0) : pb;
+            }
+            const key = (A.n + 1) + '|' + A.w + '-' + A.l;
+            (model[key] = model[key] || []).push({ a: m.a, b: m.b, sa: sa, sb: sb });
+            if (played) {
+                A.n++; B.n++;
+                if (m.win === '1') { A.w++; B.l++; } else { B.w++; A.l++; }
+            }
+        });
+        return model;
+    }
+
+    function renderSwissTree(model) {
+        const seed = k => (LOL_TEAMS[k] || {}).seed || '';
+        return SWISS_LAYOUT.map(col => {
+            let h = `<div class="swiss-column"><div class="swiss-col-header">${col.header}</div>`;
+            col.groups.forEach((g, i) => {
+                const list = model[col.round + '|' + g.rec] || [];
+                h += `<div class="swiss-pool-tag"${i ? ' style="margin-top: 15px;"' : ''}>${g.label}</div>`;
+                list.forEach(m => { h += renderBroadcastMatchCard(seed(m.a), m.a, m.sa, seed(m.b), m.b, m.sb); });
+                for (let k = list.length; k < g.slots; k++) h += renderBroadcastPendingMatch(g.ph);
+                (g.badges || []).forEach(b => {
+                    h += `<div class="${b[0] === 'adv' ? 'swiss-adv-badge' : 'swiss-elim-badge'}">${b[1]}</div>`;
+                });
+            });
+            return h + '</div>';
+        }).join('');
+    }
+
+    // Preferred source: your Apps Script (adds ?action=swiss, cached server-side). Falls back to Leaguepedia directly.
+    const SWISS_PROXY_URL = GAMES["LoL Fantasy"].url + '?action=swiss';
+
+    async function fetchSwissRows(url) {
+        const res = await fetch(url, { cache: 'no-store' });
+        const json = await res.json();
+        if (json.error) throw new Error(json.error.code || json.error.info || 'API error');
+        if (!json.cargoquery) throw new Error('Unexpected response');
+        return json.cargoquery.map(r => r.title);
+    }
+
+    async function loadSwissStage(force) {
+        const status = document.getElementById('swiss-status');
+        if (!document.getElementById('swiss-tree')) return;
+
+        let cached = null;
+        try {
+            const c = JSON.parse(localStorage.getItem(SWISS_CACHE_KEY) || 'null');
+            if (Array.isArray(c)) cached = { t: 0, rows: c };
+            else if (c && Array.isArray(c.rows)) cached = c;
+        } catch (e) {}
+
+        const age = cached ? Date.now() - cached.t : Infinity;
+        const ttl = force ? 30000 : 120000;
+        let rows = null, note = '';
+
+        if (cached && age < ttl) {
+            rows = cached.rows;
+            note = 'Results from ' + new Date(cached.t).toLocaleTimeString() + ' (auto-refreshes every 2 min)';
+        } else {
+            if (status) status.textContent = 'Loading results...';
+            const errs = [];
+            const sources = [['Apps Script', SWISS_PROXY_URL], ['Leaguepedia', SWISS_CARGO_URL]];
+            for (const [label, url] of sources) {
+                try { rows = await fetchSwissRows(url); break; }
+                catch (e) { errs.push(label + ': ' + e.message); console.warn('Swiss fetch failed (' + label + '):', e.message); }
+            }
+            window.swissLastErrors = errs.join(' | ');
+            if (rows) {
+                try { localStorage.setItem(SWISS_CACHE_KEY, JSON.stringify({ t: Date.now(), rows: rows })); } catch (e) {}
+                note = 'Live results \u00b7 updated ' + new Date().toLocaleTimeString();
+            } else if (cached) {
+                rows = cached.rows;
+                note = 'Fetch failed (' + window.swissLastErrors + ') \u2014 showing results saved ' + (cached.t ? 'at ' + new Date(cached.t).toLocaleTimeString() : 'earlier');
+            } else {
+                rows = [];
+                note = 'Could not load live results \u2014 ' + window.swissLastErrors;
+            }
+        }
+
+        const tree = document.getElementById('swiss-tree');
+        if (!tree) return;
+        tree.innerHTML = renderSwissTree(buildSwissModel(rows));
+        if (status) status.textContent = note;
     }
 
     /* Tab switcher for LoL Tournament views */
