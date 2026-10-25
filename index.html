@@ -585,6 +585,7 @@
         "Lyon Gaming": { name: "Lyon Gaming", tag: "LYON", flag: "🇲🇽", seed: "LCS #2" },
         "LØS": { name: "Los Grandes", tag: "LØS", flag: "🇧🇷", seed: "CBLOL #1" },
         "Los Grandes": { name: "Los Grandes", tag: "LØS", flag: "🇧🇷", seed: "CBLOL #1" },
+        "LOS": { name: "Los Grandes", tag: "LØS", flag: "🇧🇷", seed: "CBLOL #1" },
         "TSW": { name: "Team Secret Whales", tag: "TSW", flag: "🇻🇳", seed: "LCP #1" },
         "CFO": { name: "CTBC Flying Oyster", tag: "CFO", flag: "🇹🇼", seed: "LCP #2" },
         "C9": { name: "Cloud9", tag: "C9", flag: "🇺🇸", seed: "LCS #3" },
@@ -1688,11 +1689,11 @@
 
     // Maps any Leaguepedia team name to the keys used in LOL_TEAMS
     function swissKey(name) {
-        const n = String(name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        const n = String(name || '').toLowerCase().replace(/[\u00f8\u00d8]/g, 'o').normalize('NFD').replace(/[^a-z0-9]/g, '');
         if (!n || n === 'tbd') return null;
         if (n === 'geng' || n === 'gen') return 'GEN';
         if (n === 't1') return 'T1';
-        if (n === 'LØS' || n.startsWith('losgrandes')) return 'LØS';
+        if (n === 'los' || n.startsWith('losgrandes')) return 'LØS';
         if (n.startsWith('g2')) return 'G2';
         if (n.includes('hanwha') || n === 'hle') return 'HLE';
         if (n.includes('dplus') || n.includes('kia') || n === 'dk') return 'DK';
